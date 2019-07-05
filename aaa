@@ -1,1 +1,25 @@
-print("oof")
+import requests
+import json
+
+r = requests.get('https://www.packershoes.com/products.json?limit=250')
+products = json.loads(r.text)['products']
+count = 250
+page = 1
+productList = []
+while count>=250:
+    print(page)
+    urlstr = 'https://www.packershoes.com/products.json?limit=250&page={}'.format(page)
+    r = requests.get(urlstr)
+    products = json.loads(r.text)['products']
+    productList.extend(products)
+    print(len(products))
+    count = len(products)
+    page+=1
+print(len(productList))
+
+print(productList[0])
+'''
+for product in products:
+    print(product)
+print(len(products))
+'''
