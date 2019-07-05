@@ -26,13 +26,20 @@ def findKeyword(products, keyword):
     pList = []
     for product in products:
         if keyword.upper() in product['title']:
-            pList.append(product)
-            print(product['title'])
+            if(ProductAvailable(product)):
+                pList.append(product)
+                print(product['title'])
     finalProduct = input("Enter Product Name from List: ")
     for p in pList:
         if finalProduct == p['title']:
             return p
     return None
+
+def ProductAvailable(product):
+    for var in product['variants']:
+        if(var['available']):
+            return True
+    return False
 
 def ListSizes(product):
     count = 0
@@ -41,8 +48,6 @@ def ListSizes(product):
         if(variant['available']):
             print("Size: ", variant['option1'])
             count+=1
-    if(count == 0):
-        print("SOLD OUT")
 
 
 def UrlGen(product, size):
@@ -61,7 +66,6 @@ def testURL(url):
     driver.get(url)
     driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
     time.sleep(2)
-    driver.actions().mouseMove({X: 50, y: 0}).doubleClick().perform()
     driver.find_element_by_xpath("//html").click();
     #// *[ @ id = "new-balance-m990nv5-quot-made-in-the-usa-quot"] / div[7] / div / div / div / button
     #driver.find_element_by_xpath('//*[@id="adidas-consortium-magmur-runner-x-naked"]/div[7]/div').click()
@@ -80,7 +84,7 @@ def Main():
     SizeIn = input("Enter an Available Size: ")
     URL = UrlGen(FinalProduct, SizeIn)
     print(URL)
-    testURL(URL)
+    #testURL(URL)
 
 Main()
 '''
