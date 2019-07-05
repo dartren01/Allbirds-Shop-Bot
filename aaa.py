@@ -45,6 +45,8 @@ def ListSizes(product):
 
 def UrlGen(product, size):
     baseUrl = 'https://packershoes.com/collections/'
+    brand = product['vendor'].lower()
+
 
 def Main():
     products = getProducts()
