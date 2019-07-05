@@ -1,5 +1,7 @@
 import requests
 import json
+from selenium import webdriver
+import time
 
 def getProducts():
     #r = requests.get('https://www.packershoes.com/products.json?limit=250')
@@ -46,17 +48,39 @@ def ListSizes(product):
 def UrlGen(product, size):
     baseUrl = 'https://packershoes.com/collections/'
     brand = product['vendor'].lower()
+    productName = product['handle']
+    sizeVariant = product['id']
+    for variant in product['variants']:
+        if(size == variant['option1']):
+            sizeVariant = variant['id']
+    finalUrl = baseUrl + brand + '/products/' + productName + '?variant=' + str(sizeVariant)
+    return finalUrl
 
+def testURL(url):
+    driver = webdriver.Chrome('./chromedriver')
+    driver.get(url)
+    driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
+    time.sleep(2)
+    driver.actions().mouseMove({X: 50, y: 0}).doubleClick().perform()
+    driver.find_element_by_xpath("//html").click();
+    #// *[ @ id = "new-balance-m990nv5-quot-made-in-the-usa-quot"] / div[7] / div / div / div / button
+    #driver.find_element_by_xpath('//*[@id="adidas-consortium-magmur-runner-x-naked"]/div[7]/div').click()
+    driver.find_element_by_xpath('//*[@id="CartContainer"]/form/div[2]/button').click()
+    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys('Darren')
+
+    #driver.find_element_by_xpath("//html").click();
 
 def Main():
     products = getProducts()
     #ask for shoe keyword
-    keyword = input("Enter a keyword:" )
+    keyword = input("Enter a keyword: ")
     FinalProduct = findKeyword(products, keyword)
     print(FinalProduct)
     ListSizes(FinalProduct)
-    #SizeIn = int(input("Enter an Available Size: "))
-    #UrlGen(FinalProduct,SizeIn)
+    SizeIn = input("Enter an Available Size: ")
+    URL = UrlGen(FinalProduct, SizeIn)
+    print(URL)
+    testURL(URL)
 
 Main()
 '''
