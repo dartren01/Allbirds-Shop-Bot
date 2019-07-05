@@ -1,5 +1,0 @@
-from selenium import webdriver
-
-driver = webdriver.Chrome('./chromedriver')
-driver.get('https://packershoes.com/collections/new-arrivals/products/adidas-rivalry-hi-keith-haring')
-driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
