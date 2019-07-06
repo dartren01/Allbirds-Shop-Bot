@@ -49,6 +49,16 @@ def ListSizes(product):
             print("Size: ", variant['option1'])
             count+=1
 
+def popUpGen(product):
+    title = str(product['title'])
+    title = title.lower()
+    title = title.replace("  ", "-")
+    title = title.replace(" ", "-")
+    title = title.replace('-"', "-quot-")
+    title = title.replace('"', "-quot")
+
+    popUp = '// *[ @ id = "' + title + '"] / div[7] / div / div / div / button'
+    return popUp
 
 def UrlGen(product, size):
     baseUrl = 'https://packershoes.com/collections/'
@@ -61,14 +71,13 @@ def UrlGen(product, size):
     finalUrl = baseUrl + brand + '/products/' + productName + '?variant=' + str(sizeVariant)
     return finalUrl
 
-def testURL(url):
+def testURL(url, popUp):
     driver = webdriver.Chrome('./chromedriver')
     driver.get(url)
     driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
     time.sleep(2)
-    driver.find_element_by_xpath("//html").click();
-    #// *[ @ id = "new-balance-m990nv5-quot-made-in-the-usa-quot"] / div[7] / div / div / div / button
-    #driver.find_element_by_xpath('//*[@id="adidas-consortium-magmur-runner-x-naked"]/div[7]/div').click()
+    driver.find_element_by_xpath(popUp).click();
+
     driver.find_element_by_xpath('//*[@id="CartContainer"]/form/div[2]/button').click()
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys('Darren')
 
@@ -82,9 +91,10 @@ def Main():
     print(FinalProduct)
     ListSizes(FinalProduct)
     SizeIn = input("Enter an Available Size: ")
+    PopUp = popUpGen(FinalProduct)
     URL = UrlGen(FinalProduct, SizeIn)
     print(URL)
-    #testURL(URL)
+    testURL(URL, PopUp)
 
 Main()
 '''
