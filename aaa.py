@@ -87,11 +87,12 @@ def testURL(url, popUp):
     driver.get(url)
     driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
     time.sleep(2)
-    driver.find_element_by_xpath(popUp).click();
+    driver.find_element_by_xpath(popUp).click()
 
     driver.find_element_by_xpath('//*[@id="CartContainer"]/form/div[2]/button').click()
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys('Darren')
-
+    time.sleep(10)
+    driver.close()
     #driver.find_element_by_xpath("//html").click();
 
 
