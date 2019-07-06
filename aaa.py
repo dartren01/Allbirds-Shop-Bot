@@ -67,8 +67,14 @@ def popUpGen(product):
     title = title.replace(" ", "-")
     title = title.replace('-"', "-quot-")
     title = title.replace('"', "-quot")
-
-    popUp = '// *[ @ id = "' + title + '"] / div[7] / div / div / div / button'
+    #some urls need to replace w's???
+    '''
+    EX:
+    // *[ @ id = "adidas-x-stella-mccartney-w-39-s-ultraboost-x"] / div[7] / div / div / div / button / img
+    // *[ @ id = "adidas-x-stella-mccartney-w's-ultraboost-x"] / div[7] / div / div / div / button / img
+    '''
+    popUp = '// *[ @ id = "' + title + '"] / div[7] / div / div / div / button / img'
+    print(popUp)
     return popUp
 
 def UrlGen(product, size):
@@ -82,32 +88,57 @@ def UrlGen(product, size):
     finalUrl = baseUrl + brand + '/products/' + productName + '?variant=' + str(sizeVariant)
     return finalUrl
 
-def testURL(url, popUp):
-    driver = webdriver.Chrome('./chromedriver')
-    driver.get(url)
-    driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
-    time.sleep(2)
-    driver.find_element_by_xpath(popUp).click()
 
+def testURL(urlList, PopUp, driver):
+    #Some urls have contact to order
+    adClicked = False
+    for url in urlList:
+        driver.get(url)
+        driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
+        time.sleep(2)
+        if(not adClicked):
+            driver.find_element_by_xpath(PopUp).click()
+            adClicked = True
+
+
+def checkout(driver):
+    # STORE THESE IN A SEPARATE FILE (MODULARIZE). ADD OTHER OPTIONS TOO
     driver.find_element_by_xpath('//*[@id="CartContainer"]/form/div[2]/button').click()
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys('Darren')
-    time.sleep(10)
-    driver.close()
-    #driver.find_element_by_xpath("//html").click();
+    driver.find_element_by_xpath('// *[ @ id = "checkout_shipping_address_last_name"]').send_keys('Lim')
+    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_address1"]').send_keys('13165 Essex Dr.')
+    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys('Cerritos')
+    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys('90703')
+    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys('123-456-7890')
 
+    time.sleep(10)
 
 def Main():
     products = getProducts()
     #ask for shoe keyword
-    keyword = input("Enter a keyword: ")
-    FinalProduct = findKeyword(products, keyword)
-    print(FinalProduct)
-    ProductAvailable(FinalProduct, True)
-    SizeIn = input("Enter an Available Size: ")
-    PopUp = popUpGen(FinalProduct)
-    URL = UrlGen(FinalProduct, SizeIn)
-    print(URL)
-    testURL(URL, PopUp)
+    DoneShopping = False
+    UrlList = []
+    PopUp = ""
+    initialPopUp = True
+    while(not DoneShopping):
+        keyword = input("Enter a keyword: ")
+        FinalProduct = findKeyword(products, keyword)
+        print(FinalProduct)
+        ProductAvailable(FinalProduct, True)
+        SizeIn = input("Enter an Available Size: ")
+        if(initialPopUp):
+            PopUp = popUpGen(FinalProduct)
+            initialPopUp = False
+        URL = UrlGen(FinalProduct, SizeIn)
+        print(URL)
+        UrlList.append(URL)
+        isDone = input("Are You Done Shopping? Enter Yes or No ")
+        if(isDone.lower() == "yes"):
+            DoneShopping = True
+    driver = webdriver.Chrome('./chromedriver')
+    testURL(UrlList, PopUp, driver)
+    checkout(driver)
+    driver.close()
 
 Main()
 '''
