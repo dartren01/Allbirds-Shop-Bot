@@ -3,6 +3,7 @@ import json
 from selenium import webdriver
 import time
 
+
 def getProducts():
     #r = requests.get('https://www.packershoes.com/products.json?limit=250')
     #products = json.loads(r.text)['products']
@@ -22,25 +23,34 @@ def getProducts():
     #print(productList[0])
     return productList
 
+
 def findKeyword(products, keyword):
     pList = []
     for product in products:
         if keyword.upper() in product['title']:
-            if(ProductAvailable(product)):
+            if(ProductAvailable(product, False)):
                 pList.append(product)
                 print(product['title'])
     finalProduct = input("Enter Product Name from List: ")
+    #add exception checks
     for p in pList:
-        if finalProduct == p['title']:
+        if finalProduct.upper() == p['title']:
             return p
     return None
 
-def ProductAvailable(product):
-    for var in product['variants']:
-        if(var['available']):
-            return True
-    return False
 
+def ProductAvailable(product, printSize):
+    for variant in product['variants']:
+        if(variant['available']):
+            if(printSize):
+                print("Size: ", variant['option1'])
+            else:
+                return True
+    if(not printSize):
+        return False
+
+
+'''
 def ListSizes(product):
     count = 0
     for variant in product['variants']:
@@ -48,6 +58,7 @@ def ListSizes(product):
         if(variant['available']):
             print("Size: ", variant['option1'])
             count+=1
+'''
 
 def popUpGen(product):
     title = str(product['title'])
@@ -83,13 +94,14 @@ def testURL(url, popUp):
 
     #driver.find_element_by_xpath("//html").click();
 
+
 def Main():
     products = getProducts()
     #ask for shoe keyword
     keyword = input("Enter a keyword: ")
     FinalProduct = findKeyword(products, keyword)
     print(FinalProduct)
-    ListSizes(FinalProduct)
+    ProductAvailable(FinalProduct, True)
     SizeIn = input("Enter an Available Size: ")
     PopUp = popUpGen(FinalProduct)
     URL = UrlGen(FinalProduct, SizeIn)
