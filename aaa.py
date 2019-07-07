@@ -36,7 +36,7 @@ def findKeyword(products, keyword):
     for p in pList:
         if finalProduct.upper() == p['title']:
             return p
-    return None
+    return p #for now return p, add check
 
 
 def ProductAvailable(product, printSize):
@@ -67,6 +67,7 @@ def popUpGen(product):
     title = title.replace(" ", "-")
     title = title.replace('-"', "-quot-")
     title = title.replace('"', "-quot")
+    title = title.replace("'", "-39-")
     #some urls need to replace w's???
     '''
     EX:
@@ -95,8 +96,8 @@ def testURL(urlList, PopUp, driver):
     for url in urlList:
         driver.get(url)
         driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
-        time.sleep(2)
         if(not adClicked):
+            time.sleep(3)
             driver.find_element_by_xpath(PopUp).click()
             adClicked = True
 
@@ -106,10 +107,10 @@ def checkout(driver):
     driver.find_element_by_xpath('//*[@id="CartContainer"]/form/div[2]/button').click()
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys('Darren')
     driver.find_element_by_xpath('// *[ @ id = "checkout_shipping_address_last_name"]').send_keys('Lim')
-    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_address1"]').send_keys('13165 Essex Dr.')
+    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_address1"]').send_keys('12345 Burger Dr.')
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys('Cerritos')
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys('90703')
-    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys('123-456-7890')
+    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys('1234567890')
 
     time.sleep(10)
 
@@ -125,7 +126,10 @@ def Main():
         FinalProduct = findKeyword(products, keyword)
         print(FinalProduct)
         ProductAvailable(FinalProduct, True)
+        print("Type Back to go back to Keyword Search")
         SizeIn = input("Enter an Available Size: ")
+        if(SizeIn.lower() == "back"):
+            continue
         if(initialPopUp):
             PopUp = popUpGen(FinalProduct)
             initialPopUp = False
@@ -138,6 +142,13 @@ def Main():
     driver = webdriver.Chrome('./chromedriver')
     testURL(UrlList, PopUp, driver)
     checkout(driver)
+    '''
+    try:
+        testURL(UrlList, PopUp, driver)
+        checkout(driver)
+    except:
+        print("Error, cannot find button / took too long to load")
+    '''
     driver.close()
 
 Main()
