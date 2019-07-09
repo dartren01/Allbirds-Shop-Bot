@@ -34,8 +34,14 @@ def findKeyword(products, keyword, type, contactToOrder):
         if type.upper() in product['product_type']:
             if keyword.upper() in product['title']:
                 if(ProductAvailable(product, False)):
-                    pList.append(product)
-                    print(product['title'])
+                    if (not contactToOrder):
+                        if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                            pList.append(product)
+                            print(product['title'])
+                    else:
+                        pList.append(product)
+                        print(product['title'])
+        '''
         elif keyword.upper() in product['title']:
             if(ProductAvailable(product, False)):
                 if(not contactToOrder):
@@ -45,6 +51,7 @@ def findKeyword(products, keyword, type, contactToOrder):
                 else:
                     pList.append(product)
                     print(product['title'])
+        '''
 
     if(len(pList)==0):
         return None
@@ -103,10 +110,10 @@ def Main():
         type = input("Enter Product Type: Footwear or Apparel or Both? ")
         keyword = input("Enter a keyword (EX. Nike): ")
         contact = GetContactToOrder()
+        print()
         while(ProdList==None):
             ProdList = findKeyword(products, keyword, type, contact)
             if(ProdList == None):
-                print()
                 print("Keyword or products not found. Resetting Search.")
                 print()
                 type = input("Enter Product Type: Footwear or Apparel or Both? ")
