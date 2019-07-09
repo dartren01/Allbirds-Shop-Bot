@@ -63,8 +63,13 @@ def ListSizes(product):
 def popUpGen(product):
     title = str(product['title'])
     title = title.lower()
+    title = title.replace(" - ", "-")
     title = title.replace("  ", "-")
     title = title.replace(" ", "-")
+    title = title.replace(",", "-")
+    title = title.replace("/", "-")
+    title = title.replace(". ", "")
+    title = title.replace(".", "-")
     title = title.replace('-"', "-quot-")
     title = title.replace('"', "-quot")
     title = title.replace("'", "-39-")
@@ -76,7 +81,37 @@ def popUpGen(product):
     '''
     popUp = '// *[ @ id = "' + title + '"] / div[7] / div / div / div / button / img'
     print(popUp)
+
+    print(title)
+
+    '''
+    Testing Purposes
+    // *[ @ id = "nike-air-max-1-quot-red-orbit-quot"] / div[7] / div / div / div / button / img
+    //*[@id="adidas-ultraboost-s-by-stella-mccartney"]/div[7]/div/div/div/button/img
+    
+    ADIDAS Y-3 OVERSIZED BOMBER - BLACK
+    //*[@id="adidas-y-3-oversized-bomber-black"]/div[7]/div/div/div/button/img
+    //*[@id="adidas-y-3-oversized-bomber---black"]/div[7]/div/div/div/button/img
+    
+    ADIDAS CONSORTIUM ZX 10,000 C
+    //*[@id="adidas-consortium-zx-10-000-c"]/div[7]/div/div/div/button/img
+    //*[@id="adidas-consortium-zx-10,000-c"]/div[7]/div/div/div/button/img
+    
+    NIKE NSW JUST DO IT S/S T-SHIRT
+    //*[@id="nike-nsw-just-do-it-s-s-t-shirt"]/div[7]/div/div/div/button/img
+    //*[@id="nike-nsw-just-do-it-s/s-t-shirt"]/div[7]/div/div/div/button/img
+    
+    ADIDAS W'PUREBOOST X TR 3.0 BY STELLA MCCARTNEY
+    //*[@id="adidas-w-39-pureboost-x-tr-3-0-by-stella-mccartney"]/div[7]/div/div/div/button/img
+    //*[@id="adidas-w-39-pureboost-x-tr-30-by-stella-mccartney"]/div[7]/div/div/div/button/img
+    
+    NIKE AIR MAX 98 OA  "LA MEZCLA"
+
+    '''
+
     return popUp
+
+
 
 def UrlGen(product, size):
     baseUrl = 'https://packershoes.com/collections/'
@@ -95,22 +130,24 @@ def testURL(urlList, PopUp, driver):
     adClicked = False
     for url in urlList:
         driver.get(url)
-        driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
-        if(not adClicked):
+        if (not adClicked):
             time.sleep(3)
             driver.find_element_by_xpath(PopUp).click()
             adClicked = True
+        driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
+
 
 
 def checkout(driver):
     # STORE THESE IN A SEPARATE FILE (MODULARIZE). ADD OTHER OPTIONS TOO
-    driver.find_element_by_xpath('//*[@id="CartContainer"]/form/div[2]/button').click()
+    time.sleep(1)
+    driver.find_element_by_xpath('// *[ @ id = "CartContainer"] / form / div[2] / button').click()
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys('Darren')
     driver.find_element_by_xpath('// *[ @ id = "checkout_shipping_address_last_name"]').send_keys('Lim')
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_address1"]').send_keys('12345 Burger Dr.')
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys('Cerritos')
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys('90703')
-    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys('1234567890')
+    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys('12345678910')
 
     time.sleep(10)
 
