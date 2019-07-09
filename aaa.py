@@ -24,10 +24,15 @@ def getProducts():
     return productList
 
 
-def findKeyword(products, keyword):
+def findKeyword(products, keyword, type):
     pList = []
     for product in products:
-        if keyword.upper() in product['title']:
+        if type.upper() in product['product_type']:
+            if keyword.upper() in product['title']:
+                if(ProductAvailable(product, False)):
+                    pList.append(product)
+                    print(product['title'])
+        elif keyword.upper() in product['title']:
             if(ProductAvailable(product, False)):
                 pList.append(product)
                 print(product['title'])
@@ -84,46 +89,8 @@ def popUpGen(product):
     title = title.replace('-"', "-quot-")
     title = title.replace('"', "-quot")
     title = title.replace("'", "-39-")
-    #some urls need to replace w's???
-    '''
-    EX:
-    //*[@id="nike-air-force-1-39-07-lv8-3-quot-realtree-camo-quot"]/div[7]/div/div/div/button/img
-    //*[@id="adidas-ultraboost-s-by-stella-mccartney"]/div[7]/div/div/div/button/img
-    //*[@id="nike-air-vapormax-flyknit-3-0-quot-moon-landing-quot"]/div[7]/div/div/div/button/img
-    //*[@id="carhartt-wip-future-romance-l-s-t-shirt"]/div[7]/div/div/div/button/img
-    //*[@id="nike-air-vapormax-flyknit-3-0-quot-laser-fuchsia-quot"]/div[7]/div/div/div/button/img
-    // *[ @ id = "adidas-x-stella-mccartney-w-39-s-ultraboost-x"] / div[7] / div / div / div / button / img
-    // *[ @ id = "adidas-x-stella-mccartney-w's-ultraboost-x"] / div[7] / div / div / div / button / img
-    '''
+
     popUp = '// *[ @ id = "' + title + '"] / div[7] / div / div / div / button / img'
-    print(popUp)
-
-    print(title)
-
-    '''
-    Testing Purposes
-    // *[ @ id = "nike-air-max-1-quot-red-orbit-quot"] / div[7] / div / div / div / button / img
-    //*[@id="adidas-ultraboost-s-by-stella-mccartney"]/div[7]/div/div/div/button/img
-    
-    ADIDAS Y-3 OVERSIZED BOMBER - BLACK
-    //*[@id="adidas-y-3-oversized-bomber-black"]/div[7]/div/div/div/button/img
-    //*[@id="adidas-y-3-oversized-bomber---black"]/div[7]/div/div/div/button/img
-    
-    ADIDAS CONSORTIUM ZX 10,000 C
-    //*[@id="adidas-consortium-zx-10-000-c"]/div[7]/div/div/div/button/img
-    //*[@id="adidas-consortium-zx-10,000-c"]/div[7]/div/div/div/button/img
-    
-    NIKE NSW JUST DO IT S/S T-SHIRT
-    //*[@id="nike-nsw-just-do-it-s-s-t-shirt"]/div[7]/div/div/div/button/img
-    //*[@id="nike-nsw-just-do-it-s/s-t-shirt"]/div[7]/div/div/div/button/img
-    
-    ADIDAS W'PUREBOOST X TR 3.0 BY STELLA MCCARTNEY
-    //*[@id="adidas-w-39-pureboost-x-tr-3-0-by-stella-mccartney"]/div[7]/div/div/div/button/img
-    //*[@id="adidas-w-39-pureboost-x-tr-30-by-stella-mccartney"]/div[7]/div/div/div/button/img
-    
-    NIKE AIR MAX 98 OA  "LA MEZCLA"
-
-    '''
 
     return popUp
 
@@ -185,9 +152,11 @@ def Main():
     while(not DoneShopping):
         ProdList = None
         FinalProduct = None
+        type = input("Enter Profuct Type: Footwear or Apparel or Both? ")
+
         keyword = input("Enter a keyword: ")
         while(ProdList==None):
-            ProdList = findKeyword(products, keyword)
+            ProdList = findKeyword(products, keyword, type)
             if(ProdList == None):
                 keyword = input("Keyword not found, please reenter: ")
             else:
