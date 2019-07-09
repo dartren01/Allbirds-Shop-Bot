@@ -1,6 +1,5 @@
 import requests
 import json
-from selenium import webdriver
 from testDriver import testDriver
 import UrlGenerators
 
@@ -150,8 +149,7 @@ def Main():
             DoneShopping = True
     print()
 
-    driver = webdriver.Chrome('./chromedriver')
-    checkouttest = testDriver(UrlList, PopUp, FinalProductList, driver)
+    checkouttest = testDriver(UrlList, PopUp, FinalProductList)
     checkouttest.checkout()
     '''
     try:
@@ -160,7 +158,6 @@ def Main():
     except:
         print("Error, cannot find button / took too long to load")
     '''
-    driver.close()
 
 
 if __name__ == "__main__":
