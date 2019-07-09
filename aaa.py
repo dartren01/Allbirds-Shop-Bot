@@ -1,8 +1,8 @@
 import requests
 import json
 from selenium import webdriver
-import time
-
+from testDriver import testDriver
+import UrlGenerators
 
 def getProducts():
     #r = requests.get('https://www.packershoes.com/products.json?limit=250')
@@ -87,72 +87,6 @@ def ListSizes(product):
             count+=1
 '''
 
-def popUpGen(product):
-    title = str(product['title'])
-    title = title.lower()
-    title = title.replace(" - ", "-")
-    title = title.replace("  ", "-")
-    title = title.replace(" ", "-")
-    title = title.replace(",", "-")
-    title = title.replace("/", "-")
-    title = title.replace(". ", "")
-    title = title.replace(".", "-")
-    title = title.replace('-"', "-quot-")
-    title = title.replace('"', "-quot")
-    title = title.replace("'", "-39-")
-
-    popUp = '// *[ @ id = "' + title + '"] / div[7] / div / div / div / button / img'
-
-    return popUp
-
-
-
-def UrlGen(product, size):
-    baseUrl = 'https://packershoes.com/collections/'
-    brand = product['vendor'].lower()
-    productName = product['handle']
-    sizeVariant = product['id']
-    for variant in product['variants']:
-        if(size == variant['option1']):
-            sizeVariant = variant['id']
-    finalUrl = baseUrl + brand + '/products/' + productName + '?variant=' + str(sizeVariant)
-    return finalUrl
-
-
-def testURL(urlList, PopUp, driver, productList):
-    #Some urls have contact to order
-    adClicked = False
-    for num in range(len(urlList)):
-        driver.get(urlList[num])
-        if (not adClicked):
-            time.sleep(3)
-            driver.find_element_by_xpath(PopUp).click()
-            adClicked = True
-
-        for item in productList[num]['tags']:
-            if(item == 'email-orders' or item == 'phone-orders'):
-                print("This is a contact to order")
-                return False
-        driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
-    return True
-
-
-def checkout(driver):
-    # STORE THESE IN A SEPARATE FILE (MODULARIZE). ADD OTHER OPTIONS TOO
-    time.sleep(1)
-    driver.find_element_by_xpath('// *[ @ id = "CartContainer"] / form / div[2] / button').click()
-
-    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys('12345678910')
-    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys('Darren')
-    driver.find_element_by_xpath('// *[ @ id = "checkout_shipping_address_last_name"]').send_keys('Lim')
-    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_address1"]').send_keys('12345 Burger Dr.')
-    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys('Cerritos')
-    driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys('90703')
-    driver.find_element_by_xpath('// *[ @ id = "checkout_email"]').send_keys('dartren@gmail.com')
-
-    #driver.find_element_by_xpath('//*[@id="recaptcha-anchor"]/div[1]')
-    time.sleep(30)
-
 def Main():
     print("Collecting Packer Shoes Product Database...")
     products = getProducts()
@@ -204,9 +138,9 @@ def Main():
                 break
 
         if(initialPopUp):
-            PopUp = popUpGen(FinalProduct)
+            PopUp = UrlGenerators.popUpGen(FinalProduct)
             initialPopUp = False
-        URL = UrlGen(FinalProduct, SizeIn)
+        URL = UrlGenerators.UrlGen(FinalProduct, SizeIn)
         print(URL)
         UrlList.append(URL)
         FinalProductList.append(FinalProduct)
@@ -215,12 +149,10 @@ def Main():
         if(isDone.lower() == "yes"):
             DoneShopping = True
     print()
+
     driver = webdriver.Chrome('./chromedriver')
-    CanCheckOut = testURL(UrlList, PopUp, driver, FinalProductList)
-    if(CanCheckOut):
-        checkout(driver)
-    else:
-        print("Cannot check out")
+    checkouttest = testDriver(UrlList, PopUp, FinalProductList, driver)
+    checkouttest.checkout()
     '''
     try:
         testURL(UrlList, PopUp, driver)
@@ -230,9 +162,6 @@ def Main():
     '''
     driver.close()
 
-Main()
-'''
-for product in products:
-    print(product)
-print(len(products))
-'''
+
+if __name__ == "__main__":
+    Main()
