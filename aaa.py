@@ -18,7 +18,7 @@ def getProducts():
         productList.extend(products)
         #print(len(products))
         count = len(products)
-        page+=1
+        page += 1
     #print(len(productList))
     #print(productList[0])
     return productList
@@ -31,12 +31,16 @@ def findKeyword(products, keyword):
             if(ProductAvailable(product, False)):
                 pList.append(product)
                 print(product['title'])
-    finalProduct = input("Enter Product Name from List: ")
-    #add exception checks
-    for p in pList:
-        if finalProduct.upper() == p['title']:
+    if(len(pList)==0):
+        return None
+    return pList
+
+
+def ReturnProduct(products, keyword):
+    for p in products:
+        if keyword.upper() == p['title']:
             return p
-    return p #for now return p, add check
+    return None
 
 
 def ProductAvailable(product, printSize):
@@ -49,6 +53,13 @@ def ProductAvailable(product, printSize):
     if(not printSize):
         return False
 
+
+def CheckSizeMatch(product, size):
+    for variant in product['variants']:
+        if(variant['available']):
+            if(size == variant['option1']):
+                return True
+    return False
 
 '''
 def ListSizes(product):
@@ -76,6 +87,11 @@ def popUpGen(product):
     #some urls need to replace w's???
     '''
     EX:
+    //*[@id="nike-air-force-1-39-07-lv8-3-quot-realtree-camo-quot"]/div[7]/div/div/div/button/img
+    //*[@id="adidas-ultraboost-s-by-stella-mccartney"]/div[7]/div/div/div/button/img
+    //*[@id="nike-air-vapormax-flyknit-3-0-quot-moon-landing-quot"]/div[7]/div/div/div/button/img
+    //*[@id="carhartt-wip-future-romance-l-s-t-shirt"]/div[7]/div/div/div/button/img
+    //*[@id="nike-air-vapormax-flyknit-3-0-quot-laser-fuchsia-quot"]/div[7]/div/div/div/button/img
     // *[ @ id = "adidas-x-stella-mccartney-w-39-s-ultraboost-x"] / div[7] / div / div / div / button / img
     // *[ @ id = "adidas-x-stella-mccartney-w's-ultraboost-x"] / div[7] / div / div / div / button / img
     '''
@@ -125,17 +141,22 @@ def UrlGen(product, size):
     return finalUrl
 
 
-def testURL(urlList, PopUp, driver):
+def testURL(urlList, PopUp, driver, productList):
     #Some urls have contact to order
     adClicked = False
-    for url in urlList:
-        driver.get(url)
+    for num in range(len(urlList)):
+        driver.get(urlList[num])
         if (not adClicked):
             time.sleep(3)
             driver.find_element_by_xpath(PopUp).click()
             adClicked = True
-        driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
 
+        for item in productList[num]['tags']:
+            if(item == 'email-orders' or item == 'phone-orders'):
+                print("This is a contact to order")
+                return False
+        driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
+    return True
 
 
 def checkout(driver):
@@ -152,33 +173,57 @@ def checkout(driver):
     time.sleep(10)
 
 def Main():
+    print("Collecting Packer Shoes Product Database...")
     products = getProducts()
+    print("Collection Successful")
     #ask for shoe keyword
     DoneShopping = False
     UrlList = []
+    FinalProductList = []
     PopUp = ""
     initialPopUp = True
     while(not DoneShopping):
+        ProdList = None
+        FinalProduct = None
         keyword = input("Enter a keyword: ")
-        FinalProduct = findKeyword(products, keyword)
+        while(ProdList==None):
+            ProdList = findKeyword(products, keyword)
+            if(ProdList == None):
+                keyword = input("Keyword not found, please reenter: ")
+            else:
+                break
+        ProductName = input("Enter Product Name from List: ")
+        while(FinalProduct == None):
+            FinalProduct = ReturnProduct(ProdList, ProductName)
+            if(FinalProduct == None):
+                ProductName = input("Invalid Product Name, Please Enter the Full Product Name: ")
+            else:
+                break
         print(FinalProduct)
         ProductAvailable(FinalProduct, True)
         print("Type Back to go back to Keyword Search")
         SizeIn = input("Enter an Available Size: ")
-        if(SizeIn.lower() == "back"):
+        SizeIn = SizeIn.upper()
+        if(SizeIn == "BACK"):
             continue
+        while(not CheckSizeMatch(FinalProduct, SizeIn)):
+            SizeIn = input("Invalid Size, Please Enter an Available Size: ")
         if(initialPopUp):
             PopUp = popUpGen(FinalProduct)
             initialPopUp = False
         URL = UrlGen(FinalProduct, SizeIn)
         print(URL)
         UrlList.append(URL)
+        FinalProductList.append(FinalProduct)
         isDone = input("Are You Done Shopping? Enter Yes or No ")
         if(isDone.lower() == "yes"):
             DoneShopping = True
     driver = webdriver.Chrome('./chromedriver')
-    testURL(UrlList, PopUp, driver)
-    checkout(driver)
+    CanCheckOut = testURL(UrlList, PopUp, driver, FinalProductList)
+    if(CanCheckOut):
+        checkout(driver)
+    else:
+        print("Cannot check out")
     '''
     try:
         testURL(UrlList, PopUp, driver)
