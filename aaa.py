@@ -23,8 +23,13 @@ def getProducts():
     #print(productList[0])
     return productList
 
+def GetContactToOrder():
+    contactToOrder = input("Include Contact to Order Items? Enter Yes or No: ")
+    if (contactToOrder.lower() == 'yes'):
+        return True
+    return False
 
-def findKeyword(products, keyword, type):
+def findKeyword(products, keyword, type, contactToOrder):
     pList = []
     for product in products:
         if type.upper() in product['product_type']:
@@ -34,8 +39,14 @@ def findKeyword(products, keyword, type):
                     print(product['title'])
         elif keyword.upper() in product['title']:
             if(ProductAvailable(product, False)):
-                pList.append(product)
-                print(product['title'])
+                if(not contactToOrder):
+                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                        pList.append(product)
+                        print(product['title'])
+                else:
+                    pList.append(product)
+                    print(product['title'])
+
     if(len(pList)==0):
         return None
     return pList
@@ -149,18 +160,25 @@ def Main():
     FinalProductList = []
     PopUp = ""
     initialPopUp = True
+
     while(not DoneShopping):
         ProdList = None
         FinalProduct = None
-        type = input("Enter Profuct Type: Footwear or Apparel or Both? ")
-
-        keyword = input("Enter a keyword: ")
+        type = input("Enter Product Type: Footwear or Apparel or Both? ")
+        keyword = input("Enter a keyword (EX. Nike): ")
+        contact = GetContactToOrder()
         while(ProdList==None):
-            ProdList = findKeyword(products, keyword, type)
+            ProdList = findKeyword(products, keyword, type, contact)
             if(ProdList == None):
-                keyword = input("Keyword not found, please reenter: ")
+                print()
+                print("Keyword or products not found. Resetting Search.")
+                print()
+                type = input("Enter Product Type: Footwear or Apparel or Both? ")
+                keyword = input("Enter a keyword (EX. Nike): ")
+                contact = GetContactToOrder()
             else:
                 break
+        print()
         ProductName = input("Enter Product Name from List: ")
         while(FinalProduct == None):
             FinalProduct = ReturnProduct(ProdList, ProductName)
@@ -168,15 +186,20 @@ def Main():
                 ProductName = input("Invalid Product Name, Please Enter the Full Product Name: ")
             else:
                 break
+        print()
         print(FinalProduct)
         ProductAvailable(FinalProduct, True)
         print("Type Back to go back to Keyword Search")
+
         SizeIn = input("Enter an Available Size: ")
         SizeIn = SizeIn.upper()
-        if(SizeIn == "BACK"):
+        if (SizeIn == "BACK"):
             continue
         while(not CheckSizeMatch(FinalProduct, SizeIn)):
             SizeIn = input("Invalid Size, Please Enter an Available Size: ")
+            if (SizeIn == "BACK"):
+                break
+
         if(initialPopUp):
             PopUp = popUpGen(FinalProduct)
             initialPopUp = False
@@ -184,9 +207,11 @@ def Main():
         print(URL)
         UrlList.append(URL)
         FinalProductList.append(FinalProduct)
+        print()
         isDone = input("Are You Done Shopping? Enter Yes or No ")
         if(isDone.lower() == "yes"):
             DoneShopping = True
+    print()
     driver = webdriver.Chrome('./chromedriver')
     CanCheckOut = testURL(UrlList, PopUp, driver, FinalProductList)
     if(CanCheckOut):
