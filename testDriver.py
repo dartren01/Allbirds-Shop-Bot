@@ -34,7 +34,7 @@ class testDriver:
         time.sleep(1)
         driver.find_element_by_xpath('// *[ @ id = "CartContainer"] / form / div[2] / button').click()
 
-        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys('12345678910')
+        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys('562-916-5120')
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys('Darren')
         driver.find_element_by_xpath('// *[ @ id = "checkout_shipping_address_last_name"]').send_keys('Lim')
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_address1"]').send_keys('12345 Burger Dr.')

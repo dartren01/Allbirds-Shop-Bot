@@ -6,6 +6,8 @@ def popUpGen(product):
     title = title.replace(" ", "-")
     title = title.replace(",", "-")
     title = title.replace("/", "-")
+    title = title.replace("(", "")
+    title = title.replace(")", "")
     title = title.replace(". ", "")
     title = title.replace(".", "-")
     title = title.replace('-"', "-quot-")
