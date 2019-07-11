@@ -2,6 +2,9 @@ import requests
 import json
 from testDriver import testDriver
 import UrlGenerators
+import GUI
+import sys
+from PyQt5 import QtWidgets, QtGui
 
 def getProducts():
     #r = requests.get('https://www.packershoes.com/products.json?limit=250')
@@ -96,7 +99,7 @@ def Main():
     print("Collecting Packer Shoes Product Database...")
     products = getProducts()
     print("Collection Successful")
-    #ask for shoe keyword
+    # ask for shoe keyword
     DoneShopping = False
     UrlList = []
     FinalProductList = []
@@ -168,4 +171,7 @@ def Main():
 
 
 if __name__ == "__main__":
-    Main()
+    app = QtWidgets.QApplication(sys.argv)
+    ex = GUI.App()
+    sys.exit(app.exec_())
+    Main(ex)
