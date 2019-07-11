@@ -28,6 +28,7 @@ def GetContactToOrder():
         return True
     return False
 
+#fix this
 def findKeyword(products, keyword, type, contactToOrder):
     pList = []
     for product in products:
