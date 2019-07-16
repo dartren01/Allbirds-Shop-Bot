@@ -19,8 +19,6 @@ class Window1(QWidget):
         self.InitWindow()
 
     def InitWindow(self):
-        self.ToolsBTN = QPushButton("text2", self)
-        self.ToolsBTN.move(700, 600)
 
         # Set Window Size, Icon, and Title
         self.setWindowTitle(self.title)
@@ -33,6 +31,8 @@ class Window1(QWidget):
         vbox.addWidget(self.GroupBox)
 
         self.setLayout(vbox)
+        self.ToolsBTN = QPushButton("text2", self)
+        self.ToolsBTN.move(700, 600)
 
     def CreateGroupBox(self):
 

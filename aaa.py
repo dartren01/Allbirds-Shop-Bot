@@ -35,9 +35,10 @@ def GetContactToOrder():
 def findKeyword(products, keyword, type, contactToOrder):
     pList = []
     for product in products:
-        if type.upper() in product['product_type']:
-            if keyword.upper() in product['title']:
-                if(ProductAvailable(product, False)):
+        #also check multiple keywords
+        if keyword.upper() in product['title']:
+            if type.upper() in product['product_type'] and type.upper() == "FOOTWEAR":
+                if (ProductAvailable(product, False)):
                     if (not contactToOrder):
                         if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
                             pList.append(product)
@@ -45,9 +46,18 @@ def findKeyword(products, keyword, type, contactToOrder):
                     else:
                         pList.append(product)
                         print(product['title'])
-        else:
-            if keyword.upper() in product['title']:
-                if(ProductAvailable(product, False)):
+            elif type.upper() in product['product_type'] and type.upper() == "APPAREL":
+                if (ProductAvailable(product, False)):
+                    if (not contactToOrder):
+                        if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                            pList.append(product)
+                            print(product['title'])
+                    else:
+                        pList.append(product)
+                        print(product['title'])
+            #BOTH
+            elif type.upper() == "BOTH":
+                if (ProductAvailable(product, False)):
                     if (not contactToOrder):
                         if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
                             pList.append(product)
@@ -65,6 +75,13 @@ def ReturnProduct(products, keyword):
         if keyword.upper() == p['title']:
             return p
     return None
+
+def getSizes(product):
+    sizes = []
+    for variant in product['variants']:
+        if(variant['available']):
+            sizes.append(variant['option1'])
+    return sizes
 
 
 def ProductAvailable(product, printSize):
@@ -170,8 +187,10 @@ def Main():
     '''
 
 
-# if __name__ == "__main__":
-#     app = QtWidgets.QApplication(sys.argv)
-#     ex = GUI.App()
-#     sys.exit(app.exec_())
-#     Main(ex)
+if __name__ == "__main__":
+    '''
+    app = QtWidgets.QApplication(sys.argv)
+    ex = GUI.App()
+    sys.exit(app.exec_())
+    '''
+    Main()
