@@ -170,8 +170,8 @@ def Main():
     '''
 
 
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    ex = GUI.App()
-    sys.exit(app.exec_())
-    Main(ex)
+# if __name__ == "__main__":
+#     app = QtWidgets.QApplication(sys.argv)
+#     ex = GUI.App()
+#     sys.exit(app.exec_())
+#     Main(ex)
