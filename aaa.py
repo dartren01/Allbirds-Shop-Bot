@@ -2,6 +2,7 @@ import requests
 import json
 from testDriver import testDriver
 import UrlGenerators
+import ShopInfo
 import GUI
 import sys
 from PyQt5 import QtWidgets, QtGui
@@ -103,7 +104,10 @@ def CheckSizeMatch(product, size):
     return False
 
 #add quantity
-def CompleteShopping(ProductList, SizeList, QuantityList):
+def CompleteShopping():
+    ProductList = ShopInfo.ShoppingKeys["Cart"]
+    SizeList = ShopInfo.ShoppingKeys["Sizes"]
+    QuantityList = ShopInfo.ShoppingKeys["Quantities"]
     initialPopUp = True
     UrlList = []
     for i in range(len(ProductList)):

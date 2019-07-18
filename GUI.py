@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import aaa
+import ShopInfo
 from urllib.request import urlopen
 
 class App(QDialog):
@@ -19,6 +20,7 @@ class App(QDialog):
         #self.HGroupBox = QGroupBox()
         products = aaa.getProducts()
         self.testProducts = aaa.findKeyword(products, "adidas", "apparel", False)
+        ShopInfo.ShoppingKeys["Products"] = self.testProducts
         self.itemDict = {}
         self.cart = []
         self.cartSizes = []
@@ -162,7 +164,7 @@ class App(QDialog):
         QTableWidget.setHorizontalHeaderLabels(self.table2, headerTitles)
         self.table2.setSelectionMode(QAbstractItemView.NoSelection)
 
-        length = len(self.cart)
+        length = len(ShopInfo.ShoppingKeys["Cart"])
         print(length)
         initRowPos = self.table2.rowCount()
         if length > initRowPos:
@@ -170,9 +172,9 @@ class App(QDialog):
                 print("yes")
                 rowPos = self.table2.rowCount()
                 self.table2.insertRow(rowPos)
-                self.table2.setItem(rowPos, 0, QTableWidgetItem(self.cart[rowPos]['title']))
-                self.table2.setItem(rowPos, 1, QTableWidgetItem(self.cartSizes[rowPos]))
-                self.table2.setItem(rowPos, 2, QTableWidgetItem(str(self.quantityList[rowPos])))
+                self.table2.setItem(rowPos, 0, QTableWidgetItem(ShopInfo.ShoppingKeys["Cart"][rowPos]['title']))
+                self.table2.setItem(rowPos, 1, QTableWidgetItem(ShopInfo.ShoppingKeys["Sizes"][rowPos]))
+                self.table2.setItem(rowPos, 2, QTableWidgetItem(str(ShopInfo.ShoppingKeys["Quantities"][rowPos])))
                 button = QPushButton('Remove From Cart', self.table2)
                 button.clicked.connect(lambda: self.remove_cart())
                 self.table2.setCellWidget(rowPos, 3, button)
@@ -183,10 +185,10 @@ class App(QDialog):
 
     def order(self, cart, sizes, quantities):
         print("ORDERING")
-        print(cart)
-        print(sizes)
-        print(quantities)
-        aaa.CompleteShopping(cart,sizes,quantities)
+        print(ShopInfo.ShoppingKeys["Cart"])
+        print(ShopInfo.ShoppingKeys["Sizes"])
+        print(ShopInfo.ShoppingKeys["Quantities"])
+        aaa.CompleteShopping()
 
 
     def loadingScreen(self):
@@ -217,12 +219,15 @@ class App(QDialog):
             print(self.itemDict.get(index.row())[0] + ' Added to Cart')
             #print(str(self.itemDict.get(index.row())[1].currentText()))
             #print(self.itemDict.get(index.row())[2].value())
-            self.cart.append(self.testProducts[index.row()])
-            self.cartSizes.append(str(self.itemDict.get(index.row())[1].currentText()))
-            self.quantityList.append(self.itemDict.get(index.row())[2].value())
-            print(self.cart)
-            print(self.cartSizes)
-            print(self.quantityList)
+            #self.cart.append(self.testProducts[index.row()])
+            #self.cartSizes.append(str(self.itemDict.get(index.row())[1].currentText()))
+            #self.quantityList.append(self.itemDict.get(index.row())[2].value())
+            ShopInfo.ShoppingKeys["Cart"].append(self.testProducts[index.row()])
+            ShopInfo.ShoppingKeys["Sizes"].append(str(self.itemDict.get(index.row())[1].currentText()))
+            ShopInfo.ShoppingKeys["Quantities"].append(self.itemDict.get(index.row())[2].value())
+            print(ShopInfo.ShoppingKeys["Cart"])
+            print(ShopInfo.ShoppingKeys["Sizes"])
+            print(ShopInfo.ShoppingKeys["Quantities"])
         else:
             self.showImage(self.testProducts[index.row()]['images'][1]['src'])
 

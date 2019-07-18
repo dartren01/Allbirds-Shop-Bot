@@ -14,7 +14,7 @@ class testDriver:
         for num in range(len(self.urls)):
             driver.get(self.urls[num])
             if (not adClicked):
-                time.sleep(3)
+                time.sleep(2)
                 driver.find_element_by_xpath(self.Popup).click()
                 adClicked = True
 
