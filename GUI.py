@@ -8,7 +8,7 @@ from urllib.request import urlopen
 
 class App(QDialog):
 
-    def __init__(self):
+    def __init__(self, keyword, typeRadio, contactRadio):
         super().__init__()
         self.title = 'PyQt5 simple window'
         self.left = 20
@@ -19,7 +19,7 @@ class App(QDialog):
         #self.mov = QLabel()
         #self.HGroupBox = QGroupBox()
         products = aaa.getProducts()
-        self.testProducts = aaa.findKeyword(products, "adidas", "apparel", False)
+        self.testProducts = aaa.findKeyword(products, keyword, typeRadio, contactRadio)
         ShopInfo.ShoppingKeys["Products"] = self.testProducts
         self.itemDict = {}
         self.cart = []
@@ -75,7 +75,7 @@ class App(QDialog):
 
         #self.statusBar().showMessage('Message in statusbar.')
         #self.showOptions()
-        self.show()
+        # self.show()
 
 
     def createTable(self):

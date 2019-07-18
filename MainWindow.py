@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5 import QtGui
 import aaa
 import GUI
+import threading
 
 class Window1(QWidget):
 
@@ -55,14 +56,15 @@ class Window1(QWidget):
 
         gridLayout = QGridLayout()
 
-        self.radioButton1 = QRadioButton("FootWear")
-        self.radioButton2 = QRadioButton("Apparel")
-        self.radioButton3 = QRadioButton("Both")
-        self.radioButton1.setChecked(True)
+        self.typeRadioButton1 = QRadioButton("FootWear")
+        self.typeRadioButton2 = QRadioButton("Apparel")
+        self.typeRadioButton3 = QRadioButton("Both")
+        self.typeRadioButton1.setChecked(True)
 
-        gridLayout.addWidget(self.radioButton1)
-        gridLayout.addWidget(self.radioButton2)
-        gridLayout.addWidget(self.radioButton3)
+
+        gridLayout.addWidget(self.typeRadioButton1)
+        gridLayout.addWidget(self.typeRadioButton2)
+        gridLayout.addWidget(self.typeRadioButton3)
 
         gridLayout.setAlignment(Qt.AlignCenter)
         self.TypeRadioBox.setLayout(gridLayout)
@@ -79,16 +81,16 @@ class Window1(QWidget):
         self.TextBox.setLayout(gridLayout)
 
     def CreateContactRadioBox(self):
-        self.ContactRadioBox = QGroupBox("Select One")
+        self.ContactRadioBox = QGroupBox("Contact To Order?")
 
         gridLayout = QGridLayout()
 
-        self.radioButton1 = QRadioButton("Yes")
-        self.radioButton2 = QRadioButton("No")
-        self.radioButton1.setChecked(True)
+        self.contactRadioButton1 = QRadioButton("Yes")
+        self.contactRadioButton2 = QRadioButton("No")
+        self.contactRadioButton1.setChecked(True)
 
-        gridLayout.addWidget(self.radioButton1)
-        gridLayout.addWidget(self.radioButton2)
+        gridLayout.addWidget(self.contactRadioButton1)
+        gridLayout.addWidget(self.contactRadioButton2)
         gridLayout.setAlignment(Qt.AlignCenter)
         self.ContactRadioBox.setLayout(gridLayout)
 
@@ -101,9 +103,9 @@ class Window2(QWidget):
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__()
+        self.startWindow1()
 
         # intialize Window1
-        self.startWindow1()
 
     def startWindow1(self):
         self.Window = Window1()
@@ -115,12 +117,37 @@ class MainWindow(QMainWindow):
         self.show()
 
     def startWindow2(self):
-        self.win = GUI.App()
+        # PRINT TYPE RADIO BUTTON
+
+        if self.Window.typeRadioButton1.isChecked():
+            self.typeRadio = "Footwear"
+            print("Footwear")
+        elif self.Window.typeRadioButton2.isChecked():
+            self.typeRadio = "Apparel"
+            print("Apparel")
+        elif self.Window.typeRadioButton3.isChecked():
+            self.typeRadio = "Both"
+            print("Both")
+
+        # PRINT CONTACT RADIO BUTTON
+        if self.Window.contactRadioButton1.isChecked():
+            self.contactRadio = True
+            print("Yes")
+        elif self.Window.contactRadioButton2.isChecked():
+            self.contactRadio = False
+            print("No")
+
+        # PRINT TEXTBOX
+        self.keyword = self.Window.textbox.text()
+
+        self.win = GUI.App(self.keyword, self.typeRadio, self.contactRadio)
+
         self.setCentralWidget(self.win)
         # self.ToolTab = Window2(self)
         # self.setCentralWidget(self.ToolTab)
         # # self.ToolTab.CPSBTN.clicked.connect(self.startWindow1)
         self.show()
+
 
 
 if __name__ == '__main__':
