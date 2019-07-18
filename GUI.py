@@ -18,7 +18,7 @@ class App(QDialog):
         #self.mov = QLabel()
         #self.HGroupBox = QGroupBox()
         products = aaa.getProducts()
-        self.testProducts = aaa.findKeyword(products, "adidas", "footwear", False)
+        self.testProducts = aaa.findKeyword(products, "adidas", "apparel", False)
         self.itemDict = {}
         self.cart = []
         self.cartSizes = []
@@ -29,11 +29,35 @@ class App(QDialog):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
+        #self.createTable()
+        #tableLayout = QHBoxLayout()
+        #tableLayout.addWidget(self.table)
+        #self.setLayout(tableLayout)
+
+
+        self.tabLayout = QTabWidget()
+        layout = QVBoxLayout()
+        tab1 = QWidget()
+        tab2 = QWidget()
+
         self.createTable()
 
-        self.layout = QVBoxLayout()
-        self.layout.addWidget(self.table)
-        self.setLayout(self.layout)
+        tablelayout = QHBoxLayout()
+        tablelayout.setContentsMargins(5, 5, 5, 5)
+        tablelayout.addWidget(self.table)
+        tab1.setLayout(tablelayout)
+
+        self.createAddToCartTable()
+
+        table2layout = QHBoxLayout()
+        table2layout.setContentsMargins(5, 5, 5, 5)
+        table2layout.addWidget(self.table2)
+        tab2.setLayout(table2layout)
+
+        self.tabLayout.addTab(tab1, "Search")
+        self.tabLayout.addTab(tab2, "Cart")
+        layout.addWidget(self.tabLayout)
+        self.setLayout(layout)
 
         #self.loadingScreen()
 
@@ -48,8 +72,13 @@ class App(QDialog):
         print(length)
         self.table = QTableWidget(length, 5)
         header = self.table.horizontalHeader()
-        for i in range(5):
-            header.setSectionResizeMode(i, QHeaderView.Stretch)
+        header.setSectionResizeMode(0, QHeaderView.Stretch)
+        header.setSectionResizeMode(1, QHeaderView.Stretch)
+        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        #for i in range(5):
+        #    header.setSectionResizeMode(i, QHeaderView.Stretch)
         QTableWidget.setHorizontalHeaderLabels(self.table, headerTitles)
         #self.table.verticalHeader().setVisible(False)
         #self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
@@ -62,12 +91,12 @@ class App(QDialog):
                     self.table.setItem(i, k, QTableWidgetItem(self.testProducts[i]['title']))
                     self.itemDict[i].append(self.testProducts[i]['title'])
                 elif (k==1):
-                    button = QPushButton('Show Image', self.table)
-                    button.clicked.connect(lambda: self.on_click(False))
-                    self.table.setCellWidget(i, k, button)
+                    #button = QPushButton('Show Image', self.table)
+                    #button.clicked.connect(lambda: self.on_click(False))
+                    #self.table.setCellWidget(i, k, button)
 
-                    '''
-                    print(self.testProducts[i]['images'][0]['src'])
+
+                    #print(self.testProducts[i]['images'][0]['src'])
                     label = QLabel()
                     pixmap = QPixmap()
                     #image = QImage()
@@ -81,12 +110,11 @@ class App(QDialog):
                     except:
                         pixmap.load('brgr.png')
 
-                    label.setPixmap(pixmap.scaledToWidth(100))
+                    label.setPixmap(pixmap.scaledToWidth(350))
                     #pixmap = pixmap.scaledToWidth(100)
                     #label.setPixmap(pixmap)
-
                     self.table.setCellWidget(i, k, label)
-                    '''
+
 
                 elif (k==2):
                     sizes = aaa.getSizes(self.testProducts[i])
@@ -111,6 +139,25 @@ class App(QDialog):
         self.table.resizeColumnsToContents()
 
 
+    def createAddToCartTable(self):
+        headerTitles = ("Name", "Size", "Quantity", "Remove From Cart")
+        length = len(self.cart)
+        self.table2 = QTableWidget(length, 4)
+        header = self.table2.horizontalHeader()
+        for i in range(4):
+            header.setSectionResizeMode(i, QHeaderView.Stretch)
+        QTableWidget.setHorizontalHeaderLabels(self.table2, headerTitles)
+        for i in range(length):
+            self.table2.setItem(i, 0, QTableWidgetItem(self.cart[i]['title']))
+            self.table2.setItem(i, 1, QTableWidgetItem(self.cartSizes[i]))
+            self.table2.setItem(i, 2, QTableWidgetItem(self.quantityList[i]))
+            button = QPushButton('Remove From Cart', self.table2)
+            button.clicked.connect(lambda: self.remove_cart())
+            self.table2.setCellWidget(i, 3, button)
+        self.table2.resizeRowsToContents()
+        self.table2.resizeColumnsToContents()
+
+
     def loadingScreen(self):
         vbox = QVBoxLayout()
         label = self.changeLabel("Loading . . .")
@@ -128,26 +175,14 @@ class App(QDialog):
 
         self.setLayout(vbox)
 
-
-    def changeLabel(self, message):
-        label = QLabel()
-        label.setText(message)
-        label.setFont(QFont("Arial", 14, QFont.Black))
-        #self.label.move(500, 100)
-        #self.show()
-        return label
-
-    def showOptions(self):
-        button = QPushButton('PyQt5 button', self)
-        button.setToolTip('This is an example button')
-        button.move(100, 70)
-        button.clicked.connect(self.on_click)
-
     #pyqtSlot()
     def on_click(self, cart):
         button = qApp.focusWidget()
         index = self.table.indexAt(button.pos())
         if(cart):
+            if self.itemDict.get(index.row())[2].value() == 0:
+                print("Did not add to cart. Please choose quantity.")
+                return
             print(self.itemDict.get(index.row())[0] + ' Added to Cart')
             print(str(self.itemDict.get(index.row())[1].currentText()))
             print(self.itemDict.get(index.row())[2].value())
@@ -156,6 +191,12 @@ class App(QDialog):
             self.quantityList.append(self.itemDict.get(index.row())[2].value())
         else:
             self.showImage(self.testProducts[index.row()]['images'][1]['src'])
+
+
+    def remove_cart(self):
+        button = qApp.focusWidget()
+        index = self.table.indexAt(button.pos())
+        print(self.cart[index.row()] + "removed")
 
     def showOption(self):
         pass
