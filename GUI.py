@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import aaa
 from urllib.request import urlopen
@@ -26,8 +26,8 @@ class App(QDialog):
         self.initUI()
 
     def initUI(self):
-        # self.setWindowTitle(self.title)
-        # self.setGeometry(self.left, self.top, self.width, self.height)
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
 
         #self.createTable()
         #tableLayout = QHBoxLayout()
@@ -47,15 +47,25 @@ class App(QDialog):
         tablelayout.addWidget(self.table)
         tab1.setLayout(tablelayout)
 
-        self.createAddToCartTable()
+        self.table2 = QTableWidget(0, 4)
+        self.createAddToCartTable(1)
 
         table2layout = QHBoxLayout()
         table2layout.setContentsMargins(5, 5, 5, 5)
         table2layout.addWidget(self.table2)
+
+        orderbutton = QPushButton('Order', self)
+        orderbutton.clicked.connect(lambda: self.order(self.cart, self.cartSizes, self.quantityList))
+        table2layout.addWidget(orderbutton)
+
         tab2.setLayout(table2layout)
+
 
         self.tabLayout.addTab(tab1, "Search")
         self.tabLayout.addTab(tab2, "Cart")
+
+        self.tabLayout.currentChanged.connect(self.createAddToCartTable)
+
         layout.addWidget(self.tabLayout)
         self.setLayout(layout)
 
@@ -63,7 +73,7 @@ class App(QDialog):
 
         #self.statusBar().showMessage('Message in statusbar.')
         #self.showOptions()
-        # self.show()
+        self.show()
 
 
     def createTable(self):
@@ -139,23 +149,44 @@ class App(QDialog):
         self.table.resizeColumnsToContents()
 
 
-    def createAddToCartTable(self):
+    def createAddToCartTable(self, tabIndex):
+        print("Tab Clicked, Index: "+str(tabIndex))
+        if(tabIndex!=1):
+            return
+
         headerTitles = ("Name", "Size", "Quantity", "Remove From Cart")
-        length = len(self.cart)
-        self.table2 = QTableWidget(length, 4)
         header = self.table2.horizontalHeader()
         for i in range(4):
             header.setSectionResizeMode(i, QHeaderView.Stretch)
+
         QTableWidget.setHorizontalHeaderLabels(self.table2, headerTitles)
-        for i in range(length):
-            self.table2.setItem(i, 0, QTableWidgetItem(self.cart[i]['title']))
-            self.table2.setItem(i, 1, QTableWidgetItem(self.cartSizes[i]))
-            self.table2.setItem(i, 2, QTableWidgetItem(self.quantityList[i]))
-            button = QPushButton('Remove From Cart', self.table2)
-            button.clicked.connect(lambda: self.remove_cart())
-            self.table2.setCellWidget(i, 3, button)
+        self.table2.setSelectionMode(QAbstractItemView.NoSelection)
+
+        length = len(self.cart)
+        print(length)
+        initRowPos = self.table2.rowCount()
+        if length > initRowPos:
+            for i in range(length-initRowPos):
+                print("yes")
+                rowPos = self.table2.rowCount()
+                self.table2.insertRow(rowPos)
+                self.table2.setItem(rowPos, 0, QTableWidgetItem(self.cart[rowPos]['title']))
+                self.table2.setItem(rowPos, 1, QTableWidgetItem(self.cartSizes[rowPos]))
+                self.table2.setItem(rowPos, 2, QTableWidgetItem(str(self.quantityList[rowPos])))
+                button = QPushButton('Remove From Cart', self.table2)
+                button.clicked.connect(lambda: self.remove_cart())
+                self.table2.setCellWidget(rowPos, 3, button)
+
         self.table2.resizeRowsToContents()
         self.table2.resizeColumnsToContents()
+
+
+    def order(self, cart, sizes, quantities):
+        print("ORDERING")
+        print(cart)
+        print(sizes)
+        print(quantities)
+        aaa.CompleteShopping(cart,sizes,quantities)
 
 
     def loadingScreen(self):
@@ -184,19 +215,22 @@ class App(QDialog):
                 print("Did not add to cart. Please choose quantity.")
                 return
             print(self.itemDict.get(index.row())[0] + ' Added to Cart')
-            print(str(self.itemDict.get(index.row())[1].currentText()))
-            print(self.itemDict.get(index.row())[2].value())
+            #print(str(self.itemDict.get(index.row())[1].currentText()))
+            #print(self.itemDict.get(index.row())[2].value())
             self.cart.append(self.testProducts[index.row()])
             self.cartSizes.append(str(self.itemDict.get(index.row())[1].currentText()))
             self.quantityList.append(self.itemDict.get(index.row())[2].value())
+            print(self.cart)
+            print(self.cartSizes)
+            print(self.quantityList)
         else:
             self.showImage(self.testProducts[index.row()]['images'][1]['src'])
 
 
     def remove_cart(self):
         button = qApp.focusWidget()
-        index = self.table.indexAt(button.pos())
-        print(self.cart[index.row()] + "removed")
+        index = self.table2.indexAt(button.pos())
+        print(self.cart[index.row()]['title'] + " removed")
 
     def showOption(self):
         pass

@@ -2,10 +2,11 @@ import time
 from selenium import webdriver
 
 class testDriver:
-    def __init__(self, UrlList, PopUp, FinalProductList):
+    def __init__(self, UrlList, PopUp, FinalProductList, QuantityList):
         self.urls = UrlList
         self.Popup = PopUp
         self.FinalProdList = FinalProductList
+        self.QuantityList = QuantityList
 
     def testURL(self, driver):
         # Some urls have contact to order
@@ -21,6 +22,9 @@ class testDriver:
                 if (item == 'email-orders' or item == 'phone-orders'):
                     print("This is a contact to order")
                     return False
+            for quantity in range(self.QuantityList[num]-1):
+                driver.find_element_by_xpath('//*[@id="AddToCartForm--'
+                                             'product-packer-template"]/div[2]/div/button[2]').click()
             driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
         return True
 
@@ -30,7 +34,7 @@ class testDriver:
             print("Cannot Order")
             return False
 
-        # STORE THESE IN A SEPARATE FILE (MODULARIZE). ADD OTHER OPTIONS TOO
+        # ADD OTHER OPTIONS TOO
         time.sleep(1)
         driver.find_element_by_xpath('// *[ @ id = "CartContainer"] / form / div[2] / button').click()
 

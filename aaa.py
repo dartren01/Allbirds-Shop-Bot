@@ -102,6 +102,20 @@ def CheckSizeMatch(product, size):
                 return True
     return False
 
+#add quantity
+def CompleteShopping(ProductList, SizeList, QuantityList):
+    initialPopUp = True
+    UrlList = []
+    for i in range(len(ProductList)):
+        if (initialPopUp):
+            PopUp = UrlGenerators.popUpGen(ProductList[i])
+            initialPopUp = False
+        URL = UrlGenerators.UrlGen(ProductList[i], SizeList[i])
+        print(URL)
+        UrlList.append(URL)
+    checkouttest = testDriver(UrlList, PopUp, ProductList, QuantityList)
+    checkouttest.checkout()
+
 '''
 def ListSizes(product):
     count = 0
