@@ -26,8 +26,8 @@ class App(QDialog):
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
+        # self.setWindowTitle(self.title)
+        # self.setGeometry(self.left, self.top, self.width, self.height)
 
         #self.createTable()
         #tableLayout = QHBoxLayout()
@@ -63,7 +63,7 @@ class App(QDialog):
 
         #self.statusBar().showMessage('Message in statusbar.')
         #self.showOptions()
-        self.show()
+        # self.show()
 
 
     def createTable(self):
