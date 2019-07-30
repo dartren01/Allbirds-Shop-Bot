@@ -75,7 +75,7 @@ class App(QDialog):
 
         #self.statusBar().showMessage('Message in statusbar.')
         #self.showOptions()
-        # self.show()
+        self.show()
 
 
     def createTable(self):
@@ -155,7 +155,8 @@ class App(QDialog):
         print("Tab Clicked, Index: "+str(tabIndex))
         if(tabIndex!=1):
             return
-
+        while(self.table2.rowCount() > 0):
+            self.table2.removeRow(0)
         headerTitles = ("Name", "Size", "Quantity", "Remove From Cart")
         header = self.table2.horizontalHeader()
         for i in range(4):
@@ -235,7 +236,18 @@ class App(QDialog):
     def remove_cart(self):
         button = qApp.focusWidget()
         index = self.table2.indexAt(button.pos())
-        print(self.cart[index.row()]['title'] + " removed")
+        print(ShopInfo.ShoppingKeys["Cart"][index.row()]['title'] + " removed")
+        try:
+            del ShopInfo.ShoppingKeys["Cart"][index.row()]
+            del ShopInfo.ShoppingKeys["Sizes"][index.row()]
+            del ShopInfo.ShoppingKeys["Quantities"][index.row()]
+            print(ShopInfo.ShoppingKeys["Cart"])
+            print(ShopInfo.ShoppingKeys["Sizes"])
+            print(ShopInfo.ShoppingKeys["Quantities"])
+            self.createAddToCartTable(1)
+            self.show()
+        except:
+            print("Unable to remove")
 
     def showOption(self):
         pass
@@ -274,6 +286,6 @@ class PopupImage(QDialog):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = App()
+    ex = App("Adidas","Apparel",False)
     sys.exit(app.exec_())
 
