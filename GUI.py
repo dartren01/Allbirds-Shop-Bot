@@ -5,6 +5,9 @@ from PyQt5.QtGui import *
 import aaa
 import ShopInfo
 from urllib.request import urlopen
+from multiprocessing import cpu_count, Pool
+#import MainWindow
+
 
 class App(QDialog):
 
@@ -21,10 +24,25 @@ class App(QDialog):
         products = aaa.getProducts()
         self.testProducts = aaa.findKeyword(products, keyword, typeRadio, contactRadio)
         ShopInfo.ShoppingKeys["Products"] = self.testProducts
+
+        pool = Pool(cpu_count())
+        result_list = pool.map(getProdJsonList, self.testProducts)
+        #pjson = pool.map_async(getProdJsonList, [self.testProducts])
+        #pimage = pool.map_async(getImageData, [self.testProducts])
+
+        #pjson.start()
+        #pimage.start()
+
+        #pjson.join()
+        #pimage.join()
+
+        #print(pjson.get())
+        #self.prodJson = pjson.get(timeout=1)
+        #self.prodImageData = pimage.get(timeout=1)
+        self.prodDict = {}
+        for prod in result_list:
+            self.prodDict[prod[0]] = [prod[1], prod[2]]
         self.itemDict = {}
-        self.cart = []
-        self.cartSizes = []
-        self.quantityList = []
         self.bckbtn = QPushButton("Back", self)
         self.bckbtn.resize(100, 32)
         self.bckbtn.move(750, 650)
@@ -64,9 +82,8 @@ class App(QDialog):
         table2layout.setContentsMargins(5, 5, 5, 5)
         table2layout.addWidget(self.table2)
 
-
         orderbutton = QPushButton('Order', self)
-        orderbutton.clicked.connect(lambda: self.order(self.cart, self.cartSizes, self.quantityList))
+        orderbutton.clicked.connect(lambda: self.order())
         table2layout.addWidget(orderbutton)
 
         tab2.setLayout(table2layout)
@@ -111,6 +128,7 @@ class App(QDialog):
                 if(k==0):
                     self.table.setItem(i, k, QTableWidgetItem(self.testProducts[i]['title']))
                     self.itemDict[i].append(self.testProducts[i]['title'])
+                    print(self.testProducts[i])
                 elif (k==1):
                     #button = QPushButton('Show Image', self.table)
                     #button.clicked.connect(lambda: self.on_click(False))
@@ -124,8 +142,7 @@ class App(QDialog):
                     #data = urlopen(self.testProducts[i]['images'][0]['src']).read()
                     #image.loadFromData(data)
                     try:
-                        data = urlopen(self.testProducts[i]['images'][0]['src']).read()
-                        pixmap.loadFromData(data)
+                        pixmap.loadFromData(self.prodDict[self.testProducts[i]['title']][1])
                         print("loaded")
                         #pixmap.loadFromData(self.testProducts[i]['images'][0]['src'])
                     except:
@@ -193,7 +210,7 @@ class App(QDialog):
         self.table2.resizeColumnsToContents()
 
 
-    def order(self, cart, sizes, quantities):
+    def order(self):
         print("ORDERING")
         print(ShopInfo.ShoppingKeys["Cart"])
         print(ShopInfo.ShoppingKeys["Sizes"])
@@ -227,17 +244,9 @@ class App(QDialog):
                 print("Did not add to cart. Please choose quantity.")
                 return
             print(self.itemDict.get(index.row())[0] + ' Added to Cart')
-            #print(str(self.itemDict.get(index.row())[1].currentText()))
-            #print(self.itemDict.get(index.row())[2].value())
-            #self.cart.append(self.testProducts[index.row()])
-            #self.cartSizes.append(str(self.itemDict.get(index.row())[1].currentText()))
-            #self.quantityList.append(self.itemDict.get(index.row())[2].value())
             ShopInfo.ShoppingKeys["Cart"].append(self.testProducts[index.row()])
             ShopInfo.ShoppingKeys["Sizes"].append(str(self.itemDict.get(index.row())[1].currentText()))
             ShopInfo.ShoppingKeys["Quantities"].append(self.itemDict.get(index.row())[2].value())
-            print(ShopInfo.ShoppingKeys["Cart"])
-            print(ShopInfo.ShoppingKeys["Sizes"])
-            print(ShopInfo.ShoppingKeys["Quantities"])
         else:
             self.showImage(self.testProducts[index.row()]['images'][1]['src'])
 
@@ -250,6 +259,7 @@ class App(QDialog):
             del ShopInfo.ShoppingKeys["Cart"][index.row()]
             del ShopInfo.ShoppingKeys["Sizes"][index.row()]
             del ShopInfo.ShoppingKeys["Quantities"][index.row()]
+            self.table2.removeRow(index.row())
             print(ShopInfo.ShoppingKeys["Cart"])
             print(ShopInfo.ShoppingKeys["Sizes"])
             print(ShopInfo.ShoppingKeys["Quantities"])
@@ -258,6 +268,29 @@ class App(QDialog):
         except:
             print("Unable to remove")
 
+    def on_size_change(self):
+        pass
+
+def getProdJsonList(prod):
+    # tuple (name, json, image)
+    prod = (prod['title'], aaa.getProductJson(prod['handle']), urlopen(prod['images'][0]['src']).read())
+    return prod
+    '''
+    jsonList=[]
+    for prod in prodList:
+        jsonList.append(aaa.getProductJson(prod['handle']))
+        print(prod)
+    return jsonList
+    '''
+
+def getImageData(prodList):
+    imageList=[]
+    for prod in prodList:
+        imageList.append(urlopen(prod['images'][0]['src']).read())
+    return imageList
+
+
+'''
     def showOption(self):
         pass
 
@@ -292,6 +325,7 @@ class PopupImage(QDialog):
         # self.setGeometry(200, 200, 600, 600)
         self.layout.addWidget(self.label)
         # self.initUI()
+'''
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -26,6 +26,12 @@ def getProducts():
     #print(productList[0])
     return productList
 
+def getProductJson(product):
+    urlstr = 'https://packershoes.com/products/{}.json'.format(product)
+    r = requests.get(urlstr)
+    jsonStr = json.loads(r.text)
+    return jsonStr
+
 def GetContactToOrder():
     contactToOrder = input("Include Contact to Order Items? Enter Yes or No: ")
     if (contactToOrder.lower() == 'yes'):
