@@ -11,8 +11,8 @@ class App(QDialog):
     def __init__(self, keyword, typeRadio, contactRadio):
         super().__init__()
         self.title = 'PyQt5 simple window'
-        self.left = 20
-        self.top = 50
+        self.left = 800
+        self.top = 100
         self.width = 1024
         self.height = 768
         #self.label = QLabel()
@@ -25,11 +25,14 @@ class App(QDialog):
         self.cart = []
         self.cartSizes = []
         self.quantityList = []
+        self.bckbtn = QPushButton("Back", self)
+        self.bckbtn.resize(100, 32)
+        self.bckbtn.move(750, 650)
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
+        # self.setWindowTitle(self.title)
+        # self.setGeometry(self.left, self.top, self.width, self.height)
 
         #self.createTable()
         #tableLayout = QHBoxLayout()
@@ -47,7 +50,12 @@ class App(QDialog):
         tablelayout = QHBoxLayout()
         tablelayout.setContentsMargins(5, 5, 5, 5)
         tablelayout.addWidget(self.table)
-        tab1.setLayout(tablelayout)
+
+        searchLayout = QVBoxLayout()
+        searchLayout.addLayout(tablelayout)
+        searchLayout.addWidget(self.bckbtn)
+
+        tab1.setLayout(searchLayout)
 
         self.table2 = QTableWidget(0, 4)
         self.createAddToCartTable(1)
@@ -55,6 +63,7 @@ class App(QDialog):
         table2layout = QHBoxLayout()
         table2layout.setContentsMargins(5, 5, 5, 5)
         table2layout.addWidget(self.table2)
+
 
         orderbutton = QPushButton('Order', self)
         orderbutton.clicked.connect(lambda: self.order(self.cart, self.cartSizes, self.quantityList))
@@ -75,7 +84,7 @@ class App(QDialog):
 
         #self.statusBar().showMessage('Message in statusbar.')
         #self.showOptions()
-        self.show()
+        # self.show()
 
 
     def createTable(self):

@@ -100,6 +100,13 @@ class Window2(QWidget):
         super().__init__()
 
 
+# class Window2(QWidget):
+#     def __init__(self, parent=None):
+#         super(Window2, self).__init__(parent)
+#         self.CPSBTN = QPushButton("Back", self)
+#         self.CPSBTN.resize(100, 32)
+#         self.CPSBTN.move(750, 650)
+
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__()
@@ -117,8 +124,8 @@ class MainWindow(QMainWindow):
         self.show()
 
     def startWindow2(self):
-        # PRINT TYPE RADIO BUTTON
 
+        # CHECK WHICH RADIO BUTTON WAS CLICKED ON WINDOW 1
         if self.Window.typeRadioButton1.isChecked():
             self.typeRadio = "Footwear"
             print("Footwear")
@@ -129,7 +136,7 @@ class MainWindow(QMainWindow):
             self.typeRadio = "Both"
             print("Both")
 
-        # PRINT CONTACT RADIO BUTTON
+        # CHECK CONTACT RADIO BUTTON
         if self.Window.contactRadioButton1.isChecked():
             self.contactRadio = True
             print("Yes")
@@ -137,16 +144,23 @@ class MainWindow(QMainWindow):
             self.contactRadio = False
             print("No")
 
-        # PRINT TEXTBOX
+        # CHECK TEXTBOX
         self.keyword = self.Window.textbox.text()
 
         self.win = GUI.App(self.keyword, self.typeRadio, self.contactRadio)
 
+        # self.setCentralWidget(self.Window)
+        # self.setWindowTitle(self.Window.title)
+        # self.setWindowIcon(QtGui.QIcon(self.Window.iconName))
+        # self.setGeometry(self.Window.left, self.Window.top, self.Window.width, self.Window.height)
+
+
+        # self.win = Window2(self)
         self.setCentralWidget(self.win)
-        # self.ToolTab = Window2(self)
-        # self.setCentralWidget(self.ToolTab)
-        # # self.ToolTab.CPSBTN.clicked.connect(self.startWindow1)
+        self.win.bckbtn.clicked.connect(self.startWindow1)
         self.show()
+
+        # self.win.show()
 
 
 
