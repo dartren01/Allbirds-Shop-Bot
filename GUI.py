@@ -128,7 +128,7 @@ class App(QDialog):
                 if(k==0):
                     self.table.setItem(i, k, QTableWidgetItem(self.testProducts[i]['title']))
                     self.itemDict[i].append(self.testProducts[i]['title'])
-                    print(self.testProducts[i])
+                    #print(self.testProducts[i])
                 elif (k==1):
                     #button = QPushButton('Show Image', self.table)
                     #button.clicked.connect(lambda: self.on_click(False))
@@ -163,6 +163,14 @@ class App(QDialog):
                 elif (k==3):
                     quantityBox = QSpinBox(self.table)
                     quantityBox.setValue(0)
+                    pSize = str(self.itemDict[i][1].currentText())
+                    print(self.prodDict[self.testProducts[i]['title']][0]['product']['variants'])
+                    maxQuantity = 0
+                    for var in self.prodDict[self.testProducts[i]['title']][0]['product']['variants']:
+                        if pSize == var['option1']:
+                            maxQuantity = var['inventory_quantity']
+                            break
+                    quantityBox.setMaximum(maxQuantity)
                     self.table.setCellWidget(i, k, quantityBox)
                     self.itemDict[i].append(quantityBox)
                 elif (k==4):
@@ -172,7 +180,7 @@ class App(QDialog):
                     #self.table.setItem(i, k, QTableWidgetItem(button))
                 else:
                     self.table.setItem(i, k, QTableWidgetItem("oof"))
-
+        print(self.itemDict)
         self.table.resizeRowsToContents()
         self.table.resizeColumnsToContents()
 
@@ -243,6 +251,9 @@ class App(QDialog):
             if self.itemDict.get(index.row())[2].value() == 0:
                 print("Did not add to cart. Please choose quantity.")
                 return
+            if self.testProducts[index.row()] in ShopInfo.ShoppingKeys["Cart"]:
+                print("Already in Cart")
+                return
             print(self.itemDict.get(index.row())[0] + ' Added to Cart')
             ShopInfo.ShoppingKeys["Cart"].append(self.testProducts[index.row()])
             ShopInfo.ShoppingKeys["Sizes"].append(str(self.itemDict.get(index.row())[1].currentText()))
@@ -268,6 +279,7 @@ class App(QDialog):
         except:
             print("Unable to remove")
 
+    # change quantity cap
     def on_size_change(self):
         pass
 
