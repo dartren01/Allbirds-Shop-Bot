@@ -1,5 +1,7 @@
 import time
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import ShopInfo
 
 class testDriver:
     def __init__(self, UrlList, PopUp, FinalProductList, QuantityList):
@@ -28,9 +30,23 @@ class testDriver:
             driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
         return True
 
+    def login_to_gmail(self, driver):
+        email = ShopInfo.Login["Email"][0]
+        password = ShopInfo.Login["Password"][0]
+
+        driver.get('http://gmail.com')
+        driver.find_element_by_xpath('//*[@id="identifierId"]').send_keys(email + Keys.ENTER)
+        time.sleep(1)
+        driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input').send_keys(password + Keys.ENTER)
+        return True
+
     def checkout(self):
         driver = webdriver.Chrome('./chromedriver')
-        if(not self.testURL(driver)):
+
+        if not self.login_to_gmail(driver):
+            return False
+        time.sleep(1)
+        if not self.testURL(driver):
             print("Cannot Order")
             return False
 
@@ -47,5 +63,5 @@ class testDriver:
         driver.find_element_by_xpath('// *[ @ id = "checkout_email"]').send_keys('dartren@gmail.com')
 
         #driver.find_element_by_xpath('//*[@id="recaptcha-anchor"]/div[1]')
-        time.sleep(30)
-        driver.close()
+        # time.sleep(30)
+        # driver.close()

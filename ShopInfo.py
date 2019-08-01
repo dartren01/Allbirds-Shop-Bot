@@ -4,3 +4,8 @@ ShoppingKeys = {
     "Sizes": [],
     "Quantities": []
 }
+
+Login = {
+    "Email": [],
+    "Password": []
+}

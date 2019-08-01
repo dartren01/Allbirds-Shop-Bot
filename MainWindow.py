@@ -4,8 +4,56 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QDi
 from PyQt5.QtCore import *
 from PyQt5 import QtGui
 import aaa
+import ShopInfo
 import GUI
 import threading
+
+
+class Login_Window(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.title = "DO YOU LIKE JAZZ?"
+        self.iconName = "dartren.jpg"
+        self.left = 100
+        self.top = 100
+        self.width = 1024
+        self.height = 768
+
+        self.CreateKeywordBox()
+
+    def CreateKeywordBox(self):
+        Email = QGroupBox("Email")
+        emailGridLayout = QGridLayout()
+        self.email = QLineEdit(self)
+        emailGridLayout.addWidget(self.email)
+        emailGridLayout.setAlignment(Qt.AlignCenter)
+        Email.setLayout(emailGridLayout)
+
+        Password = QGroupBox("Password")
+        passwordGridLayout = QGridLayout()
+        self.password = QLineEdit(self)
+        passwordGridLayout.addWidget(self.password)
+        passwordGridLayout.setAlignment(Qt.AlignCenter)
+        Password.setLayout(passwordGridLayout)
+
+        vbox = QVBoxLayout()
+        vbox.addStretch()
+        vbox.addWidget(Email)
+        vbox.addWidget(Password)
+        vbox.addStretch()
+
+        hbox = QHBoxLayout()
+        hbox.addStretch()
+        hbox.addLayout(vbox)
+        hbox.setAlignment(Qt.AlignHCenter)
+        hbox.addStretch()
+
+        self.setLayout(hbox)
+        self.button = QPushButton("Next", self)
+        self.button.resize(100, 32)
+        self.button.move(750, 650)
+
 
 class Window1(QWidget):
 
@@ -43,7 +91,6 @@ class Window1(QWidget):
         hbox.addLayout(vbox)
         hbox.setAlignment(Qt.AlignHCenter)
         hbox.addStretch()
-
 
         self.setLayout(hbox)
         self.ToolsBTN = QPushButton("Next", self)
@@ -100,21 +147,26 @@ class Window2(QWidget):
         super().__init__()
 
 
-# class Window2(QWidget):
-#     def __init__(self, parent=None):
-#         super(Window2, self).__init__(parent)
-#         self.CPSBTN = QPushButton("Back", self)
-#         self.CPSBTN.resize(100, 32)
-#         self.CPSBTN.move(750, 650)
-
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__()
-        self.startWindow1()
+        self.startLoginWindow()
 
         # intialize Window1
 
+    def startLoginWindow(self):
+        self.LoginWindow = Login_Window()
+        self.setCentralWidget(self.LoginWindow)
+        self.setWindowTitle(self.LoginWindow.title)
+        self.setWindowIcon(QtGui.QIcon(self.LoginWindow.iconName))
+        self.setGeometry(self.LoginWindow.left, self.LoginWindow.top, self.LoginWindow.width, self.LoginWindow.height)
+        self.LoginWindow.button.clicked.connect(self.startWindow1)
+        self.show()
+
     def startWindow1(self):
+        ShopInfo.Login["Email"].append(self.LoginWindow.email.text())
+        ShopInfo.Login['Password'].append(self.LoginWindow.password.text())
+
         self.Window = Window1()
         self.setCentralWidget(self.Window)
         self.setWindowTitle(self.Window.title)
@@ -149,19 +201,10 @@ class MainWindow(QMainWindow):
 
         self.win = GUI.App(self.keyword, self.typeRadio, self.contactRadio)
 
-        # self.setCentralWidget(self.Window)
-        # self.setWindowTitle(self.Window.title)
-        # self.setWindowIcon(QtGui.QIcon(self.Window.iconName))
-        # self.setGeometry(self.Window.left, self.Window.top, self.Window.width, self.Window.height)
-
-
         # self.win = Window2(self)
         self.setCentralWidget(self.win)
         self.win.bckbtn.clicked.connect(self.startWindow1)
         self.show()
-
-        # self.win.show()
-
 
 
 if __name__ == '__main__':
