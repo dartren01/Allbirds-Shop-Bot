@@ -27,18 +27,6 @@ class App(QDialog):
 
         pool = Pool(cpu_count())
         result_list = pool.map(getProdJsonList, self.testProducts)
-        #pjson = pool.map_async(getProdJsonList, [self.testProducts])
-        #pimage = pool.map_async(getImageData, [self.testProducts])
-
-        #pjson.start()
-        #pimage.start()
-
-        #pjson.join()
-        #pimage.join()
-
-        #print(pjson.get())
-        #self.prodJson = pjson.get(timeout=1)
-        #self.prodImageData = pimage.get(timeout=1)
         self.prodDict = {}
         for prod in result_list:
             self.prodDict[prod[0]] = [prod[1], prod[2]]
@@ -99,8 +87,6 @@ class App(QDialog):
 
         #self.loadingScreen()
 
-        #self.statusBar().showMessage('Message in statusbar.')
-        #self.showOptions()
         # self.show()
 
 
@@ -115,11 +101,7 @@ class App(QDialog):
         header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
-        #for i in range(5):
-        #    header.setSectionResizeMode(i, QHeaderView.Stretch)
         QTableWidget.setHorizontalHeaderLabels(self.table, headerTitles)
-        #self.table.verticalHeader().setVisible(False)
-        #self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
         self.table.setSelectionMode(QAbstractItemView.NoSelection)
 
         for i in range(length):
@@ -130,29 +112,16 @@ class App(QDialog):
                     self.itemDict[i].append(self.testProducts[i]['title'])
                     #print(self.testProducts[i])
                 elif (k==1):
-                    #button = QPushButton('Show Image', self.table)
-                    #button.clicked.connect(lambda: self.on_click(False))
-                    #self.table.setCellWidget(i, k, button)
-
-
-                    #print(self.testProducts[i]['images'][0]['src'])
                     label = QLabel()
                     pixmap = QPixmap()
-                    #image = QImage()
-                    #data = urlopen(self.testProducts[i]['images'][0]['src']).read()
-                    #image.loadFromData(data)
                     try:
                         pixmap.loadFromData(self.prodDict[self.testProducts[i]['title']][1])
                         print("loaded")
-                        #pixmap.loadFromData(self.testProducts[i]['images'][0]['src'])
                     except:
                         pixmap.load('brgr.png')
 
                     label.setPixmap(pixmap.scaledToWidth(350))
-                    #pixmap = pixmap.scaledToWidth(100)
-                    #label.setPixmap(pixmap)
                     self.table.setCellWidget(i, k, label)
-
 
                 elif (k==2):
                     sizes = aaa.getSizes(self.testProducts[i])
@@ -166,6 +135,7 @@ class App(QDialog):
                     pSize = str(self.itemDict[i][1].currentText())
                     print(self.prodDict[self.testProducts[i]['title']][0]['product']['variants'])
                     maxQuantity = 0
+                    # get variants from prodDict which has quantity amount
                     for var in self.prodDict[self.testProducts[i]['title']][0]['product']['variants']:
                         if pSize == var['option1']:
                             maxQuantity = var['inventory_quantity']
@@ -225,24 +195,6 @@ class App(QDialog):
         print(ShopInfo.ShoppingKeys["Quantities"])
         aaa.CompleteShopping()
 
-
-    def loadingScreen(self):
-        vbox = QVBoxLayout()
-        label = self.changeLabel("Loading . . .")
-        #vbox.addStretch(1)
-        vbox.addWidget(label)
-
-        movie = QMovie("./PacLoader.gif")
-        mov = QLabel()
-        mov.setMovie(movie)
-        #mov.setGeometry(450, 150, 200, 200)
-        # self.mov.move(500, 400)
-        movie.start()
-        #vbox.addStretch(1)
-        vbox.addWidget(mov)
-
-        self.setLayout(vbox)
-
     #pyqtSlot()
     def on_click(self, cart):
         button = qApp.focusWidget()
@@ -287,22 +239,26 @@ def getProdJsonList(prod):
     # tuple (name, json, image)
     prod = (prod['title'], aaa.getProductJson(prod['handle']), urlopen(prod['images'][0]['src']).read())
     return prod
-    '''
-    jsonList=[]
-    for prod in prodList:
-        jsonList.append(aaa.getProductJson(prod['handle']))
-        print(prod)
-    return jsonList
-    '''
-
-def getImageData(prodList):
-    imageList=[]
-    for prod in prodList:
-        imageList.append(urlopen(prod['images'][0]['src']).read())
-    return imageList
 
 
 '''
+    def loadingScreen(self):
+        vbox = QVBoxLayout()
+        label = self.changeLabel("Loading . . .")
+        #vbox.addStretch(1)
+        vbox.addWidget(label)
+
+        movie = QMovie("./PacLoader.gif")
+        mov = QLabel()
+        mov.setMovie(movie)
+        #mov.setGeometry(450, 150, 200, 200)
+        # self.mov.move(500, 400)
+        movie.start()
+        #vbox.addStretch(1)
+        vbox.addWidget(mov)
+
+        self.setLayout(vbox)
+        
     def showOption(self):
         pass
 
