@@ -77,13 +77,13 @@ class Window1(QWidget):
 
         self.CreateTypeRadioBox()
         self.CreateKeywordBox()
-        self.CreateContactRadioBox()
+        #self.CreateContactRadioBox()
 
         vbox = QVBoxLayout()
         vbox.addStretch()
         vbox.addWidget(self.TypeRadioBox)
         vbox.addWidget(self.TextBox)
-        vbox.addWidget(self.ContactRadioBox)
+        #vbox.addWidget(self.ContactRadioBox)
         vbox.addStretch()
 
         hbox = QHBoxLayout()
@@ -127,6 +127,7 @@ class Window1(QWidget):
         gridLayout.setAlignment(Qt.AlignCenter)
         self.TextBox.setLayout(gridLayout)
 
+    #remove this func
     def CreateContactRadioBox(self):
         self.ContactRadioBox = QGroupBox("Contact To Order?")
 
@@ -187,7 +188,7 @@ class MainWindow(QMainWindow):
         elif self.Window.typeRadioButton3.isChecked():
             self.typeRadio = "Both"
             print("Both")
-
+        '''
         # CHECK CONTACT RADIO BUTTON
         if self.Window.contactRadioButton1.isChecked():
             self.contactRadio = True
@@ -195,11 +196,11 @@ class MainWindow(QMainWindow):
         elif self.Window.contactRadioButton2.isChecked():
             self.contactRadio = False
             print("No")
-
+        '''
         # CHECK TEXTBOX
         self.keyword = self.Window.textbox.text()
 
-        self.win = GUI.App(self.keyword, self.typeRadio, self.contactRadio)
+        self.win = GUI.App(self.keyword, self.typeRadio)
 
         # self.win = Window2(self)
         self.setCentralWidget(self.win)

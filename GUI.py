@@ -6,12 +6,13 @@ import aaa
 import ShopInfo
 from urllib.request import urlopen
 from multiprocessing import cpu_count, Pool
+from functools import partial
 #import MainWindow
 
 
 class App(QDialog):
 
-    def __init__(self, keyword, typeRadio, contactRadio):
+    def __init__(self, keyword, typeRadio):
         super().__init__()
         self.title = 'PyQt5 simple window'
         self.left = 800
@@ -22,10 +23,12 @@ class App(QDialog):
         #self.mov = QLabel()
         #self.HGroupBox = QGroupBox()
         products = aaa.getProducts()
-        self.testProducts = aaa.findKeyword(products, keyword, typeRadio, contactRadio)
+        pool = Pool(cpu_count())
+        self.testProducts = [x for x in pool.map(partial(aaa.findKeyword, keyword=keyword, type=typeRadio), products)
+                             if x is not None]
+        #self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
         ShopInfo.ShoppingKeys["Products"] = self.testProducts
 
-        pool = Pool(cpu_count())
         result_list = pool.map(getProdJsonList, self.testProducts)
         self.prodDict = {}
         for prod in result_list:

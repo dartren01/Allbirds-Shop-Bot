@@ -39,42 +39,51 @@ def GetContactToOrder():
     return False
 
 #fix this
-def findKeyword(products, keyword, type, contactToOrder):
-    pList = []
+def findKeyword(product, keyword, type):
+    if keyword.upper() in product['title']:
+        if type.upper() in product['product_type'] and type.upper() == "FOOTWEAR":
+            if (ProductAvailable(product, False)):
+                if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                    print(product['title'])
+                    return product
+        elif type.upper() in product['product_type'] and type.upper() == "APPAREL":
+            if (ProductAvailable(product, False)):
+                if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                    print(product['title'])
+                    return product
+        # BOTH
+        elif type.upper() == "BOTH":
+            if (ProductAvailable(product, False)):
+                if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                    print(product['title'])
+                    return product
+    return None
+
+    '''
+    pList = {}
     for product in products:
         #also check multiple keywords
         if keyword.upper() in product['title']:
             if type.upper() in product['product_type'] and type.upper() == "FOOTWEAR":
                 if (ProductAvailable(product, False)):
-                    if (not contactToOrder):
-                        if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
-                            pList.append(product)
-                            print(product['title'])
-                    else:
+                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
                         pList.append(product)
                         print(product['title'])
             elif type.upper() in product['product_type'] and type.upper() == "APPAREL":
                 if (ProductAvailable(product, False)):
-                    if (not contactToOrder):
-                        if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
-                            pList.append(product)
-                            print(product['title'])
-                    else:
+                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
                         pList.append(product)
                         print(product['title'])
             #BOTH
             elif type.upper() == "BOTH":
                 if (ProductAvailable(product, False)):
-                    if (not contactToOrder):
-                        if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
-                            pList.append(product)
-                            print(product['title'])
-                    else:
+                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
                         pList.append(product)
                         print(product['title'])
     if(len(pList)==0):
         return None
     return pList
+    '''
 
 
 def ReturnProduct(products, keyword):
