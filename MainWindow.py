@@ -23,24 +23,91 @@ class Login_Window(QWidget):
         self.CreateKeywordBox()
 
     def CreateKeywordBox(self):
-        Email = QGroupBox("Email")
-        emailGridLayout = QGridLayout()
-        self.email = QLineEdit(self)
-        emailGridLayout.addWidget(self.email)
-        emailGridLayout.setAlignment(Qt.AlignCenter)
-        Email.setLayout(emailGridLayout)
 
-        Password = QGroupBox("Password")
-        passwordGridLayout = QGridLayout()
+        # ---------- Contact Block ---------- #
+        Contact = QGroupBox("Contact Information")
+        emailGridLayout = QGridLayout()
+
+        self.email = QLineEdit(self)
+        self.email.setPlaceholderText("Email")
         self.password = QLineEdit(self)
-        passwordGridLayout.addWidget(self.password)
-        passwordGridLayout.setAlignment(Qt.AlignCenter)
-        Password.setLayout(passwordGridLayout)
+        self.password.setPlaceholderText("Password")
+
+        emailGridLayout.addWidget(self.email)
+        emailGridLayout.addWidget(self.password)
+
+        Contact.setLayout(emailGridLayout)
+        # ----------------------------------- #
+
+        # ---------- Shipping Block ---------- #
+        Shipping = QGroupBox("Shipping Information")
+        shipping_info = QVBoxLayout()
+        name = QHBoxLayout()
+
+        self.firstname = QLineEdit(self)
+        self.lastname = QLineEdit(self)
+        self.firstname.setPlaceholderText("First name")
+        self.lastname.setPlaceholderText("Last name")
+
+        name.addWidget(self.firstname)
+        name.addWidget(self.lastname)
+
+        self.address = QLineEdit(self)
+        self.address.setPlaceholderText("Address")
+
+        self.city = QLineEdit(self)
+        self.city.setPlaceholderText("City")
+
+        location = QHBoxLayout()
+        self.state = QLineEdit(self)
+        self.zipcode = QLineEdit(self)
+        self.state.setPlaceholderText("State")
+        self.zipcode.setPlaceholderText("Zipcode")
+
+        location.addWidget(self.state)
+        location.addWidget(self.zipcode)
+
+        self.phone = QLineEdit(self)
+        self.phone.setPlaceholderText("Phone")
+
+        shipping_info.addLayout(name)
+        shipping_info.addWidget(self.address)
+        shipping_info.addWidget(self.city)
+        shipping_info.addLayout(location)
+        shipping_info.addWidget(self.phone)
+
+        Shipping.setLayout(shipping_info)
+        # ------------------------------------- #
+
+        # ---------- Billing Block ---------- #
+        Billing = QGroupBox("Payment")
+        billing_info = QVBoxLayout()
+
+        self.card_number = QLineEdit(self)
+        self.card_number.setPlaceholderText("Card number")
+
+        self.card_name = QLineEdit(self)
+        self.card_name.setPlaceholderText("Card name")
+
+        card_details = QHBoxLayout()
+        self.card_expiration = QLineEdit(self)
+        self.card_security = QLineEdit(self)
+        self.card_expiration.setPlaceholderText("Card expiration")
+        self.card_security.setPlaceholderText("Card security")
+        card_details.addWidget(self.card_expiration)
+        card_details.addWidget(self.card_security)
+
+        billing_info.addWidget(self.card_number)
+        billing_info.addWidget(self.card_name)
+        billing_info.addLayout(card_details)
+        Billing.setLayout(billing_info)
+        # ----------------------------------- #
 
         vbox = QVBoxLayout()
         vbox.addStretch()
-        vbox.addWidget(Email)
-        vbox.addWidget(Password)
+        vbox.addWidget(Contact)
+        vbox.addWidget(Shipping)
+        vbox.addWidget(Billing)
         vbox.addStretch()
 
         hbox = QHBoxLayout()
@@ -174,7 +241,18 @@ class MainWindow(QMainWindow):
     def startWindow1(self, is_valid_search, is_back):
         if is_valid_search and not is_back:
             ShopInfo.Login["Email"].append(self.LoginWindow.email.text())
-            ShopInfo.Login['Password'].append(self.LoginWindow.password.text())
+            ShopInfo.Login["Password"].append(self.LoginWindow.password.text())
+            ShopInfo.Login['FirstName'].append(self.LoginWindow.firstname.text())
+            ShopInfo.Login['LastName'].append(self.LoginWindow.lastname.text())
+            ShopInfo.Login['Address'].append(self.LoginWindow.address.text())
+            ShopInfo.Login['City'].append(self.LoginWindow.city.text())
+            ShopInfo.Login['State'].append(self.LoginWindow.state.text())
+            ShopInfo.Login['Zipcode'].append(self.LoginWindow.zipcode.text())
+            ShopInfo.Login['Phone'].append(self.LoginWindow.phone.text())
+            ShopInfo.Login['CardNumber'].append(self.LoginWindow.card_number.text())
+            ShopInfo.Login['CardName'].append(self.LoginWindow.card_name.text())
+            ShopInfo.Login['CardExpiration'].append(self.LoginWindow.card_expiration.text())
+            ShopInfo.Login['CardSecurity'].append(self.LoginWindow.card_security.text())
 
         self.Window = Window1(is_valid_search, is_back)
         self.setCentralWidget(self.Window)

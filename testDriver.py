@@ -41,6 +41,24 @@ class testDriver:
         return True
 
     def checkout(self):
+        phone = ShopInfo.Login["Phone"][0]
+        firstname = ShopInfo.Login["FirstName"][0]
+        lastname = ShopInfo.Login["LastName"][0]
+        address = ShopInfo.Login["Address"][0]
+        city = ShopInfo.Login["City"][0]
+        zipcode = ShopInfo.Login["Zipcode"][0]
+        email = ShopInfo.Login["Email"][0]
+
+        # ----- TEST CASES -----
+        # phone = '5629165122'
+        # firstname = 'carmine'
+        # lastname = 'choi'
+        # address = '19611 Jacob Ave'
+        # city = 'cerritos'
+        # zipcode = '90703'
+        # email = 'gangmin519@gmail.com'
+
+
         driver = webdriver.Chrome('./chromedriver')
 
         if not self.login_to_gmail(driver):
@@ -54,13 +72,13 @@ class testDriver:
         time.sleep(1)
         driver.find_element_by_xpath('// *[ @ id = "CartContainer"] / form / div[2] / button').click()
 
-        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys('562-916-5120')
-        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys('Darren')
-        driver.find_element_by_xpath('// *[ @ id = "checkout_shipping_address_last_name"]').send_keys('Lim')
-        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_address1"]').send_keys('12345 Burger Dr.')
-        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys('Cerritos')
-        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys('90703')
-        driver.find_element_by_xpath('// *[ @ id = "checkout_email"]').send_keys('dartren@gmail.com')
+        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys(phone)
+        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys(firstname)
+        driver.find_element_by_xpath('// *[ @ id = "checkout_shipping_address_last_name"]').send_keys(lastname)
+        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_address1"]').send_keys(address)
+        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys(city)
+        driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys(zipcode)
+        driver.find_element_by_xpath('// *[ @ id = "checkout_email"]').send_keys(email)
 
         #driver.find_element_by_xpath('//*[@id="recaptcha-anchor"]/div[1]')
         # time.sleep(30)

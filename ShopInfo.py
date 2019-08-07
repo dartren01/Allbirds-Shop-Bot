@@ -7,5 +7,16 @@ ShoppingKeys = {
 
 Login = {
     "Email": [],
-    "Password": []
+    "Password": [],
+    "FirstName": [],
+    "LastName": [],
+    "Address": [],
+    "City": [],
+    "State": [],
+    "Zipcode": [],
+    "Phone": [],
+    "CardNumber": [],
+    "CardName": [],
+    "CardExpiration": [],
+    "CardSecurity": []
 }
