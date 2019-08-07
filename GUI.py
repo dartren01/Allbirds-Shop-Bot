@@ -19,13 +19,20 @@ class App(QDialog):
         self.top = 100
         self.width = 1024
         self.height = 768
+        self.is_valid_search = True
         #self.label = QLabel()
         #self.mov = QLabel()
         #self.HGroupBox = QGroupBox()
         products = aaa.getProducts()
+
         pool = Pool(cpu_count())
         self.testProducts = [x for x in pool.map(partial(aaa.findKeyword, keyword=keyword, type=typeRadio), products)
                              if x is not None]
+
+        # check if products is empty, if it is go back to search page
+        if not self.testProducts:
+            self.is_valid_search = False
+
         #self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
         ShopInfo.ShoppingKeys["Products"] = self.testProducts
 

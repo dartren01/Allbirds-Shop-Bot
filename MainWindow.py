@@ -57,7 +57,7 @@ class Login_Window(QWidget):
 
 class Window1(QWidget):
 
-    def __init__(self):
+    def __init__(self, valid_search, is_back):
         super().__init__()
 
         self.title = "DO YOU LIKE JAZZ?"
@@ -66,7 +66,11 @@ class Window1(QWidget):
         self.top = 100
         self.width = 1024
         self.height = 768
+
+        self.valid_search = valid_search
+        self.is_back = is_back
         self.InitWindow()
+
 
     def InitWindow(self):
 
@@ -122,6 +126,9 @@ class Window1(QWidget):
         gridLayout = QGridLayout()
 
         self.textbox = QLineEdit(self)
+        if not self.valid_search and not self.is_back:
+            self.TextBox.setStyleSheet("QGroupBox {color: red;}")
+            self.textbox.setStyleSheet("QLineEdit {border: 1px solid red;}")
 
         gridLayout.addWidget(self.textbox)
         gridLayout.setAlignment(Qt.AlignCenter)
@@ -161,14 +168,15 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(self.LoginWindow.title)
         self.setWindowIcon(QtGui.QIcon(self.LoginWindow.iconName))
         self.setGeometry(self.LoginWindow.left, self.LoginWindow.top, self.LoginWindow.width, self.LoginWindow.height)
-        self.LoginWindow.button.clicked.connect(self.startWindow1)
+        self.LoginWindow.button.clicked.connect(lambda: self.startWindow1(True, False))
         self.show()
 
-    def startWindow1(self):
-        ShopInfo.Login["Email"].append(self.LoginWindow.email.text())
-        ShopInfo.Login['Password'].append(self.LoginWindow.password.text())
+    def startWindow1(self, is_valid_search, is_back):
+        if is_valid_search and not is_back:
+            ShopInfo.Login["Email"].append(self.LoginWindow.email.text())
+            ShopInfo.Login['Password'].append(self.LoginWindow.password.text())
 
-        self.Window = Window1()
+        self.Window = Window1(is_valid_search, is_back)
         self.setCentralWidget(self.Window)
         self.setWindowTitle(self.Window.title)
         self.setWindowIcon(QtGui.QIcon(self.Window.iconName))
@@ -181,31 +189,27 @@ class MainWindow(QMainWindow):
         # CHECK WHICH RADIO BUTTON WAS CLICKED ON WINDOW 1
         if self.Window.typeRadioButton1.isChecked():
             self.typeRadio = "Footwear"
-            print("Footwear")
         elif self.Window.typeRadioButton2.isChecked():
             self.typeRadio = "Apparel"
-            print("Apparel")
         elif self.Window.typeRadioButton3.isChecked():
             self.typeRadio = "Both"
-            print("Both")
-        '''
-        # CHECK CONTACT RADIO BUTTON
-        if self.Window.contactRadioButton1.isChecked():
-            self.contactRadio = True
-            print("Yes")
-        elif self.Window.contactRadioButton2.isChecked():
-            self.contactRadio = False
-            print("No")
-        '''
+
         # CHECK TEXTBOX
         self.keyword = self.Window.textbox.text()
 
         self.win = GUI.App(self.keyword, self.typeRadio)
 
-        # self.win = Window2(self)
-        self.setCentralWidget(self.win)
-        self.win.bckbtn.clicked.connect(self.startWindow1)
-        self.show()
+        if self.win.is_valid_search:
+            # self.win = Window2(self)
+            is_back = True
+            is_valid_search = True
+            self.setCentralWidget(self.win)
+            self.win.bckbtn.clicked.connect(lambda: self.startWindow1(is_valid_search, is_back))
+            self.show()
+        else:
+            is_valid_search = False
+            is_back = False
+            self.startWindow1(is_valid_search, is_back)
 
 
 if __name__ == '__main__':
