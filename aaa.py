@@ -39,24 +39,25 @@ def GetContactToOrder():
     return False
 
 #fix this
-def findKeyword(product, keyword, type):
+def findKeyword(product, keyword, type, price):
     if keyword.upper() in product['title']:
-        if type.upper() in product['product_type'] and type.upper() == "FOOTWEAR":
-            if (ProductAvailable(product, False)):
-                if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
-                    print(product['title'])
-                    return product
-        elif type.upper() in product['product_type'] and type.upper() == "APPAREL":
-            if (ProductAvailable(product, False)):
-                if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
-                    print(product['title'])
-                    return product
-        # BOTH
-        elif type.upper() == "BOTH":
-            if (ProductAvailable(product, False)):
-                if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
-                    print(product['title'])
-                    return product
+        if price == '' or price in product['tags']:
+            if type.upper() in product['product_type'] and type.upper() == "FOOTWEAR":
+                if (ProductAvailable(product, False)):
+                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                        print(product['title'])
+                        return product
+            elif type.upper() in product['product_type'] and type.upper() == "APPAREL":
+                if (ProductAvailable(product, False)):
+                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                        print(product['title'])
+                        return product
+            # BOTH
+            elif type.upper() == "BOTH":
+                if (ProductAvailable(product, False)):
+                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                        print(product['title'])
+                        return product
     return None
 
     '''

@@ -7,6 +7,7 @@ import aaa
 import ShopInfo
 import GUI
 import threading
+import multiprocessing
 
 
 class Login_Window(QWidget):
@@ -262,19 +263,30 @@ class MainWindow(QMainWindow):
         self.Window.ToolsBTN.clicked.connect(self.startWindow2)
         self.show()
 
+
     def startWindow2(self):
 
         # CHECK WHICH RADIO BUTTON WAS CLICKED ON WINDOW 1
         if self.Window.typeRadioButton1.isChecked():
             self.typeRadio = "Footwear"
+            print("Footwear")
         elif self.Window.typeRadioButton2.isChecked():
             self.typeRadio = "Apparel"
+            print("Apparel")
         elif self.Window.typeRadioButton3.isChecked():
             self.typeRadio = "Both"
-
+            print("Both")
+        '''
+        # CHECK CONTACT RADIO BUTTON
+        if self.Window.contactRadioButton1.isChecked():
+            self.contactRadio = True
+            print("Yes")
+        elif self.Window.contactRadioButton2.isChecked():
+            self.contactRadio = False
+            print("No")
+        '''
         # CHECK TEXTBOX
         self.keyword = self.Window.textbox.text()
-
         self.win = GUI.App(self.keyword, self.typeRadio)
 
         if self.win.is_valid_search:

@@ -2,7 +2,8 @@ ShoppingKeys = {
     "Products": [],
     "Cart": [],
     "Sizes": [],
-    "Quantities": []
+    "Quantities": [],
+    "Prices": []
 }
 
 Login = {
