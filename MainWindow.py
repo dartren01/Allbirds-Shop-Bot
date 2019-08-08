@@ -149,13 +149,13 @@ class Window1(QWidget):
 
         self.CreateTypeRadioBox()
         self.CreateKeywordBox()
-        #self.CreateContactRadioBox()
+        self.CreatePriceRadioBox()
 
         vbox = QVBoxLayout()
         vbox.addStretch()
         vbox.addWidget(self.TypeRadioBox)
         vbox.addWidget(self.TextBox)
-        #vbox.addWidget(self.ContactRadioBox)
+        vbox.addWidget(self.PriceRadioBox)
         vbox.addStretch()
 
         hbox = QHBoxLayout()
@@ -171,7 +171,7 @@ class Window1(QWidget):
 
     def CreateTypeRadioBox(self):
 
-        self.TypeRadioBox = QGroupBox("Select One")
+        self.TypeRadioBox = QGroupBox("Product Type")
 
         gridLayout = QGridLayout()
 
@@ -203,19 +203,33 @@ class Window1(QWidget):
         self.TextBox.setLayout(gridLayout)
 
     #remove this func
-    def CreateContactRadioBox(self):
-        self.ContactRadioBox = QGroupBox("Contact To Order?")
+    def CreatePriceRadioBox(self):
+        self.PriceRadioBox = QGroupBox("Price Range")
 
         gridLayout = QGridLayout()
 
-        self.contactRadioButton1 = QRadioButton("Yes")
-        self.contactRadioButton2 = QRadioButton("No")
-        self.contactRadioButton1.setChecked(True)
+        self.priceRadioButton1 = QRadioButton("All")
+        self.priceRadioButton2 = QRadioButton("Under $50")
+        self.priceRadioButton3 = QRadioButton("$50-$100")
+        self.priceRadioButton4 = QRadioButton("$100-$150")
+        self.priceRadioButton5 = QRadioButton("$150-$200")
+        self.priceRadioButton6 = QRadioButton("$200-$250")
+        self.priceRadioButton7 = QRadioButton("$250-$300")
+        self.priceRadioButton8 = QRadioButton("Over $300")
 
-        gridLayout.addWidget(self.contactRadioButton1)
-        gridLayout.addWidget(self.contactRadioButton2)
+        self.priceRadioButton1.setChecked(True)
+
+        gridLayout.addWidget(self.priceRadioButton1)
+        gridLayout.addWidget(self.priceRadioButton2)
+        gridLayout.addWidget(self.priceRadioButton3)
+        gridLayout.addWidget(self.priceRadioButton4)
+        gridLayout.addWidget(self.priceRadioButton5)
+        gridLayout.addWidget(self.priceRadioButton6)
+        gridLayout.addWidget(self.priceRadioButton7)
+        gridLayout.addWidget(self.priceRadioButton8)
+
         gridLayout.setAlignment(Qt.AlignCenter)
-        self.ContactRadioBox.setLayout(gridLayout)
+        self.PriceRadioBox.setLayout(gridLayout)
 
 
 class Window2(QWidget):
@@ -263,31 +277,44 @@ class MainWindow(QMainWindow):
         self.Window.ToolsBTN.clicked.connect(self.startWindow2)
         self.show()
 
-
     def startWindow2(self):
 
         # CHECK WHICH RADIO BUTTON WAS CLICKED ON WINDOW 1
         if self.Window.typeRadioButton1.isChecked():
-            self.typeRadio = "Footwear"
+            typeRadio = "Footwear"
             print("Footwear")
         elif self.Window.typeRadioButton2.isChecked():
-            self.typeRadio = "Apparel"
+            typeRadio = "Apparel"
             print("Apparel")
         elif self.Window.typeRadioButton3.isChecked():
-            self.typeRadio = "Both"
+            typeRadio = "Both"
             print("Both")
-        '''
-        # CHECK CONTACT RADIO BUTTON
-        if self.Window.contactRadioButton1.isChecked():
-            self.contactRadio = True
-            print("Yes")
-        elif self.Window.contactRadioButton2.isChecked():
-            self.contactRadio = False
-            print("No")
-        '''
+        else:
+            typeRadio = "Both"
+
+        # CHECK PRICE RADIO BUTTON
+        if self.Window.priceRadioButton1.isChecked():
+            priceRadio = ''
+        elif self.Window.priceRadioButton2.isChecked():
+            priceRadio = 'under-50'
+        elif self.Window.priceRadioButton3.isChecked():
+            priceRadio = '50-100'
+        elif self.Window.priceRadioButton4.isChecked():
+            priceRadio = '100-150'
+        elif self.Window.priceRadioButton5.isChecked():
+            priceRadio = '150-200'
+        elif self.Window.priceRadioButton6.isChecked():
+            priceRadio = '200-250'
+        elif self.Window.priceRadioButton7.isChecked():
+            priceRadio = '250-300'
+        elif self.Window.priceRadioButton8.isChecked():
+            priceRadio = 'over-300'
+        else:
+            priceRadio = ''
+
         # CHECK TEXTBOX
-        self.keyword = self.Window.textbox.text()
-        self.win = GUI.App(self.keyword, self.typeRadio)
+        keyword = self.Window.textbox.text()
+        self.win = GUI.App(keyword, typeRadio, priceRadio)
 
         if self.win.is_valid_search:
             # self.win = Window2(self)

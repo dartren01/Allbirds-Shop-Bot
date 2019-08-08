@@ -126,7 +126,7 @@ class App(QDialog):
 
         #self.loadingScreen()
 
-        self.show()
+        # self.show()
 
 
     def createTable(self):

@@ -50,13 +50,13 @@ class testDriver:
         email = ShopInfo.Login["Email"][0]
 
         # ----- TEST CASES -----
-        # phone = '5629165122'
-        # firstname = 'carmine'
-        # lastname = 'choi'
-        # address = '19611 Jacob Ave'
-        # city = 'cerritos'
-        # zipcode = '90703'
-        # email = 'gangmin519@gmail.com'
+        phone = '5629165122'
+        firstname = 'carmine'
+        lastname = 'choi'
+        address = '19611 Jacob Ave'
+        city = 'cerritos'
+        zipcode = '90703'
+        email = 'gangmin519@gmail.com'
 
 
         driver = webdriver.Chrome('./chromedriver')
