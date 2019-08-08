@@ -265,10 +265,8 @@ class App(QDialog):
             del ShopInfo.ShoppingKeys["Cart"][index.row()]
             del ShopInfo.ShoppingKeys["Sizes"][index.row()]
             del ShopInfo.ShoppingKeys["Quantities"][index.row()]
+            del ShopInfo.ShoppingKeys["Prices"][index.row()]
             self.table2.removeRow(index.row())
-            print(ShopInfo.ShoppingKeys["Cart"])
-            print(ShopInfo.ShoppingKeys["Sizes"])
-            print(ShopInfo.ShoppingKeys["Quantities"])
             self.createAddToCartTable(1)
             self.show()
         except:
