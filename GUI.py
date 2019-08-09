@@ -23,10 +23,11 @@ class App(QDialog):
         self.is_valid_search = True
         #self.label = QLabel()
         #self.mov = QLabel()
-
+        self.totalPrice = 0
         self.keyword = keyword
         self.type = typeRadio
         self.price = typePrice
+        self.PriceLabel = QLabel("Total Price: ")
         #placeholder
         self.itemDict = {}
         self.bckbtn = QPushButton("Back", self)
@@ -105,13 +106,15 @@ class App(QDialog):
         self.table2 = QTableWidget(0, 5)
         self.createAddToCartTable(1)
 
-        table2layout = QHBoxLayout()
+        table2layout = QVBoxLayout()
         table2layout.setContentsMargins(5, 5, 5, 5)
         table2layout.addWidget(self.table2)
 
         orderbutton = QPushButton('Order', self)
         orderbutton.clicked.connect(lambda: self.order())
+        self.PriceLabel = QLabel("Total Price: ")
         table2layout.addWidget(orderbutton)
+        table2layout.addWidget(self.PriceLabel)
 
         tab2.setLayout(table2layout)
 
@@ -126,7 +129,7 @@ class App(QDialog):
 
         #self.loadingScreen()
 
-        # self.show()
+        #self.show()
 
 
     def createTable(self):
@@ -212,7 +215,7 @@ class App(QDialog):
 
         QTableWidget.setHorizontalHeaderLabels(self.table2, headerTitles)
         #self.table2.setSelectionMode(QAbstractItemView.NoSelection)
-
+        allPrices = 0
         length = len(ShopInfo.ShoppingKeys["Cart"])
         print(length)
         initRowPos = self.table2.rowCount()
@@ -225,10 +228,12 @@ class App(QDialog):
                 self.table2.setItem(rowPos, 1, QTableWidgetItem(ShopInfo.ShoppingKeys["Sizes"][rowPos]))
                 self.table2.setItem(rowPos, 2, QTableWidgetItem(str(ShopInfo.ShoppingKeys["Quantities"][rowPos])))
                 self.table2.setItem(rowPos, 3, QTableWidgetItem(ShopInfo.ShoppingKeys["Prices"][rowPos]))
+                allPrices = float(ShopInfo.ShoppingKeys["Prices"][rowPos]) + allPrices
                 button = QPushButton('Remove From Cart', self.table2)
                 button.clicked.connect(lambda: self.remove_cart())
                 self.table2.setCellWidget(rowPos, 4, button)
-
+        self.PriceLabel.setText("Total Price: " + str(allPrices))
+        print(allPrices)
         self.table2.resizeRowsToContents()
         self.table2.resizeColumnsToContents()
 
@@ -352,6 +357,6 @@ class PopupImage(QDialog):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = App("Nike","footwear")
+    ex = App("Nike","footwear",'')
     sys.exit(app.exec_())
 
