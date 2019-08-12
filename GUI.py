@@ -45,13 +45,13 @@ class App(QDialog):
                 self.is_valid_search = False
             #self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
             ShopInfo.ShoppingKeys["Products"] = self.testProducts
-            print(self.testProducts[0])
+            #print(self.testProducts[0])
             result_list = pool.map(getProdJsonList, self.testProducts)
             # this dict stores key: name of product, value: product json, image url
             self.prodDict = {}
             for prod in result_list:
                 self.prodDict[prod[0]] = [prod[1], prod[2]]
-                print(prod[1])
+                #print(prod[1])
 
             print("Done")
             self.initUI()
