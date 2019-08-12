@@ -30,9 +30,17 @@ class Login_Window(QWidget):
         emailGridLayout = QGridLayout()
 
         self.email = QLineEdit(self)
-        self.email.setPlaceholderText("Email")
         self.password = QLineEdit(self)
-        self.password.setPlaceholderText("Password")
+
+        if ShopInfo.Login["Email"]:
+            self.email.setText(ShopInfo.Login["Email"][-1])
+        else:
+            self.email.clear()
+            self.email.setPlaceholderText("Email")
+        if ShopInfo.Login["Password"]:
+            self.password.setText(ShopInfo.Login["Password"][-1])
+        else:
+            self.password.setPlaceholderText("Password")
 
         emailGridLayout.addWidget(self.email)
         emailGridLayout.addWidget(self.password)
@@ -47,29 +55,50 @@ class Login_Window(QWidget):
 
         self.firstname = QLineEdit(self)
         self.lastname = QLineEdit(self)
-        self.firstname.setPlaceholderText("First name")
-        self.lastname.setPlaceholderText("Last name")
+
+        if ShopInfo.Login["FirstName"]:
+            self.firstname.setText(ShopInfo.Login["FirstName"][-1])
+        else:
+            self.firstname.setPlaceholderText("First name")
+        if ShopInfo.Login["LastName"]:
+            self.lastname.setText(ShopInfo.Login["LastName"][-1])
+        else:
+            self.lastname.setPlaceholderText("Last name")
 
         name.addWidget(self.firstname)
         name.addWidget(self.lastname)
 
         self.address = QLineEdit(self)
-        self.address.setPlaceholderText("Address")
-
         self.city = QLineEdit(self)
-        self.city.setPlaceholderText("City")
+        if ShopInfo.Login["Address"]:
+            self.address.setText(ShopInfo.Login["Address"][-1])
+        else:
+            self.address.setPlaceholderText("Address")
+        if ShopInfo.Login["City"]:
+            self.city.setText(ShopInfo.Login["City"][-1])
+        else:
+            self.city.setPlaceholderText("City")
 
         location = QHBoxLayout()
         self.state = QLineEdit(self)
         self.zipcode = QLineEdit(self)
-        self.state.setPlaceholderText("State")
-        self.zipcode.setPlaceholderText("Zipcode")
+        if ShopInfo.Login["State"]:
+            self.state.setText(ShopInfo.Login["State"][-1])
+        else:
+            self.state.setPlaceholderText("State")
+        if ShopInfo.Login["Zipcode"]:
+            self.zipcode.setText(ShopInfo.Login["Zipcode"][-1])
+        else:
+            self.zipcode.setPlaceholderText("Zipcode")
 
         location.addWidget(self.state)
         location.addWidget(self.zipcode)
 
         self.phone = QLineEdit(self)
-        self.phone.setPlaceholderText("Phone")
+        if ShopInfo.Login["Phone"]:
+            self.phone.setText(ShopInfo.Login["Phone"][-1])
+        else:
+            self.phone.setPlaceholderText("Phone")
 
         shipping_info.addLayout(name)
         shipping_info.addWidget(self.address)
@@ -85,16 +114,27 @@ class Login_Window(QWidget):
         billing_info = QVBoxLayout()
 
         self.card_number = QLineEdit(self)
-        self.card_number.setPlaceholderText("Card number")
-
         self.card_name = QLineEdit(self)
-        self.card_name.setPlaceholderText("Card name")
+        if ShopInfo.Login["CardNumber"]:
+            self.card_number.setText(ShopInfo.Login["CardNumber"][-1])
+        else:
+            self.card_number.setPlaceholderText("Card number")
+        if ShopInfo.Login["CardName"]:
+            self.card_name.setText(ShopInfo.Login["CardName"][-1])
+        else:
+            self.card_name.setPlaceholderText("Card name")
 
         card_details = QHBoxLayout()
         self.card_expiration = QLineEdit(self)
         self.card_security = QLineEdit(self)
-        self.card_expiration.setPlaceholderText("Card expiration")
-        self.card_security.setPlaceholderText("Card security")
+        if ShopInfo.Login["CardExpiration"]:
+            self.card_expiration.setText(ShopInfo.Login["CardExpiration"][-1])
+        else:
+            self.card_expiration.setPlaceholderText("Card expiration")
+        if ShopInfo.Login["CardSecurity"]:
+            self.card_security.setText(ShopInfo.Login["CardSecurity"][-1])
+        else:
+            self.card_security.setPlaceholderText("Card security")
         card_details.addWidget(self.card_expiration)
         card_details.addWidget(self.card_security)
 
@@ -177,6 +217,10 @@ class Window1(QWidget):
         self.ToolsBTN = QPushButton("Next", self)
         self.ToolsBTN.resize(100, 32)
         self.ToolsBTN.move(750, 650)
+
+        self.ToolsBCKBTN = QPushButton("Back", self)
+        self.ToolsBCKBTN.resize(100, 32)
+        self.ToolsBCKBTN.move(174, 650)
 
     def CreateTypeRadioBox(self):
 
@@ -324,12 +368,14 @@ class MainWindow(QMainWindow):
             ShopInfo.Login['CardExpiration'].append(self.LoginWindow.card_expiration.text())
             ShopInfo.Login['CardSecurity'].append(self.LoginWindow.card_security.text())
 
+
         self.Window = Window1(is_valid_search, is_back)
         self.setCentralWidget(self.Window)
         self.setWindowTitle(self.Window.title)
         self.setWindowIcon(QtGui.QIcon(self.Window.iconName))
         self.setGeometry(self.Window.left, self.Window.top, self.Window.width, self.Window.height)
         self.Window.ToolsBTN.clicked.connect(self.startWindow2)
+        self.Window.ToolsBCKBTN.clicked.connect(self.startLoginWindow)
         self.show()
 
     def startWindow2(self):

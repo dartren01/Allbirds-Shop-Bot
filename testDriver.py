@@ -31,8 +31,8 @@ class testDriver:
         return True
 
     def login_to_gmail(self, driver):
-        email = ShopInfo.Login["Email"][0]
-        password = ShopInfo.Login["Password"][0]
+        email = ShopInfo.Login["Email"][-1]
+        password = ShopInfo.Login["Password"][-1]
 
         driver.get('http://gmail.com')
         driver.find_element_by_xpath('//*[@id="identifierId"]').send_keys(email + Keys.ENTER)
@@ -41,16 +41,16 @@ class testDriver:
         return True
 
     def checkout(self):
-        phone = ShopInfo.Login["Phone"][0]
-        firstname = ShopInfo.Login["FirstName"][0]
-        lastname = ShopInfo.Login["LastName"][0]
-        address = ShopInfo.Login["Address"][0]
-        city = ShopInfo.Login["City"][0]
-        zipcode = ShopInfo.Login["Zipcode"][0]
-        email = ShopInfo.Login["Email"][0]
+        phone = ShopInfo.Login["Phone"][-1]
+        firstname = ShopInfo.Login["FirstName"][-1]
+        lastname = ShopInfo.Login["LastName"][-1]
+        address = ShopInfo.Login["Address"][-1]
+        city = ShopInfo.Login["City"][-1]
+        zipcode = ShopInfo.Login["Zipcode"][-1]
+        email = ShopInfo.Login["Email"][-1]
 
         # ----- TEST CASES -----
-        phone = '5629165122'
+        phone = '562 916 5122'
         firstname = 'carmine'
         lastname = 'choi'
         address = '19611 Jacob Ave'
