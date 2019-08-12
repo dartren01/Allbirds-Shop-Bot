@@ -18,8 +18,8 @@ class App(QDialog):
         #self.title = 'PyQt5 simple window'
         self.left = 800
         self.top = 100
-        self.width = 1024
-        self.height = 768
+        self.width = 1280
+        self.height = 960
         self.is_valid_search = True
         #self.label = QLabel()
         #self.mov = QLabel()

@@ -83,3 +83,4 @@ class testDriver:
         #driver.find_element_by_xpath('//*[@id="recaptcha-anchor"]/div[1]')
         # time.sleep(30)
         # driver.close()
+        return driver

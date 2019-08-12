@@ -18,8 +18,8 @@ class Login_Window(QWidget):
         self.iconName = "dartren.jpg"
         self.left = 100
         self.top = 100
-        self.width = 1024
-        self.height = 768
+        self.width = 1280
+        self.height = 960
 
         self.CreateKeywordBox()
 
@@ -160,7 +160,7 @@ class Login_Window(QWidget):
         self.setLayout(hbox)
         self.button = QPushButton("Next", self)
         self.button.resize(100, 32)
-        self.button.move(750, 650)
+        self.button.move(850, 750)
 
 
 class Window1(QWidget):
@@ -172,8 +172,8 @@ class Window1(QWidget):
         self.iconName = "dartren.jpg"
         self.left = 100
         self.top = 100
-        self.width = 1024
-        self.height = 768
+        self.width = 1280
+        self.height = 960
 
         self.valid_search = valid_search
         self.is_back = is_back
@@ -216,11 +216,11 @@ class Window1(QWidget):
         self.setLayout(hbox)
         self.ToolsBTN = QPushButton("Next", self)
         self.ToolsBTN.resize(100, 32)
-        self.ToolsBTN.move(750, 650)
+        self.ToolsBTN.move(850, 750)
 
         self.ToolsBCKBTN = QPushButton("Back", self)
         self.ToolsBCKBTN.resize(100, 32)
-        self.ToolsBCKBTN.move(174, 650)
+        self.ToolsBCKBTN.move(330, 750)
 
     def CreateTypeRadioBox(self):
 
@@ -384,9 +384,9 @@ class MainWindow(QMainWindow):
 
         self.Window = Window1(is_valid_search, is_back)
         self.setCentralWidget(self.Window)
-        self.setWindowTitle(self.Window.title)
-        self.setWindowIcon(QtGui.QIcon(self.Window.iconName))
-        self.setGeometry(self.Window.left, self.Window.top, self.Window.width, self.Window.height)
+        # self.setWindowTitle(self.Window.title)
+        # self.setWindowIcon(QtGui.QIcon(self.Window.iconName))
+        # self.setGeometry(self.Window.left, self.Window.top, self.Window.width, self.Window.height)
         self.Window.ToolsBTN.clicked.connect(self.startWindow2)
         self.Window.ToolsBCKBTN.clicked.connect(self.startLoginWindow)
         self.show()
