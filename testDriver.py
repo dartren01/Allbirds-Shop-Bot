@@ -2,6 +2,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import ShopInfo
+import GUI
 
 class testDriver:
     def __init__(self, UrlList, PopUp, FinalProductList, QuantityList):
@@ -33,12 +34,15 @@ class testDriver:
     def login_to_gmail(self, driver):
         email = ShopInfo.Login["Email"][-1]
         password = ShopInfo.Login["Password"][-1]
-
-        driver.get('http://gmail.com')
-        driver.find_element_by_xpath('//*[@id="identifierId"]').send_keys(email + Keys.ENTER)
-        time.sleep(1)
-        driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input').send_keys(password + Keys.ENTER)
-        return True
+        try:
+            driver.get('http://gmail.com')
+            driver.find_element_by_xpath('//*[@id="identifierId"]').send_keys(email + Keys.ENTER)
+            time.sleep(1)
+            driver.find_element_by_xpath('//*[@id="password"]/div[1]/div/div[1]/input').send_keys(password + Keys.ENTER)
+            return True
+        except:
+            print("Error")
+            return True
 
     def checkout(self):
         phone = ShopInfo.Login["Phone"][-1]
@@ -80,7 +84,29 @@ class testDriver:
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys(zipcode)
         driver.find_element_by_xpath('// *[ @ id = "checkout_email"]').send_keys(email)
 
+        button = GUI.CaptchaButton()
+        button.activateWindow()
+
+
         #driver.find_element_by_xpath('//*[@id="recaptcha-anchor"]/div[1]')
         # time.sleep(30)
         # driver.close()
+
+        # continue to payment xpath
+        # /html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button
+
+        #card number
+        # // *[ @ id = "number"]
+
+        #name on card
+        # //*[@id="name"]
+
+        #exp date
+        # //*[@id="expiry"]
+
+        #security code
+        # //*[@id="verification_value"]
+
+        #complete order button
+        # /html/body/div[2]/div/div[1]/div[2]/div/div/form/div[4]/div[1]/button
         return driver

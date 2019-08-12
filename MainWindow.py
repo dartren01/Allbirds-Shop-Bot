@@ -307,7 +307,7 @@ class Window1(QWidget):
         gridLayout.addWidget(QLabel("Converse"))
         gridLayout.addWidget(QLabel("Diadora"))
         gridLayout.addWidget(QLabel("Ellesse"))
-        gridLayout.addWidget(QLabel("Jasron Markk"))
+        gridLayout.addWidget(QLabel("Jason Markk"))
         gridLayout.addWidget(QLabel("Jordan"))
         gridLayout.addWidget(QLabel("Maharishi"))
         gridLayout.addWidget(QLabel("Napa"))

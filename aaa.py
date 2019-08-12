@@ -14,16 +14,12 @@ def getProducts():
     page = 1
     productList = []
     while count>=250:
-        #print(page)
         urlstr = 'https://www.packershoes.com/products.json?limit=250&page={}'.format(page)
         r = requests.get(urlstr)
         products = json.loads(r.text)['products']
         productList.extend(products)
-        #print(len(products))
         count = len(products)
         page += 1
-    #print(len(productList))
-    #print(productList[0])
     return productList
 
 def getProductJson(product):
@@ -32,18 +28,13 @@ def getProductJson(product):
     jsonStr = json.loads(r.text)
     return jsonStr
 
-def GetContactToOrder():
-    contactToOrder = input("Include Contact to Order Items? Enter Yes or No: ")
-    if (contactToOrder.lower() == 'yes'):
-        return True
-    return False
-
 #fix this
 def findKeyword(product, keyword, type, price):
     keywordList = keyword.upper().split(' ')
     if any(word in product['title'] for word in keywordList):
         if price == '' or price in product['tags']:
-            if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+            if 'email-orders' not in product['tags'] and 'phone-orders' not in product['tags'] \
+                    and 'INQUIRE' not in product['tags']:
                 if type.upper() in product['tags'] and type.upper() == "FOOTWEAR":
                     if (ProductAvailable(product, False)):
                         print(product['title'])
@@ -62,32 +53,6 @@ def findKeyword(product, keyword, type, price):
                         print(product['title'])
                         return product
     return None
-
-    '''
-    pList = {}
-    for product in products:
-        #also check multiple keywords
-        if keyword.upper() in product['title']:
-            if type.upper() in product['product_type'] and type.upper() == "FOOTWEAR":
-                if (ProductAvailable(product, False)):
-                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
-                        pList.append(product)
-                        print(product['title'])
-            elif type.upper() in product['product_type'] and type.upper() == "APPAREL":
-                if (ProductAvailable(product, False)):
-                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
-                        pList.append(product)
-                        print(product['title'])
-            #BOTH
-            elif type.upper() == "BOTH":
-                if (ProductAvailable(product, False)):
-                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
-                        pList.append(product)
-                        print(product['title'])
-    if(len(pList)==0):
-        return None
-    return pList
-    '''
 
 
 def ReturnProduct(products, keyword):
@@ -138,16 +103,6 @@ def CompleteShopping():
         UrlList.append(URL)
     checkouttest = testDriver(UrlList, PopUp, ProductList, QuantityList)
     checkouttest.checkout()
-
-'''
-def ListSizes(product):
-    count = 0
-    for variant in product['variants']:
-        #print(variant)
-        if(variant['available']):
-            print("Size: ", variant['option1'])
-            count+=1
-'''
 
 def Main():
     print("Collecting Packer Shoes Product Database...")

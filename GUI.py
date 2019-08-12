@@ -43,62 +43,30 @@ class App(QDialog):
             # check if products is empty, if it is go back to search page
             if not self.testProducts:
                 self.is_valid_search = False
-
             #self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
             ShopInfo.ShoppingKeys["Products"] = self.testProducts
             print(self.testProducts[0])
             result_list = pool.map(getProdJsonList, self.testProducts)
+            # this dict stores key: name of product, value: product json, image url
             self.prodDict = {}
             for prod in result_list:
                 self.prodDict[prod[0]] = [prod[1], prod[2]]
+                print(prod[1])
 
             print("Done")
             self.initUI()
         except:
             self.noProducts()
 
-    def loading(self):
-        pass
-        msg = QMessageBox()
-        #alabel = self.loadingScreen()
-        #msg.setLayout(alabel)
-        msg.setText("Please wait for items to load.")
-        msg.exec()
-
-    '''
-    def processProducts(self):
-        print('run')
-        products = aaa.getProducts()
-        pool = Pool(cpu_count())
-        self.testProducts = [x for x in pool.map(partial(aaa.findKeyword, keyword=self.keyword, type=self.type), products)
-                             if x is not None]
-        try:
-            # self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
-            ShopInfo.ShoppingKeys["Products"] = self.testProducts
-            print(self.testProducts[0])
-            result_list = pool.map(getProdJsonList, self.testProducts)
-            self.prodDict = {}
-            for prod in result_list:
-                self.prodDict[prod[0]] = [prod[1], prod[2]]
-        except:
-            # no products found
-            self.noProducts()
-    '''
-
     def noProducts(self):
         self.NoProd = QVBoxLayout()
-        self.NoProd.addWidget(QLabel("No Products Found, Please Try Again"))
+        self.NoProd.addWidget(QLabel("Search Invalid, Please Try Again"))
         self.NoProd.setAlignment(Qt.AlignCenter)
         self.setLayout(self.NoProd)
 
     def initUI(self):
         # self.setWindowTitle(self.title)
         # self.setGeometry(self.left, self.top, self.width, self.height)
-
-        #self.createTable()
-        #tableLayout = QHBoxLayout()
-        #tableLayout.addWidget(self.table)
-        #self.setLayout(tableLayout)
 
 
         self.tabLayout = QTabWidget()
@@ -173,7 +141,7 @@ class App(QDialog):
                     label = QLabel()
                     pixmap = QPixmap()
                     try:
-                        pixmap.loadFromData(self.prodDict[self.testProducts[i]['title']][1])
+                        pixmap.loadFromData(self.prodDict[self.testProducts[i]['id']][1])
                         #print("loaded")
                     except:
                         pixmap.load('brgr.png')
@@ -191,10 +159,9 @@ class App(QDialog):
                     quantityBox = QSpinBox(self.table)
                     quantityBox.setValue(0)
                     pSize = str(self.itemDict[i][1].currentText())
-                    #print(self.prodDict[self.testProducts[i]['title']][0]['product']['variants'])
                     maxQuantity = 0
                     # get variants from prodDict which has quantity amount
-                    for var in self.prodDict[self.testProducts[i]['title']][0]['product']['variants']:
+                    for var in self.prodDict[self.testProducts[i]['id']][0]['product']['variants']:
                         if pSize == var['option1']:
                             maxQuantity = var['inventory_quantity']
                             break
@@ -202,7 +169,7 @@ class App(QDialog):
                     self.table.setCellWidget(i, k, quantityBox)
                     self.itemDict[i].append(quantityBox)
                 elif (k==4):
-                    self.table.setItem(i, k, QTableWidgetItem(self.testProducts[i]['variants'][0]['price']))
+                    self.table.setItem(i, k, QTableWidgetItem("$" + self.testProducts[i]['variants'][0]['price']))
                     self.itemDict[i].append(self.testProducts[i]['variants'][0]['price'])
                 elif (k==5):
                     button = QPushButton('Add to Cart', self.table)
@@ -214,7 +181,6 @@ class App(QDialog):
         #print(self.itemDict)
         self.table.resizeRowsToContents()
         self.table.resizeColumnsToContents()
-        print(self.itemDict)
 
 
     def createAddToCartTable(self, tabIndex):
@@ -242,12 +208,12 @@ class App(QDialog):
                 self.table2.setItem(rowPos, 0, QTableWidgetItem(ShopInfo.ShoppingKeys["Cart"][rowPos]['title']))
                 self.table2.setItem(rowPos, 1, QTableWidgetItem(ShopInfo.ShoppingKeys["Sizes"][rowPos]))
                 self.table2.setItem(rowPos, 2, QTableWidgetItem(str(ShopInfo.ShoppingKeys["Quantities"][rowPos])))
-                self.table2.setItem(rowPos, 3, QTableWidgetItem(ShopInfo.ShoppingKeys["Prices"][rowPos]))
+                self.table2.setItem(rowPos, 3, QTableWidgetItem("$"+ShopInfo.ShoppingKeys["Prices"][rowPos]))
                 allPrices = float(ShopInfo.ShoppingKeys["Prices"][rowPos]) + allPrices
                 button = QPushButton('Remove From Cart', self.table2)
                 button.clicked.connect(lambda: self.remove_cart())
                 self.table2.setCellWidget(rowPos, 4, button)
-        self.PriceLabel.setText("Total Price: " + str(allPrices))
+        self.PriceLabel.setText("Total Price: $" + str(allPrices))
         print(allPrices)
         self.table2.resizeRowsToContents()
         self.table2.resizeColumnsToContents()
@@ -292,27 +258,38 @@ class App(QDialog):
         except:
             print("Unable to remove")
 
-    # change quantity cap
-    def on_size_change(self):
-        pass
 
-    def loadingScreen(self):
-        label = QLabel("Loading . . .")
-        vbox = QVBoxLayout()
-        vbox.addWidget(label)
+class CaptchaButton(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.title = 'Captcha'
+        self.left = 600
+        self.top = 100
+        self.width = 320
+        self.height = 200
+        self.initUI()
 
-        movie = QMovie("./PacLoader.gif")
-        mov = QLabel()
-        mov.setMovie(movie)
-        movie.start()
-        vbox.addWidget(mov)
-        return vbox
+    def initUI(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
 
-        #self.show()
+        buttonReply = QMessageBox.question(self, 'Please Complete Captcha', "Press Yes to continue after captcha",
+                                           QMessageBox.Yes, QMessageBox.Yes)
+        if buttonReply == QMessageBox.Yes:
+            print('Yes clicked.')
+            return True
+        else:
+            print('No clicked.')
+            return False
+        #self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
+        #self.activateWindow()
+        self.show()
+        self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
+        self.activateWindow()
 
 def getProdJsonList(prod):
-    # tuple (name, json, image)
-    prod = (prod['title'], aaa.getProductJson(prod['handle']), urlopen(prod['images'][0]['src']).read())
+    # tuple (id, json, image)
+    prod = (prod['id'], aaa.getProductJson(prod['handle']), urlopen(prod['images'][0]['src']).read())
     return prod
 
 
