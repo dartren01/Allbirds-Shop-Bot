@@ -354,19 +354,32 @@ class MainWindow(QMainWindow):
 
     def startWindow1(self, is_valid_search, is_back):
         if is_valid_search and not is_back:
-            ShopInfo.Login["Email"].append(self.LoginWindow.email.text())
-            ShopInfo.Login["Password"].append(self.LoginWindow.password.text())
-            ShopInfo.Login['FirstName'].append(self.LoginWindow.firstname.text())
-            ShopInfo.Login['LastName'].append(self.LoginWindow.lastname.text())
-            ShopInfo.Login['Address'].append(self.LoginWindow.address.text())
-            ShopInfo.Login['City'].append(self.LoginWindow.city.text())
-            ShopInfo.Login['State'].append(self.LoginWindow.state.text())
-            ShopInfo.Login['Zipcode'].append(self.LoginWindow.zipcode.text())
-            ShopInfo.Login['Phone'].append(self.LoginWindow.phone.text())
-            ShopInfo.Login['CardNumber'].append(self.LoginWindow.card_number.text())
-            ShopInfo.Login['CardName'].append(self.LoginWindow.card_name.text())
-            ShopInfo.Login['CardExpiration'].append(self.LoginWindow.card_expiration.text())
-            ShopInfo.Login['CardSecurity'].append(self.LoginWindow.card_security.text())
+            if not self.LoginWindow.email.text() == "":
+                ShopInfo.Login["Email"].append(self.LoginWindow.email.text())
+            if not self.LoginWindow.password.text() == "":
+                ShopInfo.Login["Password"].append(self.LoginWindow.password.text())
+            if not self.LoginWindow.firstname.text() == "":
+                ShopInfo.Login['FirstName'].append(self.LoginWindow.firstname.text())
+            if not self.LoginWindow.lastname.text() == "":
+                ShopInfo.Login['LastName'].append(self.LoginWindow.lastname.text())
+            if not self.LoginWindow.address.text() == "":
+                ShopInfo.Login['Address'].append(self.LoginWindow.address.text())
+            if not self.LoginWindow.city.text() == "":
+                ShopInfo.Login['City'].append(self.LoginWindow.city.text())
+            if not self.LoginWindow.state.text() == "":
+                ShopInfo.Login['State'].append(self.LoginWindow.state.text())
+            if not self.LoginWindow.zipcode.text() == "":
+                ShopInfo.Login['Zipcode'].append(self.LoginWindow.zipcode.text())
+            if not self.LoginWindow.phone.text() == "":
+                ShopInfo.Login['Phone'].append(self.LoginWindow.phone.text())
+            if not self.LoginWindow.card_number.text() == "":
+                ShopInfo.Login['CardNumber'].append(self.LoginWindow.card_number.text())
+            if not self.LoginWindow.card_name.text() == "":
+                ShopInfo.Login['CardName'].append(self.LoginWindow.card_name.text())
+            if not self.LoginWindow.card_expiration.text() == "":
+                ShopInfo.Login['CardExpiration'].append(self.LoginWindow.card_expiration.text())
+            if not self.LoginWindow.card_security.text() == "":
+                ShopInfo.Login['CardSecurity'].append(self.LoginWindow.card_security.text())
 
 
         self.Window = Window1(is_valid_search, is_back)
