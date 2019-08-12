@@ -150,17 +150,26 @@ class Window1(QWidget):
         self.CreateTypeRadioBox()
         self.CreateKeywordBox()
         self.CreatePriceRadioBox()
+        self.createBrandsText()
 
         vbox = QVBoxLayout()
         vbox.addStretch()
         vbox.addWidget(self.TypeRadioBox)
         vbox.addWidget(self.TextBox)
         vbox.addWidget(self.PriceRadioBox)
+        #vbox.addWidget(self.BrandNames)
         vbox.addStretch()
+
+        vbox2 = QVBoxLayout()
+        vbox2.addStretch()
+        vbox2.addWidget(self.BrandNames)
+        vbox2.addStretch()
+
 
         hbox = QHBoxLayout()
         hbox.addStretch()
         hbox.addLayout(vbox)
+        hbox.addLayout(vbox2)
         hbox.setAlignment(Qt.AlignHCenter)
         hbox.addStretch()
 
@@ -177,13 +186,15 @@ class Window1(QWidget):
 
         self.typeRadioButton1 = QRadioButton("FootWear")
         self.typeRadioButton2 = QRadioButton("Apparel")
-        self.typeRadioButton3 = QRadioButton("Both")
+        self.typeRadioButton3 = QRadioButton("Accessories")
+        self.typeRadioButton4 = QRadioButton("All")
         self.typeRadioButton1.setChecked(True)
 
 
         gridLayout.addWidget(self.typeRadioButton1)
         gridLayout.addWidget(self.typeRadioButton2)
         gridLayout.addWidget(self.typeRadioButton3)
+        gridLayout.addWidget(self.typeRadioButton4)
 
         gridLayout.setAlignment(Qt.AlignCenter)
         self.TypeRadioBox.setLayout(gridLayout)
@@ -202,7 +213,6 @@ class Window1(QWidget):
         gridLayout.setAlignment(Qt.AlignCenter)
         self.TextBox.setLayout(gridLayout)
 
-    #remove this func
     def CreatePriceRadioBox(self):
         self.PriceRadioBox = QGroupBox("Price Range")
 
@@ -231,6 +241,54 @@ class Window1(QWidget):
         gridLayout.setAlignment(Qt.AlignCenter)
         self.PriceRadioBox.setLayout(gridLayout)
 
+    def createBrandsText(self):
+        self.BrandNames = QGroupBox("Brand Names")
+
+        gridLayout = QGridLayout()
+
+        gridLayout.addWidget(QLabel("Adidas"), 0, 0)
+        gridLayout.addWidget(QLabel("Adidas Originals"), 0, 1)
+        gridLayout.addWidget(QLabel("Adidas by Raf Simons"))
+        gridLayout.addWidget(QLabel("Adidas by Stella McCartney"))
+        gridLayout.addWidget(QLabel("Adidas Originals by Alexander Wang"))
+        gridLayout.addWidget(QLabel("Asics"))
+        gridLayout.addWidget(QLabel("Assouline"))
+        gridLayout.addWidget(QLabel("Born X Raised"))
+        gridLayout.addWidget(QLabel("Carhartt Wip"))
+        gridLayout.addWidget(QLabel("Central High"))
+        gridLayout.addWidget(QLabel("Champion Reverse Weave"))
+        gridLayout.addWidget(QLabel("Chinatown Market"))
+        gridLayout.addWidget(QLabel("Clarks"))
+        gridLayout.addWidget(QLabel("CDG Play"))
+        gridLayout.addWidget(QLabel("Converse"))
+        gridLayout.addWidget(QLabel("Diadora"))
+        gridLayout.addWidget(QLabel("Ellesse"))
+        gridLayout.addWidget(QLabel("Jasron Markk"))
+        gridLayout.addWidget(QLabel("Jordan"))
+        gridLayout.addWidget(QLabel("Maharishi"))
+        gridLayout.addWidget(QLabel("Napa"))
+        gridLayout.addWidget(QLabel("New Balance"))
+        gridLayout.addWidget(QLabel("New Era"))
+        gridLayout.addWidget(QLabel("Nike"))
+        gridLayout.addWidget(QLabel("Porter-Yoshida & Co"))
+        gridLayout.addWidget(QLabel("Pleasures"))
+        gridLayout.addWidget(QLabel("Puma"))
+        gridLayout.addWidget(QLabel("Rizzoli Books"))
+        gridLayout.addWidget(QLabel("ROA"))
+        gridLayout.addWidget(QLabel("Reebok"))
+        gridLayout.addWidget(QLabel("Stussy"))
+        gridLayout.addWidget(QLabel("Suicoke"))
+        gridLayout.addWidget(QLabel("Timberland"))
+        gridLayout.addWidget(QLabel("United Standard"))
+        gridLayout.addWidget(QLabel("Vans"))
+        gridLayout.addWidget(QLabel("Yeezy"))
+        gridLayout.addWidget(QLabel("Y-3"))
+
+
+
+
+        gridLayout.setAlignment(Qt.AlignCenter)
+        self.BrandNames.setLayout(gridLayout)
 
 class Window2(QWidget):
     def __init__(self, parent=GUI.App):
@@ -287,10 +345,13 @@ class MainWindow(QMainWindow):
             typeRadio = "Apparel"
             print("Apparel")
         elif self.Window.typeRadioButton3.isChecked():
-            typeRadio = "Both"
-            print("Both")
+            typeRadio = "Accessories"
+            print("Accessories")
+        elif self.Window.typeRadioButton3.isChecked():
+            typeRadio = "All"
+            print("All")
         else:
-            typeRadio = "Both"
+            typeRadio = "All"
 
         # CHECK PRICE RADIO BUTTON
         if self.Window.priceRadioButton1.isChecked():

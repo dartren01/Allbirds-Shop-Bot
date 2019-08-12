@@ -42,20 +42,22 @@ def GetContactToOrder():
 def findKeyword(product, keyword, type, price):
     if keyword.upper() in product['title']:
         if price == '' or price in product['tags']:
-            if type.upper() in product['product_type'] and type.upper() == "FOOTWEAR":
-                if (ProductAvailable(product, False)):
-                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+            if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                if type.upper() in product['tags'] and type.upper() == "FOOTWEAR":
+                    if (ProductAvailable(product, False)):
                         print(product['title'])
                         return product
-            elif type.upper() in product['product_type'] and type.upper() == "APPAREL":
-                if (ProductAvailable(product, False)):
-                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                elif type.upper() in product['tags'] and type.upper() == "APPAREL":
+                    if (ProductAvailable(product, False)):
                         print(product['title'])
                         return product
-            # BOTH
-            elif type.upper() == "BOTH":
-                if (ProductAvailable(product, False)):
-                    if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
+                elif type.upper() in product['tags'] and type.upper() == "ACCESSORIES":
+                    if (ProductAvailable(product, False)):
+                        print(product['title'])
+                        return product
+                # BOTH
+                elif type.upper() == "ALL":
+                    if (ProductAvailable(product, False)):
                         print(product['title'])
                         return product
     return None
