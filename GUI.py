@@ -38,21 +38,24 @@ class App(QDialog):
         pool = Pool(cpu_count())
         self.testProducts = [x for x in pool.map(partial(aaa.findKeyword, keyword=keyword, type=typeRadio,
                                                          price=typePrice), self.products) if x is not None]
+        # so no errors
+        try:
+            # check if products is empty, if it is go back to search page
+            if not self.testProducts:
+                self.is_valid_search = False
 
-        # check if products is empty, if it is go back to search page
-        if not self.testProducts:
-            self.is_valid_search = False
+            #self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
+            ShopInfo.ShoppingKeys["Products"] = self.testProducts
+            print(self.testProducts[0])
+            result_list = pool.map(getProdJsonList, self.testProducts)
+            self.prodDict = {}
+            for prod in result_list:
+                self.prodDict[prod[0]] = [prod[1], prod[2]]
 
-        #self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
-        ShopInfo.ShoppingKeys["Products"] = self.testProducts
-        print(self.testProducts[0])
-        result_list = pool.map(getProdJsonList, self.testProducts)
-        self.prodDict = {}
-        for prod in result_list:
-            self.prodDict[prod[0]] = [prod[1], prod[2]]
-
-        print("Done")
-        self.initUI()
+            print("Done")
+            self.initUI()
+        except:
+            self.noProducts()
 
     def loading(self):
         pass
@@ -62,19 +65,31 @@ class App(QDialog):
         msg.setText("Please wait for items to load.")
         msg.exec()
 
+    '''
     def processProducts(self):
         print('run')
         products = aaa.getProducts()
         pool = Pool(cpu_count())
         self.testProducts = [x for x in pool.map(partial(aaa.findKeyword, keyword=self.keyword, type=self.type), products)
                              if x is not None]
-        # self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
-        ShopInfo.ShoppingKeys["Products"] = self.testProducts
-        print(self.testProducts[0])
-        result_list = pool.map(getProdJsonList, self.testProducts)
-        self.prodDict = {}
-        for prod in result_list:
-            self.prodDict[prod[0]] = [prod[1], prod[2]]
+        try:
+            # self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
+            ShopInfo.ShoppingKeys["Products"] = self.testProducts
+            print(self.testProducts[0])
+            result_list = pool.map(getProdJsonList, self.testProducts)
+            self.prodDict = {}
+            for prod in result_list:
+                self.prodDict[prod[0]] = [prod[1], prod[2]]
+        except:
+            # no products found
+            self.noProducts()
+    '''
+
+    def noProducts(self):
+        self.NoProd = QVBoxLayout()
+        self.NoProd.addWidget(QLabel("No Products Found, Please Try Again"))
+        self.NoProd.setAlignment(Qt.AlignCenter)
+        self.setLayout(self.NoProd)
 
     def initUI(self):
         # self.setWindowTitle(self.title)
@@ -129,7 +144,7 @@ class App(QDialog):
 
         #self.loadingScreen()
 
-        #self.show()
+        self.show()
 
 
     def createTable(self):
@@ -357,6 +372,6 @@ class PopupImage(QDialog):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = App("Nike","footwear",'')
+    ex = App("suicoke","apparel",'')
     sys.exit(app.exec_())
 

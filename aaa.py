@@ -40,7 +40,8 @@ def GetContactToOrder():
 
 #fix this
 def findKeyword(product, keyword, type, price):
-    if keyword.upper() in product['title']:
+    keywordList = keyword.upper().split(' ')
+    if any(word in product['title'] for word in keywordList):
         if price == '' or price in product['tags']:
             if ('email-orders' not in product['tags'] and 'phone-orders' not in product['tags']):
                 if type.upper() in product['tags'] and type.upper() == "FOOTWEAR":

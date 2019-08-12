@@ -284,9 +284,6 @@ class Window1(QWidget):
         gridLayout.addWidget(QLabel("Yeezy"))
         gridLayout.addWidget(QLabel("Y-3"))
 
-
-
-
         gridLayout.setAlignment(Qt.AlignCenter)
         self.BrandNames.setLayout(gridLayout)
 
@@ -381,12 +378,14 @@ class MainWindow(QMainWindow):
             # self.win = Window2(self)
             is_back = True
             is_valid_search = True
+            self.statusBar().clearMessage()
             self.setCentralWidget(self.win)
             self.win.bckbtn.clicked.connect(lambda: self.startWindow1(is_valid_search, is_back))
             self.show()
         else:
             is_valid_search = False
             is_back = False
+            self.statusBar().showMessage('No Products Found, Please Try Again')
             self.startWindow1(is_valid_search, is_back)
 
 
