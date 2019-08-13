@@ -3,9 +3,6 @@ import json
 from testDriver import testDriver
 import UrlGenerators
 import ShopInfo
-import GUI
-import sys
-from PyQt5 import QtWidgets, QtGui
 
 def getProducts():
     #r = requests.get('https://www.packershoes.com/products.json?limit=250')
@@ -104,85 +101,3 @@ def CompleteShopping():
     checkouttest = testDriver(UrlList, PopUp, ProductList, QuantityList)
     checkouttest.checkout()
 
-def Main():
-    print("Collecting Packer Shoes Product Database...")
-    products = getProducts()
-    print("Collection Successful")
-    # ask for shoe keyword
-    DoneShopping = False
-    UrlList = []
-    FinalProductList = []
-    PopUp = ""
-    initialPopUp = True
-
-    while(not DoneShopping):
-        ProdList = None
-        FinalProduct = None
-        type = input("Enter Product Type: Footwear or Apparel or Both? ")
-        keyword = input("Enter a keyword (EX. Nike): ")
-        contact = GetContactToOrder()
-        print()
-        while(ProdList==None):
-            ProdList = findKeyword(products, keyword, type, contact)
-            if(ProdList == None):
-                print()
-                print("Keyword or products not found. Resetting Search.")
-                print()
-                type = input("Enter Product Type: Footwear or Apparel or Both? ")
-                keyword = input("Enter a keyword (EX. Nike): ")
-                contact = GetContactToOrder()
-            else:
-                break
-        print()
-        ProductName = input("Enter Product Name from List: ")
-        while(FinalProduct == None):
-            FinalProduct = ReturnProduct(ProdList, ProductName)
-            if(FinalProduct == None):
-                ProductName = input("Invalid Product Name, Please Enter the Full Product Name: ")
-            else:
-                break
-        print()
-        print(FinalProduct)
-        ProductAvailable(FinalProduct, True)
-        print("Type Back to go back to Keyword Search")
-
-        SizeIn = input("Enter an Available Size: ")
-        SizeIn = SizeIn.upper()
-        if (SizeIn == "BACK"):
-            continue
-        while(not CheckSizeMatch(FinalProduct, SizeIn)):
-            SizeIn = input("Invalid Size, Please Enter an Available Size: ")
-            if (SizeIn == "BACK"):
-                break
-
-        if(initialPopUp):
-            PopUp = UrlGenerators.popUpGen(FinalProduct)
-            initialPopUp = False
-        URL = UrlGenerators.UrlGen(FinalProduct, SizeIn)
-        print(URL)
-        UrlList.append(URL)
-        FinalProductList.append(FinalProduct)
-        print()
-        isDone = input("Are You Done Shopping? Enter Yes or No ")
-        if(isDone.lower() == "yes"):
-            DoneShopping = True
-    print()
-
-    checkouttest = testDriver(UrlList, PopUp, FinalProductList)
-    checkouttest.checkout()
-    '''
-    try:
-        testURL(UrlList, PopUp, driver)
-        checkout(driver)
-    except:
-        print("Error, cannot find button / took too long to load")
-    '''
-
-
-if __name__ == "__main__":
-    '''
-    app = QtWidgets.QApplication(sys.argv)
-    ex = GUI.App()
-    sys.exit(app.exec_())
-    '''
-    Main()

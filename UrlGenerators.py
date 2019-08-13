@@ -27,5 +27,6 @@ def UrlGen(product, size):
     for variant in product['variants']:
         if(size == variant['option1']):
             sizeVariant = variant['id']
+            break
     finalUrl = baseUrl + brand + '/products/' + productName + '?variant=' + str(sizeVariant)
     return finalUrl

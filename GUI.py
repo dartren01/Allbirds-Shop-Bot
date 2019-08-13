@@ -213,7 +213,7 @@ class App(QDialog):
                 button = QPushButton('Remove From Cart', self.table2)
                 button.clicked.connect(lambda: self.remove_cart())
                 self.table2.setCellWidget(rowPos, 4, button)
-        self.PriceLabel.setText("Total Price: $" + str(allPrices))
+        self.PriceLabel.setText("Total Price: $" + str(allPrices) + " + $15 Shipping")
         print(allPrices)
         self.table2.resizeRowsToContents()
         self.table2.resizeColumnsToContents()

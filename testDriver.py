@@ -32,9 +32,9 @@ class testDriver:
         return True
 
     def login_to_gmail(self, driver):
-        email = ShopInfo.Login["Email"][-1]
-        password = ShopInfo.Login["Password"][-1]
         try:
+            email = ShopInfo.Login["Email"][-1]
+            password = ShopInfo.Login["Password"][-1]
             driver.get('http://gmail.com')
             driver.find_element_by_xpath('//*[@id="identifierId"]').send_keys(email + Keys.ENTER)
             time.sleep(1)
@@ -45,6 +45,7 @@ class testDriver:
             return True
 
     def checkout(self):
+        '''
         phone = ShopInfo.Login["Phone"][-1]
         firstname = ShopInfo.Login["FirstName"][-1]
         lastname = ShopInfo.Login["LastName"][-1]
@@ -52,7 +53,7 @@ class testDriver:
         city = ShopInfo.Login["City"][-1]
         zipcode = ShopInfo.Login["Zipcode"][-1]
         email = ShopInfo.Login["Email"][-1]
-
+        '''
         # ----- TEST CASES -----
         phone = '562 916 5122'
         firstname = 'carmine'
@@ -61,6 +62,10 @@ class testDriver:
         city = 'cerritos'
         zipcode = '90703'
         email = 'gangmin519@gmail.com'
+        cardNum = '1234567891234567'
+        cardName = 'Ooga Booga'
+        cardExp = '06/20'
+        cardSecurity = '212'
 
 
         driver = webdriver.Chrome('./chromedriver')
@@ -86,26 +91,31 @@ class testDriver:
 
         button = GUI.CaptchaButton()
         button.activateWindow()
-
-
+        #time.sleep(20)
         #driver.find_element_by_xpath('//*[@id="recaptcha-anchor"]/div[1]')
         # time.sleep(30)
         # driver.close()
 
         # continue to payment xpath
+        driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button').click()
+        driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button').click()
         # /html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button
-
+        time.sleep(1)
         #card number
         # // *[ @ id = "number"]
+        driver.find_element_by_xpath('// *[ @ id = "number"]').send_keys(cardNum)
 
         #name on card
         # //*[@id="name"]
+        driver.find_element_by_xpath('// *[ @ id = "name"]').send_keys(cardName)
 
         #exp date
         # //*[@id="expiry"]
+        driver.find_element_by_xpath('//*[@id="expiry"]').send_keys(cardExp)
 
         #security code
         # //*[@id="verification_value"]
+        driver.find_element_by_xpath('//*[@id="verification_value"]').send_keys(cardSecurity)
 
         #complete order button
         # /html/body/div[2]/div/div[1]/div[2]/div/div/form/div[4]/div[1]/button
