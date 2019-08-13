@@ -90,7 +90,8 @@ class testDriver:
         driver.find_element_by_xpath('// *[ @ id = "checkout_email"]').send_keys(email)
 
         button = GUI.CaptchaButton()
-        button.activateWindow()
+        button.showNormal()
+        time.sleep(10)
         #time.sleep(20)
         #driver.find_element_by_xpath('//*[@id="recaptcha-anchor"]/div[1]')
         # time.sleep(30)

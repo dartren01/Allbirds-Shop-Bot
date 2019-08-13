@@ -209,7 +209,8 @@ class App(QDialog):
                 self.table2.setItem(rowPos, 1, QTableWidgetItem(ShopInfo.ShoppingKeys["Sizes"][rowPos]))
                 self.table2.setItem(rowPos, 2, QTableWidgetItem(str(ShopInfo.ShoppingKeys["Quantities"][rowPos])))
                 self.table2.setItem(rowPos, 3, QTableWidgetItem("$"+ShopInfo.ShoppingKeys["Prices"][rowPos]))
-                allPrices = float(ShopInfo.ShoppingKeys["Prices"][rowPos]) + allPrices
+                allPrices = (float(ShopInfo.ShoppingKeys["Prices"][rowPos]) *
+                             float(ShopInfo.ShoppingKeys["Quantities"][rowPos])) + allPrices
                 button = QPushButton('Remove From Cart', self.table2)
                 button.clicked.connect(lambda: self.remove_cart())
                 self.table2.setCellWidget(rowPos, 4, button)
@@ -263,7 +264,7 @@ class CaptchaButton(QDialog):
     def __init__(self):
         super().__init__()
         self.title = 'Captcha'
-        self.left = 600
+        self.left = 1600
         self.top = 100
         self.width = 320
         self.height = 200
@@ -285,7 +286,7 @@ class CaptchaButton(QDialog):
         #self.activateWindow()
         self.show()
         self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
-        self.activateWindow()
+        #self.activateWindow()
 
 def getProdJsonList(prod):
     # tuple (id, json, image)
