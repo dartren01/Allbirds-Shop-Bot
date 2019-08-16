@@ -21,7 +21,6 @@ time.sleep(1)
 driver.find_element_by_xpath('//*[@id="CartContainer"]/form/div[3]/button').click()
 time.sleep(1)
 
-driver.find_element_by_xpath('//*[@id="checkout_email"]').send_keys('dartren@gmail.com')
 driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys(phone)
 driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys(firstname)
 driver.find_element_by_xpath('// *[ @ id = "checkout_shipping_address_last_name"]').send_keys(lastname)
@@ -29,4 +28,5 @@ driver.find_element_by_xpath('//*[@id="checkout_shipping_address_address1"]').se
 driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys(city)
 driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys(zipcode)
 driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button').click()
+driver.find_element_by_xpath('//*[@id="checkout_email"]').send_keys('dartren@gmail.com')
 
