@@ -33,8 +33,9 @@ class App(QDialog):
         self.bckbtn = QPushButton("Back", self)
         self.bckbtn.resize(100, 32)
         self.bckbtn.move(750, 650)
-
-        self.products = aaa.getProducts()
+        if len(ShopInfo.ShoppingKeys["ProductDatabase"]) <= 1:
+            ShopInfo.ShoppingKeys["ProductDatabase"] = aaa.getProducts()
+        self.products = ShopInfo.ShoppingKeys["ProductDatabase"]
         pool = Pool(cpu_count())
         self.testProducts = [x for x in pool.map(partial(aaa.findKeyword, keyword=keyword, type=typeRadio,
                                                          price=typePrice), self.products) if x is not None]
@@ -112,7 +113,7 @@ class App(QDialog):
 
         #self.loadingScreen()
 
-        self.show()
+        #self.show()
 
 
     def createTable(self):
@@ -278,10 +279,8 @@ class CaptchaButton(QDialog):
                                            QMessageBox.Yes, QMessageBox.Yes)
         if buttonReply == QMessageBox.Yes:
             print('Yes clicked.')
+            self.close()
             return True
-        else:
-            print('No clicked.')
-            return False
         #self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
         #self.activateWindow()
         self.show()

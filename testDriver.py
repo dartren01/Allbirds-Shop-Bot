@@ -88,7 +88,7 @@ class testDriver:
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys(city)
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys(zipcode)
         driver.find_element_by_xpath('// *[ @ id = "checkout_email"]').send_keys(email)
-
+        time.sleep(5)
         button = GUI.CaptchaButton()
         button.showNormal()
         time.sleep(10)
