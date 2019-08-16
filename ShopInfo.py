@@ -1,5 +1,6 @@
 ShoppingKeys = {
     "Products": [],
+    # DICT OF product: SIZE, QUANTITY, PRICE
     "Cart": [],
     "Sizes": [],
     "Quantities": [],

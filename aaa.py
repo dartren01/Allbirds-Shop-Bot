@@ -11,7 +11,7 @@ def getProducts():
     page = 1
     productList = []
     while count>=250:
-        urlstr = 'https://www.packershoes.com/products.json?limit=250&page={}'.format(page)
+        urlstr = 'https://www.allbirds.com/products.json?limit=250&page={}'.format(page)
         r = requests.get(urlstr)
         products = json.loads(r.text)['products']
         productList.extend(products)
@@ -20,23 +20,31 @@ def getProducts():
     return productList
 
 def getProductJson(product):
-    urlstr = 'https://packershoes.com/products/{}.json'.format(product)
+    urlstr = 'https://www.allbirds.com/products/{}.json'.format(product)
     r = requests.get(urlstr)
     jsonStr = json.loads(r.text)
     return jsonStr
 
+def findProducts(product, keyword1, keyword2):
+    # creates search param ex [mens, runners]
+    keyword1 = keyword1.lower()
+    keyword2 = keyword2.lower()
+    titleList = [keyword1, keyword2]
+    if keyword1.lower() == 'accessories' and product['product_type'] == keyword1:
+        print(product['title'])
+        return product
+    elif all(word in product['handle'].split('-') for word in titleList):
+        print(product['title'])
+        return product
+    return None
+
+'''
 #fix this
 def findKeyword(product, keyword, type, price):
     keywordList = keyword.upper().split(' ')
     if any(word in product['title'] for word in keywordList):
         if price == '' or price in product['tags']:
-            if 'email-orders' not in product['tags'] and 'phone-orders' not in product['tags'] \
-                    and 'INQUIRE' not in product['tags']:
                 if type.upper() in product['tags'] and type.upper() == "FOOTWEAR":
-                    if (ProductAvailable(product, False)):
-                        print(product['title'])
-                        return product
-                elif type.upper() in product['tags'] and type.upper() == "APPAREL":
                     if (ProductAvailable(product, False)):
                         print(product['title'])
                         return product
@@ -50,7 +58,7 @@ def findKeyword(product, keyword, type, price):
                         print(product['title'])
                         return product
     return None
-
+'''
 
 def ReturnProduct(products, keyword):
     for p in products:

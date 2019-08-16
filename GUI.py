@@ -12,8 +12,10 @@ import threading
 
 
 class App(QDialog):
-
-    def __init__(self, keyword, typeRadio, typePrice):
+    # keyword1 = men, women, kids, socks, accessories
+    # keyword2 = runners, loungers, toppers, skippers, breezers
+    # keyword1 KIDS MUST BE 'SMALLBIRDS'
+    def __init__(self, keyword1, keyword2):
         super().__init__()
         #self.title = 'PyQt5 simple window'
         self.left = 800
@@ -24,9 +26,8 @@ class App(QDialog):
         #self.label = QLabel()
         #self.mov = QLabel()
         self.totalPrice = 0
-        self.keyword = keyword
-        self.type = typeRadio
-        self.price = typePrice
+        self.keyword1 = keyword1
+        self.keyword2 = keyword2
         self.PriceLabel = QLabel("Total Price: ")
         #placeholder
         self.itemDict = {}
@@ -37,14 +38,29 @@ class App(QDialog):
             ShopInfo.ShoppingKeys["ProductDatabase"] = aaa.getProducts()
         self.products = ShopInfo.ShoppingKeys["ProductDatabase"]
         pool = Pool(cpu_count())
-        self.testProducts = [x for x in pool.map(partial(aaa.findKeyword, keyword=keyword, type=typeRadio,
-                                                         price=typePrice), self.products) if x is not None]
+        self.testProducts = [x for x in pool.map(partial(aaa.findProducts, keyword1=keyword1,
+                                                         keyword2=keyword2), self.products) if x is not None]
+        self.testProducts = sorted(self.testProducts, key=lambda k: k['title'])
+        if not self.testProducts:
+            self.is_valid_search = False
+        for prod in self.testProducts:
+            print(prod)
+        ShopInfo.ShoppingKeys["Products"] = self.testProducts
+        try:
+            image_list = pool.map(getProdImgList, self.testProducts)
+            self.prodDict = {}
+            for prod in image_list:
+                self.prodDict[prod[0]] = [prod[1]]
+                print('yes')
+            self.initUI()
+        except:
+            self.noProducts()
+        '''
         # so no errors
         try:
             # check if products is empty, if it is go back to search page
             if not self.testProducts:
                 self.is_valid_search = False
-            #self.testProducts = pool.map(aaa.findKeyword(products, keyword, typeRadio)
             ShopInfo.ShoppingKeys["Products"] = self.testProducts
             #print(self.testProducts[0])
             result_list = pool.map(getProdJsonList, self.testProducts)
@@ -58,6 +74,7 @@ class App(QDialog):
             self.initUI()
         except:
             self.noProducts()
+        '''
 
     def noProducts(self):
         self.NoProd = QVBoxLayout()
@@ -66,8 +83,8 @@ class App(QDialog):
         self.setLayout(self.NoProd)
 
     def initUI(self):
-        # self.setWindowTitle(self.title)
-        # self.setGeometry(self.left, self.top, self.width, self.height)
+        #self.setWindowTitle(self.title)
+        #self.setGeometry(self.left, self.top, self.width, self.height)
 
 
         self.tabLayout = QTabWidget()
@@ -113,7 +130,7 @@ class App(QDialog):
 
         #self.loadingScreen()
 
-        #self.show()
+        self.show()
 
 
     def createTable(self):
@@ -132,6 +149,7 @@ class App(QDialog):
         self.table.setSelectionMode(QAbstractItemView.NoSelection)
 
         for i in range(length):
+            # dict of product: list of pyqt5 widgets
             self.itemDict[i] = []
             for k in range(6):
                 if(k==0):
@@ -142,7 +160,7 @@ class App(QDialog):
                     label = QLabel()
                     pixmap = QPixmap()
                     try:
-                        pixmap.loadFromData(self.prodDict[self.testProducts[i]['id']][1])
+                        pixmap.loadFromData(self.prodDict[self.testProducts[i]['id']][0])
                         #print("loaded")
                     except:
                         pixmap.load('brgr.png')
@@ -159,6 +177,7 @@ class App(QDialog):
                 elif (k==3):
                     quantityBox = QSpinBox(self.table)
                     quantityBox.setValue(0)
+                    '''
                     pSize = str(self.itemDict[i][1].currentText())
                     maxQuantity = 0
                     # get variants from prodDict which has quantity amount
@@ -167,6 +186,7 @@ class App(QDialog):
                             maxQuantity = var['inventory_quantity']
                             break
                     quantityBox.setMaximum(maxQuantity)
+                    '''
                     self.table.setCellWidget(i, k, quantityBox)
                     self.itemDict[i].append(quantityBox)
                 elif (k==4):
@@ -192,8 +212,13 @@ class App(QDialog):
             self.table2.removeRow(0)
         headerTitles = ("Name", "Size", "Quantity", "Price", "Remove From Cart")
         header = self.table2.horizontalHeader()
-        for i in range(5):
-            header.setSectionResizeMode(i, QHeaderView.Stretch)
+        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.Stretch)
+        header.setSectionResizeMode(2, QHeaderView.Stretch)
+        header.setSectionResizeMode(3, QHeaderView.Stretch)
+        header.setSectionResizeMode(4, QHeaderView.Stretch)
+        #for i in range(5):
+        #    header.setSectionResizeMode(i, QHeaderView.Stretch)
 
         QTableWidget.setHorizontalHeaderLabels(self.table2, headerTitles)
         #self.table2.setSelectionMode(QAbstractItemView.NoSelection)
@@ -217,6 +242,7 @@ class App(QDialog):
                 self.table2.setCellWidget(rowPos, 4, button)
         self.PriceLabel.setText("Total Price: $" + str(allPrices) + " + $15 Shipping")
         print(allPrices)
+        self.table2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.table2.resizeRowsToContents()
         self.table2.resizeColumnsToContents()
 
@@ -235,9 +261,22 @@ class App(QDialog):
         if self.itemDict.get(index.row())[2].value() == 0:
             print("Did not add to cart. Please choose quantity.")
             return
+        print(self.testProducts[index.row()])
+        for i in range(len(ShopInfo.ShoppingKeys["Cart"])):
+            if self.testProducts[index.row()] == ShopInfo.ShoppingKeys["Cart"][i] and ShopInfo.ShoppingKeys["Sizes"][i] == str(self.itemDict.get(index.row())[1].currentText()):
+                print("Adding more")
+                add = ShopInfo.ShoppingKeys["Quantities"][i] + self.itemDict.get(index.row())[2].value()
+                ShopInfo.ShoppingKeys["Quantities"][i] = add
+                return
+        '''
         if self.testProducts[index.row()] in ShopInfo.ShoppingKeys["Cart"]:
-            print("Already in Cart")
-            return
+            cartIndex = ShopInfo.ShoppingKeys["Cart"].index(self.testProducts[index.row()])
+            if ShopInfo.ShoppingKeys["Sizes"][cartIndex] == str(self.itemDict.get(index.row())[1].currentText()):
+                print("Adding more")
+                add = ShopInfo.ShoppingKeys["Quantities"][cartIndex] + self.itemDict.get(index.row())[2].value()
+                ShopInfo.ShoppingKeys["Quantities"][cartIndex] = add
+                return
+        '''
         print(self.itemDict.get(index.row())[0] + ' Added to Cart')
         ShopInfo.ShoppingKeys["Cart"].append(self.testProducts[index.row()])
         ShopInfo.ShoppingKeys["Sizes"].append(str(self.itemDict.get(index.row())[1].currentText()))
@@ -287,10 +326,10 @@ class CaptchaButton(QDialog):
         self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
         #self.activateWindow()
 
-def getProdJsonList(prod):
+def getProdImgList(prod):
     # tuple (id, json, image)
-    prod = (prod['id'], aaa.getProductJson(prod['handle']), urlopen(prod['images'][0]['src']).read())
-    return prod
+    product = (prod['id'], urlopen(prod['images'][0]['src']).read())
+    return product
 
 
 '''
@@ -349,6 +388,6 @@ class PopupImage(QDialog):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = App("suicoke","apparel",'')
+    ex = App("mens","runners")
     sys.exit(app.exec_())
 
