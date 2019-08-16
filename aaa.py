@@ -97,15 +97,15 @@ def CompleteShopping():
     ProductList = ShopInfo.ShoppingKeys["Cart"]
     SizeList = ShopInfo.ShoppingKeys["Sizes"]
     QuantityList = ShopInfo.ShoppingKeys["Quantities"]
-    initialPopUp = True
+    #initialPopUp = False
     UrlList = []
     for i in range(len(ProductList)):
-        if (initialPopUp):
-            PopUp = UrlGenerators.popUpGen(ProductList[i])
-            initialPopUp = False
+        #if (initialPopUp):
+            #PopUp = UrlGenerators.popUpGen(ProductList[i])
+            #initialPopUp = False
         URL = UrlGenerators.UrlGen(ProductList[i], SizeList[i])
         print(URL)
         UrlList.append(URL)
-    checkouttest = testDriver(UrlList, PopUp, ProductList, QuantityList)
+    checkouttest = testDriver(UrlList, ProductList, QuantityList)
     checkouttest.checkout()
 

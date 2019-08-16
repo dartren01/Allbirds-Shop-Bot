@@ -20,13 +20,13 @@ def popUpGen(product):
 
 
 def UrlGen(product, size):
-    baseUrl = 'https://packershoes.com/collections/'
-    brand = product['vendor'].lower()
+    baseUrl = 'https://www.allbirds.com/products/'
+    #brand = product['vendor'].lower()
     productName = product['handle']
-    sizeVariant = product['id']
-    for variant in product['variants']:
-        if(size == variant['option1']):
-            sizeVariant = variant['id']
-            break
-    finalUrl = baseUrl + brand + '/products/' + productName + '?variant=' + str(sizeVariant)
+    #sizeVariant = product['id']
+    #for variant in product['variants']:
+    #    if(size == variant['option1']):
+    #        sizeVariant = variant['id']
+    #        break
+    finalUrl = baseUrl + productName + '?size=' + size
     return finalUrl

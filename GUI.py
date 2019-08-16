@@ -130,7 +130,7 @@ class App(QDialog):
 
         #self.loadingScreen()
 
-        #self.show()
+        self.show()
 
 
     def createTable(self):
@@ -165,7 +165,7 @@ class App(QDialog):
                     except:
                         pixmap.load('brgr.png')
 
-                    label.setPixmap(pixmap.scaledToWidth(350))
+                    label.setPixmap(pixmap.scaledToWidth(250))
                     self.table.setCellWidget(i, k, label)
 
                 elif (k==2):
@@ -240,7 +240,7 @@ class App(QDialog):
                 button = QPushButton('Remove From Cart', self.table2)
                 button.clicked.connect(lambda: self.remove_cart())
                 self.table2.setCellWidget(rowPos, 4, button)
-        self.PriceLabel.setText("Total Price: $" + str(allPrices) + " + $15 Shipping")
+        self.PriceLabel.setText("Total Price: $" + str(allPrices) + " tax not included")
         print(allPrices)
         self.table2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.table2.resizeRowsToContents()

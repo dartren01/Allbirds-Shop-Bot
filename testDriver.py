@@ -5,30 +5,26 @@ import ShopInfo
 import GUI
 
 class testDriver:
-    def __init__(self, UrlList, PopUp, FinalProductList, QuantityList):
+    def __init__(self, UrlList, FinalProductList, QuantityList):
         self.urls = UrlList
-        self.Popup = PopUp
+        #self.Popup = PopUp
         self.FinalProdList = FinalProductList
         self.QuantityList = QuantityList
 
     def testURL(self, driver):
         # Some urls have contact to order
-        adClicked = False
+        #adClicked = False
         for num in range(len(self.urls)):
             driver.get(self.urls[num])
-            if (not adClicked):
-                time.sleep(2)
-                driver.find_element_by_xpath(self.Popup).click()
-                adClicked = True
-
-            for item in self.FinalProdList[num]['tags']:
-                if (item == 'email-orders' or item == 'phone-orders'):
-                    print("This is a contact to order")
-                    return False
+            #if (not adClicked):
+            #    time.sleep(2)
+            #    driver.find_element_by_xpath(self.Popup).click()
+            #    adClicked = True
+            driver.find_element_by_xpath('//*[@id="add-to-cart"]').click()
+            time.sleep(1)
             for quantity in range(self.QuantityList[num]-1):
-                driver.find_element_by_xpath('//*[@id="AddToCartForm--'
-                                             'product-packer-template"]/div[2]/div/button[2]').click()
-            driver.find_element_by_xpath('//*[@id="AddToCart--product-packer-template"]').click()
+                driver.find_element_by_xpath('//*[@id="cart"]/div/div/div/div[2]/div/div/div[1]/div[1]/div[2]/div/div/button[2]').click()
+                time.sleep(1)
         return True
 
     def login_to_gmail(self, driver):
@@ -70,17 +66,16 @@ class testDriver:
 
         driver = webdriver.Chrome('./chromedriver')
 
-        if not self.login_to_gmail(driver):
-            return False
+        #if not self.login_to_gmail(driver):
+        #    return False
         time.sleep(1)
         if not self.testURL(driver):
             print("Cannot Order")
             return False
 
         # ADD OTHER OPTIONS TOO
+        driver.find_element_by_xpath('//*[@id="cart"]/div/div/div/div[3]/div[2]/div/a').click()
         time.sleep(1)
-        driver.find_element_by_xpath('// *[ @ id = "CartContainer"] / form / div[2] / button').click()
-
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_phone"]').send_keys(phone)
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_first_name"]').send_keys(firstname)
         driver.find_element_by_xpath('// *[ @ id = "checkout_shipping_address_last_name"]').send_keys(lastname)
@@ -89,8 +84,8 @@ class testDriver:
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys(zipcode)
         driver.find_element_by_xpath('// *[ @ id = "checkout_email"]').send_keys(email)
         time.sleep(5)
-        button = GUI.CaptchaButton()
-        button.showNormal()
+        #button = GUI.CaptchaButton()
+        #button.showNormal()
         time.sleep(10)
         #time.sleep(20)
         #driver.find_element_by_xpath('//*[@id="recaptcha-anchor"]/div[1]')
@@ -104,19 +99,19 @@ class testDriver:
         time.sleep(1)
         #card number
         # // *[ @ id = "number"]
-        driver.find_element_by_xpath('// *[ @ id = "number"]').send_keys(cardNum)
+        #driver.find_element_by_xpath('// *[ @ id = "number"]').send_keys(cardNum)
 
         #name on card
         # //*[@id="name"]
-        driver.find_element_by_xpath('// *[ @ id = "name"]').send_keys(cardName)
+        #driver.find_element_by_xpath('// *[ @ id = "name"]').send_keys(cardName)
 
         #exp date
         # //*[@id="expiry"]
-        driver.find_element_by_xpath('//*[@id="expiry"]').send_keys(cardExp)
+        #driver.find_element_by_xpath('//*[@id="expiry"]').send_keys(cardExp)
 
         #security code
         # //*[@id="verification_value"]
-        driver.find_element_by_xpath('//*[@id="verification_value"]').send_keys(cardSecurity)
+        #driver.find_element_by_xpath('//*[@id="verification_value"]').send_keys(cardSecurity)
 
         #complete order button
         # /html/body/div[2]/div/div[1]/div[2]/div/div/form/div[4]/div[1]/button
