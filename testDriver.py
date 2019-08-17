@@ -72,7 +72,7 @@ class testDriver:
         if not self.testURL(driver):
             print("Cannot Order")
             return False
-
+        time.sleep(1)
         # ADD OTHER OPTIONS TOO
         driver.find_element_by_xpath('//*[@id="cart"]/div/div/div/div[3]/div[2]/div/a').click()
         time.sleep(1)
@@ -83,39 +83,41 @@ class testDriver:
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys(city)
         driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys(zipcode)
         driver.find_element_by_xpath('// *[ @ id = "checkout_email"]').send_keys(email)
-        time.sleep(5)
+        driver.find_element_by_xpath('// *[ @ id = "checkout_buyer_accepts_marketing"]').click()
+        time.sleep(7)
         #button = GUI.CaptchaButton()
         #button.showNormal()
-        time.sleep(10)
+        #time.sleep(10)
         #time.sleep(20)
         #driver.find_element_by_xpath('//*[@id="recaptcha-anchor"]/div[1]')
         # time.sleep(30)
         # driver.close()
 
         # continue to payment xpath
-        driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button').click()
-        driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button').click()
+        driver.find_element_by_xpath('/html/body/div[4]/div/div[1]/div[2]/div/form/div[2]/button').click()
+        time.sleep(1)
+        driver.find_element_by_xpath('/html/body/div[4]/div/div[1]/div[2]/div/form/div[2]/button').click()
         # /html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button
         time.sleep(1)
         #card number
         # // *[ @ id = "number"]
-        #driver.find_element_by_xpath('// *[ @ id = "number"]').send_keys(cardNum)
+        driver.find_element_by_xpath('// *[ @ id = "number"]').send_keys(cardNum)
         # // *[ @ id = "number"]                             //*[@id="card-fields-number-rqtlu1itar900000"]
         # driver.switch_to.frame(0)
-        # driver.find_element_by_xpath('// *[ @ id = "number"]').send_keys(cardNum)
+        driver.find_element_by_xpath('// *[ @ id = "number"]').send_keys(cardNum)
 
         #name on card
         # //*[@id="name"]
-        #driver.find_element_by_xpath('// *[ @ id = "name"]').send_keys(cardName)
+        driver.find_element_by_xpath('// *[ @ id = "name"]').send_keys(cardName)
 
         #exp date
         # //*[@id="expiry"]
-        #driver.find_element_by_xpath('//*[@id="expiry"]').send_keys(cardExp)
+        driver.find_element_by_xpath('//*[@id="expiry"]').send_keys(cardExp)
 
         #security code
         # //*[@id="verification_value"]
-        #driver.find_element_by_xpath('//*[@id="verification_value"]').send_keys(cardSecurity)
-
+        driver.find_element_by_xpath('//*[@id="verification_value"]').send_keys(cardSecurity)
+        time.sleep(20)
         #complete order button
         # /html/body/div[2]/div/div[1]/div[2]/div/div/form/div[4]/div[1]/button
 
