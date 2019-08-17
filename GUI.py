@@ -130,7 +130,6 @@ class App(QDialog):
 
         #self.loadingScreen()
 
-        self.show()
 
 
     def createTable(self):
@@ -322,7 +321,6 @@ class CaptchaButton(QDialog):
             return True
         #self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
         #self.activateWindow()
-        self.show()
         self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
         #self.activateWindow()
 

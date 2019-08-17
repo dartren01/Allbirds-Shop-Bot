@@ -344,9 +344,9 @@ class MainWindow(QMainWindow):
     def startWindow2(self):
 
         # DETERMINE KETWORDS
-        # Men = 1; Women = 2; Kids = 3; Socks = 4; Accessories = 5
+        # Mens = 1; Womens = 2; Kids = 3; Socks = 4; Accessories = 5
         if self.Window.menu == 1:
-            keyword1 = "men"
+            keyword1 = "mens"
             if self.Window.MenRadioBtn1.isChecked():
                 keyword2 = "runners"
             elif self.Window.MenRadioBtn2.isChecked():
@@ -355,18 +355,23 @@ class MainWindow(QMainWindow):
                 keyword2 = "toppers"
             elif self.Window.MenRadioBtn4.isChecked():
                 keyword2 = "skippers"
+            else:
+                keyword2 = "runners"
         elif self.Window.menu == 2:
-            keyword1 = "women"
+            keyword1 = "womens"
             if self.Window.WomenRadioBtn1.isChecked():
                 keyword2 = "runners"
-            elif self.Window.WomenRadioBtn1.isChecked():
+            elif self.Window.WomenRadioBtn2.isChecked():
                 keyword2 = "loungers"
-            elif self.Window.WomenRadioBtn1.isChecked():
+            elif self.Window.WomenRadioBtn3.isChecked():
                 keyword2 = "breezers"
-            elif self.Window.WomenRadioBtn1.isChecked():
+            elif self.Window.WomenRadioBtn4.isChecked():
                 keyword2 = "skippers"
-            elif self.Window.WomenRadioBtn1.isChecked():
+            elif self.Window.WomenRadioBtn5.isChecked():
                 keyword2 = "toppers"
+                print("in here")
+            else:
+                keyword2 = "runners"
         elif self.Window.menu == 3:
             keyword1 = "SMALLBIRDS"
             keyword2 = ""
@@ -377,22 +382,28 @@ class MainWindow(QMainWindow):
             keyword1 = "accessories"
             keyword2 = ""
 
-        # CHECK TEXTBOX
-        keyword = self.Window.textbox.text()
+        else:
+            keyword1 = ""
+            keyword2 = ""
+
+        print(keyword1)
+        print(keyword2)
+
         self.win = GUI.App(keyword1, keyword2)
 
-        # if self.win.is_valid_search:
-        #     is_back = True
-        #     is_valid_search = True
-        #     self.statusBar().clearMessage()
-        #     self.setCentralWidget(self.win)
-        #     self.win.bckbtn.clicked.connect(lambda: self.startWindow1(is_valid_search, is_back))
-        #     self.show()
-        # else:
-        #     is_valid_search = False
-        #     is_back = False
-        #     self.statusBar().showMessage('No Products Found, Please Try Again')
-        #     self.startWindow1(is_valid_search, is_back)
+        if self.win.is_valid_search:
+            is_back = True
+            is_valid_search = True
+            self.statusBar().clearMessage()
+            self.setCentralWidget(self.win)
+            self.win.bckbtn.clicked.connect(lambda: self.startSearchWindow(is_valid_search, is_back, 0))
+            self.show()
+            print("in if")
+        else:
+            is_valid_search = False
+            is_back = False
+            self.statusBar().showMessage('No Products Found, Please Try Again')
+            self.startWindow1(is_valid_search, is_back)
 
 
 if __name__ == '__main__':

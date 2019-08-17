@@ -17,6 +17,11 @@ def getProducts():
         productList.extend(products)
         count = len(products)
         page += 1
+    print("here")
+    for x in range(len(productList)):
+        print(productList[x])
+    print("here")
+
     return productList
 
 def getProductJson(product):
@@ -30,7 +35,13 @@ def findProducts(product, keyword1, keyword2):
     keyword1 = keyword1.lower()
     keyword2 = keyword2.lower()
     titleList = [keyword1, keyword2]
-    if keyword1.lower() == 'accessories' and product['product_type'] == keyword1:
+    if keyword1 == 'accessories' and product['product_type'].lower() == keyword1:
+        print(product['title'])
+        return product
+    elif keyword1 == 'socks' and product['product_type'].lower() == keyword1:
+        print(product['title'])
+        return product
+    elif keyword1 == 'smallbirds' and keyword1 in product['handle'].lower():
         print(product['title'])
         return product
     elif all(word in product['handle'].split('-') for word in titleList):
