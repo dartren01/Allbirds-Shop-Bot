@@ -295,7 +295,7 @@ class App(QDialog):
             del ShopInfo.ShoppingKeys["Prices"][index.row()]
             self.table2.removeRow(index.row())
             self.createAddToCartTable(1)
-            self.show()
+            # self.show()
         except:
             print("Unable to remove")
 

@@ -190,9 +190,18 @@ class Search_Window(QWidget):
         if self.menu == 1:
             self.CreateMenMenu()
             hbox.addWidget(self.MenMenu)
+            self.searchbtn1.setDown(True)
         if self.menu == 2:
             self.CreateWomenMenu()
             hbox.addWidget(self.WomenMenu)
+            self.searchbtn2.setDown(True)
+        if self.menu == 3:
+            self.searchbtn3.setDown(True)
+        if self.menu == 4:
+            self.searchbtn4.setDown(True)
+        if self.menu == 5:
+            self.searchbtn5.setDown(True)
+
 
         hbox.addStretch()
 
@@ -323,6 +332,10 @@ class MainWindow(QMainWindow):
 
         self.Window.searchbtn1.clicked.connect(lambda: self.startSearchWindow(True, False, 1))
         self.Window.searchbtn2.clicked.connect(lambda: self.startSearchWindow(True, False, 2))
+        self.Window.searchbtn3.clicked.connect(lambda: self.startSearchWindow(True, False, 3))
+        self.Window.searchbtn4.clicked.connect(lambda: self.startSearchWindow(True, False, 4))
+        self.Window.searchbtn5.clicked.connect(lambda: self.startSearchWindow(True, False, 5))
+
 
         self.Window.BTN.clicked.connect(self.startWindow2)
         self.Window.BCKBTN.clicked.connect(self.startLoginWindow)
@@ -330,59 +343,56 @@ class MainWindow(QMainWindow):
 
     def startWindow2(self):
 
-        # CHECK WHICH RADIO BUTTON WAS CLICKED ON WINDOW 1
-        if self.Window.typeRadioButton1.isChecked():
-            typeRadio = "Footwear"
-            print("Footwear")
-        elif self.Window.typeRadioButton2.isChecked():
-            typeRadio = "Apparel"
-            print("Apparel")
-        elif self.Window.typeRadioButton3.isChecked():
-            typeRadio = "Accessories"
-            print("Accessories")
-        elif self.Window.typeRadioButton3.isChecked():
-            typeRadio = "All"
-            print("All")
-        else:
-            typeRadio = "All"
-
-        # CHECK PRICE RADIO BUTTON
-        if self.Window.priceRadioButton1.isChecked():
-            priceRadio = ''
-        elif self.Window.priceRadioButton2.isChecked():
-            priceRadio = 'under-50'
-        elif self.Window.priceRadioButton3.isChecked():
-            priceRadio = '50-100'
-        elif self.Window.priceRadioButton4.isChecked():
-            priceRadio = '100-150'
-        elif self.Window.priceRadioButton5.isChecked():
-            priceRadio = '150-200'
-        elif self.Window.priceRadioButton6.isChecked():
-            priceRadio = '200-250'
-        elif self.Window.priceRadioButton7.isChecked():
-            priceRadio = '250-300'
-        elif self.Window.priceRadioButton8.isChecked():
-            priceRadio = 'over-300'
-        else:
-            priceRadio = ''
+        # DETERMINE KETWORDS
+        # Men = 1; Women = 2; Kids = 3; Socks = 4; Accessories = 5
+        if self.Window.menu == 1:
+            keyword1 = "men"
+            if self.Window.MenRadioBtn1.isChecked():
+                keyword2 = "runners"
+            elif self.Window.MenRadioBtn2.isChecked():
+                keyword2 = "loungers"
+            elif self.Window.MenRadioBtn3.isChecked():
+                keyword2 = "toppers"
+            elif self.Window.MenRadioBtn4.isChecked():
+                keyword2 = "skippers"
+        elif self.Window.menu == 2:
+            keyword1 = "women"
+            if self.Window.WomenRadioBtn1.isChecked():
+                keyword2 = "runners"
+            elif self.Window.WomenRadioBtn1.isChecked():
+                keyword2 = "loungers"
+            elif self.Window.WomenRadioBtn1.isChecked():
+                keyword2 = "breezers"
+            elif self.Window.WomenRadioBtn1.isChecked():
+                keyword2 = "skippers"
+            elif self.Window.WomenRadioBtn1.isChecked():
+                keyword2 = "toppers"
+        elif self.Window.menu == 3:
+            keyword1 = "SMALLBIRDS"
+            keyword2 = ""
+        elif self.Window.menu == 4:
+            keyword1 = "socks"
+            keyword2 = ""
+        elif self.Window.menu == 5:
+            keyword1 = "accessories"
+            keyword2 = ""
 
         # CHECK TEXTBOX
         keyword = self.Window.textbox.text()
-        self.win = GUI.App(keyword, typeRadio, priceRadio)
+        self.win = GUI.App(keyword1, keyword2)
 
-        if self.win.is_valid_search:
-            # self.win = Window2(self)
-            is_back = True
-            is_valid_search = True
-            self.statusBar().clearMessage()
-            self.setCentralWidget(self.win)
-            self.win.bckbtn.clicked.connect(lambda: self.startWindow1(is_valid_search, is_back))
-            self.show()
-        else:
-            is_valid_search = False
-            is_back = False
-            self.statusBar().showMessage('No Products Found, Please Try Again')
-            self.startWindow1(is_valid_search, is_back)
+        # if self.win.is_valid_search:
+        #     is_back = True
+        #     is_valid_search = True
+        #     self.statusBar().clearMessage()
+        #     self.setCentralWidget(self.win)
+        #     self.win.bckbtn.clicked.connect(lambda: self.startWindow1(is_valid_search, is_back))
+        #     self.show()
+        # else:
+        #     is_valid_search = False
+        #     is_back = False
+        #     self.statusBar().showMessage('No Products Found, Please Try Again')
+        #     self.startWindow1(is_valid_search, is_back)
 
 
 if __name__ == '__main__':
