@@ -160,12 +160,12 @@ class Login_Window(QWidget):
         self.setLayout(hbox)
         self.button = QPushButton("Next", self)
         self.button.resize(100, 32)
-        self.button.move(850, 750)
+        self.button.move(1000, 850)
 
 
-class Window1(QWidget):
+class Search_Window(QWidget):
 
-    def __init__(self, valid_search, is_back):
+    def __init__(self, valid_search, is_back, menu):
         super().__init__()
 
         self.title = "DO YOU LIKE JAZZ?"
@@ -177,159 +177,96 @@ class Window1(QWidget):
 
         self.valid_search = valid_search
         self.is_back = is_back
+        self.menu = menu
         self.InitWindow()
 
-
     def InitWindow(self):
+        hbox = QHBoxLayout()
+        hbox.addStretch()
+        self.CreateGenderKidCategory()
+        hbox.addWidget(self.Category)
 
-        # Set Window Size, Icon, and Title
-        self.setWindowTitle(self.title)
-        self.setWindowIcon(QtGui.QIcon(self.iconName))
-        self.setGeometry(self.left, self.top, self.width, self.height)
+        hbox.addSpacing(100)
+        if self.menu == 1:
+            self.CreateMenMenu()
+            hbox.addWidget(self.MenMenu)
+        if self.menu == 2:
+            self.CreateWomenMenu()
+            hbox.addWidget(self.WomenMenu)
 
-        self.CreateTypeRadioBox()
-        self.CreateKeywordBox()
-        self.CreatePriceRadioBox()
-        self.createBrandsText()
+        hbox.addStretch()
 
         vbox = QVBoxLayout()
         vbox.addStretch()
-        vbox.addWidget(self.TypeRadioBox)
-        vbox.addWidget(self.TextBox)
-        vbox.addWidget(self.PriceRadioBox)
-        #vbox.addWidget(self.BrandNames)
+        vbox.addLayout(hbox)
         vbox.addStretch()
 
-        vbox2 = QVBoxLayout()
-        vbox2.addStretch()
-        vbox2.addWidget(self.BrandNames)
-        vbox2.addStretch()
+        self.setLayout(vbox)
+
+        self.BTN = QPushButton("Next", self)
+        self.BTN.resize(100, 32)
+        self.BTN.move(1000, 850)
+
+        self.BCKBTN = QPushButton("Back", self)
+        self.BCKBTN.resize(100, 32)
+        self.BCKBTN.move(180, 850)
+
+    def CreateGenderKidCategory(self):
+
+        self.Category = QGroupBox("Select One")
+        vbox = QVBoxLayout()
+
+        self.searchbtn1 = QPushButton("Men", self)
+        self.searchbtn2 = QPushButton("Women", self)
+        self.searchbtn3 = QPushButton("Kids", self)
+        self.searchbtn4 = QPushButton("Socks", self)
+        self.searchbtn5 = QPushButton("Accessories", self)
+
+        vbox.addStretch()
+        vbox.addWidget(self.searchbtn1)
+        vbox.addWidget(self.searchbtn2)
+        vbox.addWidget(self.searchbtn3)
+        vbox.addWidget(self.searchbtn4)
+        vbox.addWidget(self.searchbtn5)
+        vbox.addStretch()
+
+        self.Category.setLayout(vbox)
+
+    def CreateMenMenu(self):
+        self.MenMenu = QGroupBox("Select a Category")
+        vbox = QVBoxLayout()
+
+        self.MenRadioBtn1 = QRadioButton("Runners")
+        self.MenRadioBtn2 = QRadioButton("Loungers")
+        self.MenRadioBtn3 = QRadioButton("Toppers")
+        self.MenRadioBtn4 = QRadioButton("Skippers")
+
+        vbox.addWidget(self.MenRadioBtn1)
+        vbox.addWidget(self.MenRadioBtn2)
+        vbox.addWidget(self.MenRadioBtn3)
+        vbox.addWidget(self.MenRadioBtn4)
+
+        self.MenMenu.setLayout(vbox)
+
+    def CreateWomenMenu(self):
+        self.WomenMenu = QGroupBox("Select a Category")
+        vbox = QVBoxLayout()
+
+        self.WomenRadioBtn1 = QRadioButton("Runners")
+        self.WomenRadioBtn2 = QRadioButton("Loungers")
+        self.WomenRadioBtn3 = QRadioButton("Breezers")
+        self.WomenRadioBtn4 = QRadioButton("Skippers")
+        self.WomenRadioBtn5 = QRadioButton("Toppers")
 
 
-        hbox = QHBoxLayout()
-        hbox.addStretch()
-        hbox.addLayout(vbox)
-        hbox.addLayout(vbox2)
-        hbox.setAlignment(Qt.AlignHCenter)
-        hbox.addStretch()
+        vbox.addWidget(self.WomenRadioBtn1)
+        vbox.addWidget(self.WomenRadioBtn2)
+        vbox.addWidget(self.WomenRadioBtn3)
+        vbox.addWidget(self.WomenRadioBtn4)
+        vbox.addWidget(self.WomenRadioBtn5)
 
-        self.setLayout(hbox)
-        self.ToolsBTN = QPushButton("Next", self)
-        self.ToolsBTN.resize(100, 32)
-        self.ToolsBTN.move(850, 750)
+        self.WomenMenu.setLayout(vbox)
 
-        self.ToolsBCKBTN = QPushButton("Back", self)
-        self.ToolsBCKBTN.resize(100, 32)
-        self.ToolsBCKBTN.move(330, 750)
-
-    def CreateTypeRadioBox(self):
-
-        self.TypeRadioBox = QGroupBox("Product Type")
-
-        gridLayout = QGridLayout()
-
-        self.typeRadioButton1 = QRadioButton("FootWear")
-        self.typeRadioButton2 = QRadioButton("Apparel")
-        self.typeRadioButton3 = QRadioButton("Accessories")
-        self.typeRadioButton4 = QRadioButton("All")
-        self.typeRadioButton1.setChecked(True)
-
-
-        gridLayout.addWidget(self.typeRadioButton1)
-        gridLayout.addWidget(self.typeRadioButton2)
-        gridLayout.addWidget(self.typeRadioButton3)
-        gridLayout.addWidget(self.typeRadioButton4)
-
-        gridLayout.setAlignment(Qt.AlignCenter)
-        self.TypeRadioBox.setLayout(gridLayout)
-
-    def CreateKeywordBox(self):
-        self.TextBox = QGroupBox("KeyWord")
-
-        gridLayout = QGridLayout()
-
-        self.textbox = QLineEdit(self)
-        if not self.valid_search and not self.is_back:
-            self.TextBox.setStyleSheet("QGroupBox {color: red;}")
-            self.textbox.setStyleSheet("QLineEdit {border: 1px solid red;}")
-
-        gridLayout.addWidget(self.textbox)
-        gridLayout.setAlignment(Qt.AlignCenter)
-        self.TextBox.setLayout(gridLayout)
-
-    def CreatePriceRadioBox(self):
-        self.PriceRadioBox = QGroupBox("Price Range")
-
-        gridLayout = QGridLayout()
-
-        self.priceRadioButton1 = QRadioButton("All")
-        self.priceRadioButton2 = QRadioButton("Under $50")
-        self.priceRadioButton3 = QRadioButton("$50-$100")
-        self.priceRadioButton4 = QRadioButton("$100-$150")
-        self.priceRadioButton5 = QRadioButton("$150-$200")
-        self.priceRadioButton6 = QRadioButton("$200-$250")
-        self.priceRadioButton7 = QRadioButton("$250-$300")
-        self.priceRadioButton8 = QRadioButton("Over $300")
-
-        self.priceRadioButton1.setChecked(True)
-
-        gridLayout.addWidget(self.priceRadioButton1)
-        gridLayout.addWidget(self.priceRadioButton2)
-        gridLayout.addWidget(self.priceRadioButton3)
-        gridLayout.addWidget(self.priceRadioButton4)
-        gridLayout.addWidget(self.priceRadioButton5)
-        gridLayout.addWidget(self.priceRadioButton6)
-        gridLayout.addWidget(self.priceRadioButton7)
-        gridLayout.addWidget(self.priceRadioButton8)
-
-        gridLayout.setAlignment(Qt.AlignCenter)
-        self.PriceRadioBox.setLayout(gridLayout)
-
-    def createBrandsText(self):
-        self.BrandNames = QGroupBox("Brand Names")
-
-        gridLayout = QGridLayout()
-
-        gridLayout.addWidget(QLabel("Adidas"), 0, 0)
-        gridLayout.addWidget(QLabel("Adidas Originals"), 0, 1)
-        gridLayout.addWidget(QLabel("Adidas by Raf Simons"))
-        gridLayout.addWidget(QLabel("Adidas by Stella McCartney"))
-        gridLayout.addWidget(QLabel("Adidas Originals by Alexander Wang"))
-        gridLayout.addWidget(QLabel("Asics"))
-        gridLayout.addWidget(QLabel("Assouline"))
-        gridLayout.addWidget(QLabel("Born X Raised"))
-        gridLayout.addWidget(QLabel("Carhartt Wip"))
-        gridLayout.addWidget(QLabel("Central High"))
-        gridLayout.addWidget(QLabel("Champion Reverse Weave"))
-        gridLayout.addWidget(QLabel("Chinatown Market"))
-        gridLayout.addWidget(QLabel("Clarks"))
-        gridLayout.addWidget(QLabel("CDG Play"))
-        gridLayout.addWidget(QLabel("Converse"))
-        gridLayout.addWidget(QLabel("Diadora"))
-        gridLayout.addWidget(QLabel("Ellesse"))
-        gridLayout.addWidget(QLabel("Jason Markk"))
-        gridLayout.addWidget(QLabel("Jordan"))
-        gridLayout.addWidget(QLabel("Maharishi"))
-        gridLayout.addWidget(QLabel("Napa"))
-        gridLayout.addWidget(QLabel("New Balance"))
-        gridLayout.addWidget(QLabel("New Era"))
-        gridLayout.addWidget(QLabel("Nike"))
-        gridLayout.addWidget(QLabel("Porter-Yoshida & Co"))
-        gridLayout.addWidget(QLabel("Pleasures"))
-        gridLayout.addWidget(QLabel("Puma"))
-        gridLayout.addWidget(QLabel("Rizzoli Books"))
-        gridLayout.addWidget(QLabel("ROA"))
-        gridLayout.addWidget(QLabel("Reebok"))
-        gridLayout.addWidget(QLabel("Stussy"))
-        gridLayout.addWidget(QLabel("Suicoke"))
-        gridLayout.addWidget(QLabel("Timberland"))
-        gridLayout.addWidget(QLabel("United Standard"))
-        gridLayout.addWidget(QLabel("Vans"))
-        gridLayout.addWidget(QLabel("Yeezy"))
-        gridLayout.addWidget(QLabel("Y-3"))
-
-        gridLayout.setAlignment(Qt.AlignCenter)
-        self.BrandNames.setLayout(gridLayout)
 
 class Window2(QWidget):
     def __init__(self, parent=GUI.App):
@@ -349,11 +286,11 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(self.LoginWindow.title)
         self.setWindowIcon(QtGui.QIcon(self.LoginWindow.iconName))
         self.setGeometry(self.LoginWindow.left, self.LoginWindow.top, self.LoginWindow.width, self.LoginWindow.height)
-        self.LoginWindow.button.clicked.connect(lambda: self.startWindow1(True, False))
+        self.LoginWindow.button.clicked.connect(lambda: self.startSearchWindow(True, False, 0))
         self.show()
 
-    def startWindow1(self, is_valid_search, is_back):
-        if is_valid_search and not is_back:
+    def startSearchWindow(self, is_valid_search, is_back, menu):
+        if is_valid_search and not is_back and menu == 0:
             if not self.LoginWindow.email.text() == "":
                 ShopInfo.Login["Email"].append(self.LoginWindow.email.text())
             if not self.LoginWindow.password.text() == "":
@@ -381,14 +318,14 @@ class MainWindow(QMainWindow):
             if not self.LoginWindow.card_security.text() == "":
                 ShopInfo.Login['CardSecurity'].append(self.LoginWindow.card_security.text())
 
-
-        self.Window = Window1(is_valid_search, is_back)
+        self.Window = Search_Window(is_valid_search, is_back, menu)
         self.setCentralWidget(self.Window)
-        # self.setWindowTitle(self.Window.title)
-        # self.setWindowIcon(QtGui.QIcon(self.Window.iconName))
-        # self.setGeometry(self.Window.left, self.Window.top, self.Window.width, self.Window.height)
-        self.Window.ToolsBTN.clicked.connect(self.startWindow2)
-        self.Window.ToolsBCKBTN.clicked.connect(self.startLoginWindow)
+
+        self.Window.searchbtn1.clicked.connect(lambda: self.startSearchWindow(True, False, 1))
+        self.Window.searchbtn2.clicked.connect(lambda: self.startSearchWindow(True, False, 2))
+
+        self.Window.BTN.clicked.connect(self.startWindow2)
+        self.Window.BCKBTN.clicked.connect(self.startLoginWindow)
         self.show()
 
     def startWindow2(self):

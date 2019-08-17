@@ -57,7 +57,7 @@ class testDriver:
         address = '19611 Jacob Ave'
         city = 'cerritos'
         zipcode = '90703'
-        email = 'gangmin519@gmail.com'
+        email = 'gangmin5519@gmail.com'
         cardNum = '1234567891234567'
         cardName = 'Ooga Booga'
         cardExp = '06/20'
@@ -100,6 +100,9 @@ class testDriver:
         #card number
         # // *[ @ id = "number"]
         #driver.find_element_by_xpath('// *[ @ id = "number"]').send_keys(cardNum)
+        # // *[ @ id = "number"]                             //*[@id="card-fields-number-rqtlu1itar900000"]
+        # driver.switch_to.frame(0)
+        # driver.find_element_by_xpath('// *[ @ id = "number"]').send_keys(cardNum)
 
         #name on card
         # //*[@id="name"]
@@ -115,4 +118,7 @@ class testDriver:
 
         #complete order button
         # /html/body/div[2]/div/div[1]/div[2]/div/div/form/div[4]/div[1]/button
+
+        # driver.switchTo().defaultContent();
+
         return driver
