@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QDialog, QGroupBox, QHBoxLayout, QVBoxLayout
 from PyQt5.QtCore import *
 from PyQt5 import QtGui
-import aaa
+import HelperFile
 import ShopInfo
 import GUI
 import threading

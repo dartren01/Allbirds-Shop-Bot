@@ -1,10 +1,10 @@
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import aaa
+import HelperFile
 
 def aa():
-    a = aaa.getProducts()
+    a = HelperFile.getProducts()
     for p in a:
         print(p)
     #print(a)

@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-import aaa
+import HelperFile
 import ShopInfo
 from urllib.request import urlopen
 from multiprocessing import cpu_count, Pool, Process
@@ -35,10 +35,10 @@ class App(QDialog):
         self.bckbtn.resize(100, 32)
         self.bckbtn.move(750, 650)
         if len(ShopInfo.ShoppingKeys["ProductDatabase"]) <= 1:
-            ShopInfo.ShoppingKeys["ProductDatabase"] = aaa.getProducts()
+            ShopInfo.ShoppingKeys["ProductDatabase"] = HelperFile.getProducts()
         self.products = ShopInfo.ShoppingKeys["ProductDatabase"]
         pool = Pool(cpu_count())
-        self.testProducts = [x for x in pool.map(partial(aaa.findProducts, keyword1=keyword1,
+        self.testProducts = [x for x in pool.map(partial(HelperFile.findProducts, keyword1=keyword1,
                                                          keyword2=keyword2), self.products) if x is not None]
         self.testProducts = sorted(self.testProducts, key=lambda k: k['title'])
         if not self.testProducts:
@@ -168,7 +168,7 @@ class App(QDialog):
                     self.table.setCellWidget(i, k, label)
 
                 elif (k==2):
-                    sizes = aaa.getSizes(self.testProducts[i])
+                    sizes = HelperFile.getSizes(self.testProducts[i])
                     styleComboBox = QComboBox()
                     styleComboBox.addItems(sizes)
                     self.table.setCellWidget(i, k, styleComboBox)
@@ -251,7 +251,7 @@ class App(QDialog):
         print(ShopInfo.ShoppingKeys["Cart"])
         print(ShopInfo.ShoppingKeys["Sizes"])
         print(ShopInfo.ShoppingKeys["Quantities"])
-        aaa.CompleteShopping()
+        HelperFile.CompleteShopping()
 
     #pyqtSlot()
     def on_click(self):

@@ -17,10 +17,10 @@ def getProducts():
         productList.extend(products)
         count = len(products)
         page += 1
-    print("here")
-    for x in range(len(productList)):
-        print(productList[x])
-    print("here")
+    #print("here")
+    #for x in range(len(productList)):
+    #    print(productList[x])
+    #print("here")
 
     return productList
 
@@ -47,34 +47,10 @@ def findProducts(product, keyword1, keyword2):
     elif all(word in product['handle'].split('-') for word in titleList):
         print(product['title'])
         return product
-    return None
-
-'''
-#fix this
-def findKeyword(product, keyword, type, price):
-    keywordList = keyword.upper().split(' ')
-    if any(word in product['title'] for word in keywordList):
-        if price == '' or price in product['tags']:
-                if type.upper() in product['tags'] and type.upper() == "FOOTWEAR":
-                    if (ProductAvailable(product, False)):
-                        print(product['title'])
-                        return product
-                elif type.upper() in product['tags'] and type.upper() == "ACCESSORIES":
-                    if (ProductAvailable(product, False)):
-                        print(product['title'])
-                        return product
-                # BOTH
-                elif type.upper() == "ALL":
-                    if (ProductAvailable(product, False)):
-                        print(product['title'])
-                        return product
-    return None
-'''
-
-def ReturnProduct(products, keyword):
-    for p in products:
-        if keyword.upper() == p['title']:
-            return p
+    # no keyword, return all products
+    elif keyword1 == keyword2:
+        print(product['title'])
+        return product
     return None
 
 def getSizes(product):
@@ -83,25 +59,6 @@ def getSizes(product):
         if(variant['available']):
             sizes.append(variant['option1'])
     return sizes
-
-
-def ProductAvailable(product, printSize):
-    for variant in product['variants']:
-        if(variant['available']):
-            if(printSize):
-                print("Size: ", variant['option1'])
-            else:
-                return True
-    if(not printSize):
-        return False
-
-
-def CheckSizeMatch(product, size):
-    for variant in product['variants']:
-        if(variant['available']):
-            if(size == variant['option1']):
-                return True
-    return False
 
 #add quantity
 def CompleteShopping():
