@@ -124,6 +124,12 @@ class Search_Window(QWidget):
         self.InitWindow()
 
     def InitWindow(self):
+        titleBox = QHBoxLayout()
+        TitleLabel = QLabel("Search Products Page")
+        titleBox.addStretch()
+        titleBox.addWidget(TitleLabel)
+        titleBox.addStretch()
+
         hbox = QHBoxLayout()
         hbox.addStretch()
         self.CreateGenderKidCategory()
@@ -146,9 +152,9 @@ class Search_Window(QWidget):
             self.searchbtn5.setDown(True)
 
         hbox.addStretch()
-
         vbox = QVBoxLayout()
         vbox.addStretch()
+        vbox.addLayout(titleBox)
         vbox.addLayout(hbox)
         vbox.addStretch()
 
@@ -164,7 +170,7 @@ class Search_Window(QWidget):
 
     def CreateGenderKidCategory(self):
 
-        self.Category = QGroupBox("Select One")
+        self.Category = QGroupBox("Select a Category")
         vbox = QVBoxLayout()
 
         self.searchbtn1 = QPushButton("Men", self)
@@ -184,7 +190,7 @@ class Search_Window(QWidget):
         self.Category.setLayout(vbox)
 
     def CreateMenMenu(self):
-        self.MenMenu = QGroupBox("Select a Category")
+        self.MenMenu = QGroupBox("Select Shoe Type")
         vbox = QVBoxLayout()
 
         self.MenRadioBtn1 = QRadioButton("Runners")

@@ -5,7 +5,7 @@ from PyQt5.QtGui import *
 import HelperFile
 import ShopInfo
 from urllib.request import urlopen
-from multiprocessing import cpu_count, Pool, Process
+from multiprocessing import cpu_count, Pool
 from functools import partial
 
 
@@ -181,7 +181,6 @@ class App(QDialog):
         QTableWidget.setHorizontalHeaderLabels(self.table2, headerTitles)
         allPrices = 0
         length = len(ShopInfo.ShoppingKeys["Cart"])
-        print(length)
         initRowPos = self.table2.rowCount()
         if length > initRowPos:
             for i in range(length-initRowPos):
@@ -198,7 +197,6 @@ class App(QDialog):
                 button.clicked.connect(lambda: self.remove_cart())
                 self.table2.setCellWidget(rowPos, 4, button)
         self.PriceLabel.setText("Total Price: $" + str(allPrices) + " tax not included")
-        print(allPrices)
         self.table2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.table2.resizeRowsToContents()
         self.table2.resizeColumnsToContents()
