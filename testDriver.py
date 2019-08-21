@@ -27,13 +27,17 @@ class testDriver:
         return True
 
     def checkout(self):
-
-        firstname = ShopInfo.Login["FirstName"][-1]
-        lastname = ShopInfo.Login["LastName"][-1]
-        address = ShopInfo.Login["Address"][-1]
-        city = ShopInfo.Login["City"][-1]
-        zipcode = ShopInfo.Login["Zipcode"][-1]
-        email = ShopInfo.Login["Email"][-1]
+        try:
+            firstname = ShopInfo.Login["FirstName"][-1]
+            lastname = ShopInfo.Login["LastName"][-1]
+            address = ShopInfo.Login["Address"][-1]
+            city = ShopInfo.Login["City"][-1]
+            zipcode = ShopInfo.Login["Zipcode"][-1]
+            email = ShopInfo.Login["Email"][-1]
+        except:
+            errorMsg = GUI.MessageBox(True)
+            errorMsg.done(1)
+            return 1
 
         # ----- TEST CASES -----
         # phone = '5629165122'
@@ -88,7 +92,7 @@ class testDriver:
         # /html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button
         time.sleep(1)
 
-        button = GUI.MessageBox()
+        button = GUI.MessageBox(False)
         button.done(1)
 
         #complete order button
@@ -97,4 +101,5 @@ class testDriver:
         #driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[2]/div/div/form/div[4]/div[1]/button').click()
         time.sleep(3)
         driver.quit()
+        return 0
         #return driver

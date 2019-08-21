@@ -83,4 +83,5 @@ def CompleteShopping():
         UrlList.append(URL)
     checkouttest = testDriver(UrlList, ProductList, QuantityList)
     checkouttest.checkout()
+    return checkouttest
 

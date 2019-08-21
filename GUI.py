@@ -249,17 +249,18 @@ class App(QDialog):
         print(ShopInfo.ShoppingKeys["Cart"])
         print(ShopInfo.ShoppingKeys["Sizes"])
         print(ShopInfo.ShoppingKeys["Quantities"])
-        HelperFile.CompleteShopping()
-        try:
-            for i in ShopInfo.ShoppingKeys["Cart"]:
-                self.table2.removeRow(0)
-            ShopInfo.ShoppingKeys["Cart"].clear()
-            ShopInfo.ShoppingKeys["Sizes"].clear()
-            ShopInfo.ShoppingKeys["Quantities"].clear()
-            ShopInfo.ShoppingKeys["Prices"].clear()
-            self.createTable()
-        except:
-            print("Could not clear lists")
+        cont = HelperFile.CompleteShopping()
+        if cont == 0:
+            try:
+                for i in ShopInfo.ShoppingKeys["Cart"]:
+                    self.table2.removeRow(0)
+                ShopInfo.ShoppingKeys["Cart"].clear()
+                ShopInfo.ShoppingKeys["Sizes"].clear()
+                ShopInfo.ShoppingKeys["Quantities"].clear()
+                ShopInfo.ShoppingKeys["Prices"].clear()
+                self.createTable()
+            except:
+                print("Could not clear lists")
 
 
     #pyqtSlot()
@@ -309,7 +310,7 @@ class App(QDialog):
 
 
 class MessageBox(QDialog):
-    def __init__(self):
+    def __init__(self, isError):
         super().__init__()
         self.title = 'Message'
         self.left = 1600
@@ -319,7 +320,10 @@ class MessageBox(QDialog):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
         self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
-        self.initUI()
+        if(isError):
+            self.errorMessage()
+        else:
+            self.initUI()
 
     def initUI(self):
         buttonReply = QMessageBox.question(self, 'Complete Shopping', "Please Enter Card Info and Complete the Order.\nDo You Want to Continue Shopping?",
@@ -328,6 +332,12 @@ class MessageBox(QDialog):
             return True
         else:
             sys.exit()
+
+    def errorMessage(self):
+        buttonReply = QMessageBox.question(self, 'Error', "Please Enter User Information",
+                                           QMessageBox.Ok, QMessageBox.Ok)
+        if buttonReply == QMessageBox.Ok:
+            return True
 
 
 def getProdImgList(prod):
