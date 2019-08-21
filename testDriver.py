@@ -1,6 +1,7 @@
 import time
 from selenium import webdriver
 import ShopInfo
+import GUI
 
 class testDriver:
     def __init__(self, UrlList, FinalProductList, QuantityList):
@@ -84,7 +85,16 @@ class testDriver:
         # PAYMENT PAGE
 
         # complete order button
+        # /html/body/div[2]/div/div[1]/div[2]/div/form/div[2]/button
+        time.sleep(1)
+
+        button = GUI.MessageBox()
+        button.done(1)
+
+        #complete order button
         # /html/body/div[2]/div/div[1]/div[2]/div/div/form/div[4]/div[1]/button
 
+        #driver.find_element_by_xpath('/html/body/div[2]/div/div[1]/div[2]/div/div/form/div[4]/div[1]/button').click()
+        time.sleep(3)
         driver.quit()
-        # return driver
+        #return driver

@@ -7,8 +7,6 @@ import ShopInfo
 from urllib.request import urlopen
 from multiprocessing import cpu_count, Pool, Process
 from functools import partial
-import threading
-#import MainWindow
 
 
 class App(QDialog):
@@ -252,6 +250,17 @@ class App(QDialog):
         print(ShopInfo.ShoppingKeys["Sizes"])
         print(ShopInfo.ShoppingKeys["Quantities"])
         HelperFile.CompleteShopping()
+        try:
+            for i in ShopInfo.ShoppingKeys["Cart"]:
+                self.table2.removeRow(0)
+            ShopInfo.ShoppingKeys["Cart"].clear()
+            ShopInfo.ShoppingKeys["Sizes"].clear()
+            ShopInfo.ShoppingKeys["Quantities"].clear()
+            ShopInfo.ShoppingKeys["Prices"].clear()
+            self.createTable()
+        except:
+            print("Could not clear lists")
+
 
     #pyqtSlot()
     def on_click(self):
@@ -299,30 +308,27 @@ class App(QDialog):
             print("Unable to remove")
 
 
-class CaptchaButton(QDialog):
+class MessageBox(QDialog):
     def __init__(self):
         super().__init__()
-        self.title = 'Captcha'
+        self.title = 'Message'
         self.left = 1600
         self.top = 100
         self.width = 320
         self.height = 200
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+        self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
         self.initUI()
 
     def initUI(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-
-        buttonReply = QMessageBox.question(self, 'Please Complete Captcha', "Press Yes to continue after captcha",
-                                           QMessageBox.Yes, QMessageBox.Yes)
+        buttonReply = QMessageBox.question(self, 'Complete Shopping', "Please Enter Card Info and Complete the Order.\nDo You Want to Continue Shopping?",
+                                           QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if buttonReply == QMessageBox.Yes:
-            print('Yes clicked.')
-            self.close()
             return True
-        #self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
-        #self.activateWindow()
-        self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
-        #self.activateWindow()
+        else:
+            sys.exit()
+
 
 def getProdImgList(prod):
     # tuple (id, json, image)
