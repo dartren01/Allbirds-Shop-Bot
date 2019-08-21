@@ -35,6 +35,13 @@ def findProducts(product, keyword1, keyword2):
     keyword1 = keyword1.lower()
     keyword2 = keyword2.lower()
     titleList = [keyword1, keyword2]
+    isAvailable = False
+    for variant in product['variants']:
+        if(variant['available']):
+            isAvailable = True
+            break
+    if not isAvailable:
+        return None
     if keyword1 == 'accessories' and product['product_type'].lower() == keyword1:
         print(product['title'])
         return product

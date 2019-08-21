@@ -28,5 +28,10 @@ def UrlGen(product, size):
     #    if(size == variant['option1']):
     #        sizeVariant = variant['id']
     #        break
-    finalUrl = baseUrl + productName + '?size=' + size
+    sizeStr = size.lower()
+    sizeStr = sizeStr.replace("(", "")
+    sizeStr = sizeStr.replace(")", "")
+    sizeStr = sizeStr.replace("/ ", "")
+    sizeStr = sizeStr.replace(" ", "-")
+    finalUrl = baseUrl + productName + '?size=' + sizeStr
     return finalUrl
