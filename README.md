@@ -30,7 +30,7 @@ $ pipenv run python MainWindow.py
 ![](https://media.giphy.com/media/h2ZATDOCToTirkpLvB/giphy.gif) 
 
 ## Disclaimer
-Only works in US, California
+Only works in US, California  
 User must input their own credit card information (for security purposes, we did not include that in the bot)
 
 ## Built With
