@@ -29,16 +29,25 @@ class App(QDialog):
         self.bckbtn = QPushButton("Back", self)
         self.bckbtn.resize(100, 32)
         self.bckbtn.move(750, 650)
+
+        # Get all of the products
         if len(ShopInfo.ShoppingKeys["ProductDatabase"]) <= 1:
             ShopInfo.ShoppingKeys["ProductDatabase"] = HelperFile.getProducts()
         self.products = ShopInfo.ShoppingKeys["ProductDatabase"]
+
+        # Create a pool for multiprocessing
         pool = Pool(cpu_count())
+        # Find products from search page using multiprocessing
         self.testProducts = [x for x in pool.map(partial(HelperFile.findProducts, keyword1=keyword1,
                                                          keyword2=keyword2), self.products) if x is not None]
         self.testProducts = sorted(self.testProducts, key=lambda k: k['title'])
+
+        # check if there is no products
         if not self.testProducts:
             self.is_valid_search = False
         ShopInfo.ShoppingKeys["Products"] = self.testProducts
+
+        # prodDict is a dictionary with the product image url opened to read
         try:
             image_list = pool.map(getProdImgList, self.testProducts)
             self.prodDict = {}
@@ -95,6 +104,7 @@ class App(QDialog):
         layout.addWidget(self.tabLayout)
         self.setLayout(layout)
 
+
     def createTable(self):
         headerTitles = ("Name", "Image", "Size", "Quantity", "Price", "Add to Cart")
         length = len(self.testProducts)
@@ -113,9 +123,11 @@ class App(QDialog):
             # dict of product: list of pyqt5 widgets
             self.itemDict[i] = []
             for k in range(6):
+                # Name of Product
                 if(k==0):
                     self.table.setItem(i, k, QTableWidgetItem(self.testProducts[i]['title']))
                     self.itemDict[i].append(self.testProducts[i]['title'])
+                # Product Image
                 elif (k==1):
                     label = QLabel()
                     pixmap = QPixmap()
@@ -126,21 +138,24 @@ class App(QDialog):
 
                     label.setPixmap(pixmap.scaledToWidth(250))
                     self.table.setCellWidget(i, k, label)
-
+                # Product Sizes
                 elif (k==2):
                     sizes = HelperFile.getSizes(self.testProducts[i])
                     styleComboBox = QComboBox()
                     styleComboBox.addItems(sizes)
                     self.table.setCellWidget(i, k, styleComboBox)
                     self.itemDict[i].append(styleComboBox)
+                # Quantity
                 elif (k==3):
                     quantityBox = QSpinBox(self.table)
                     quantityBox.setValue(0)
                     self.table.setCellWidget(i, k, quantityBox)
                     self.itemDict[i].append(quantityBox)
+                # Product Price
                 elif (k==4):
                     self.table.setItem(i, k, QTableWidgetItem("$" + self.testProducts[i]['variants'][0]['price']))
                     self.itemDict[i].append(self.testProducts[i]['variants'][0]['price'])
+                # Add to cart
                 elif (k==5):
                     button = QPushButton('Add to Cart', self.table)
                     button.clicked.connect(lambda: self.on_click())
@@ -167,9 +182,11 @@ class App(QDialog):
         QTableWidget.setHorizontalHeaderLabels(self.table2, headerTitles)
         allPrices = 0
         length = len(ShopInfo.ShoppingKeys["Cart"])
+        print(length)
         initRowPos = self.table2.rowCount()
         if length > initRowPos:
             for i in range(length-initRowPos):
+                print("yes")
                 rowPos = self.table2.rowCount()
                 self.table2.insertRow(rowPos)
                 self.table2.setItem(rowPos, 0, QTableWidgetItem(ShopInfo.ShoppingKeys["Cart"][rowPos]['title']))
@@ -182,11 +199,14 @@ class App(QDialog):
                 button.clicked.connect(lambda: self.remove_cart())
                 self.table2.setCellWidget(rowPos, 4, button)
         self.PriceLabel.setText("Total Price: $" + str(allPrices) + " tax not included")
+        print(allPrices)
         self.table2.setSizeAdjustPolicy(QAbstractScrollArea.AdjustToContents)
         self.table2.resizeRowsToContents()
         self.table2.resizeColumnsToContents()
 
+
     def order(self):
+        print("ORDERING")
         cont = HelperFile.CompleteShopping()
         if cont == 0:
             try:
@@ -204,13 +224,15 @@ class App(QDialog):
         button = qApp.focusWidget()
         index = self.table.indexAt(button.pos())
         if self.itemDict.get(index.row())[2].value() == 0:
+            print("Did not add to cart. Please choose quantity.")
             return
         for i in range(len(ShopInfo.ShoppingKeys["Cart"])):
             if self.testProducts[index.row()] == ShopInfo.ShoppingKeys["Cart"][i] and ShopInfo.ShoppingKeys["Sizes"][i] == str(self.itemDict.get(index.row())[1].currentText()):
+                print("Adding more")
                 add = ShopInfo.ShoppingKeys["Quantities"][i] + self.itemDict.get(index.row())[2].value()
                 ShopInfo.ShoppingKeys["Quantities"][i] = add
                 return
-
+        print(self.itemDict.get(index.row())[0] + ' Added to Cart')
         ShopInfo.ShoppingKeys["Cart"].append(self.testProducts[index.row()])
         ShopInfo.ShoppingKeys["Sizes"].append(str(self.itemDict.get(index.row())[1].currentText()))
         ShopInfo.ShoppingKeys["Quantities"].append(self.itemDict.get(index.row())[2].value())
@@ -266,7 +288,6 @@ def getProdImgList(prod):
     # tuple (id, json, image)
     product = (prod['id'], urlopen(prod['images'][0]['src']).read())
     return product
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
