@@ -1,6 +1,6 @@
 # ShopBot_2.0
-A shopping assistant that automates the checkout process for the webstore, Allbirds
-
+A shopping assistant that automates the checkout process for the webstore, [Allbirds
+](https://www.allbirds.com/)
 ### Prerequisites
 
 1. [Python 3.x.x](https://www.python.org/downloads/)
