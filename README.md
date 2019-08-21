@@ -1,4 +1,4 @@
-# AllbirdShopBot
+# Allbirds-Shop-Bot
 A shopping assistant that automates the checkout process for the webstore, Allbirds
 
 ### Prerequisites
