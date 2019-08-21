@@ -15,7 +15,6 @@ class App(QDialog):
     # keyword1 KIDS MUST BE 'SMALLBIRDS'
     def __init__(self, keyword1, keyword2):
         super().__init__()
-        #self.title = 'PyQt5 simple window'
         self.left = 800
         self.top = 100
         self.width = 1280

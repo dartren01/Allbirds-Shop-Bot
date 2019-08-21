@@ -11,8 +11,8 @@ class Login_Window(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.title = "DO YOU LIKE JAZZ?"
-        self.iconName = "dartren.jpg"
+        self.title = " allbirds"
+        self.iconName = "allbirds.png"
         self.left = 100
         self.top = 100
         self.width = 1280
@@ -223,8 +223,6 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__()
         self.startLoginWindow()
-
-        # intialize Window1
 
     def startLoginWindow(self):
         self.LoginWindow = Login_Window()
