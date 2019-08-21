@@ -21,134 +21,16 @@ class Login_Window(QWidget):
         self.width = 1280
         self.height = 960
 
-        self.CreateKeywordBox()
+        self.InitWindow()
 
-    def CreateKeywordBox(self):
-
-        # ---------- Contact Block ---------- #
-        Contact = QGroupBox("Contact Information")
-        emailGridLayout = QGridLayout()
-
-        self.email = QLineEdit(self)
-        self.password = QLineEdit(self)
-
-        if ShopInfo.Login["Email"]:
-            self.email.setText(ShopInfo.Login["Email"][-1])
-        else:
-            self.email.clear()
-            self.email.setPlaceholderText("Email")
-        if ShopInfo.Login["Password"]:
-            self.password.setText(ShopInfo.Login["Password"][-1])
-        else:
-            self.password.setPlaceholderText("Password")
-
-        emailGridLayout.addWidget(self.email)
-        emailGridLayout.addWidget(self.password)
-
-        Contact.setLayout(emailGridLayout)
-        # ----------------------------------- #
-
-        # ---------- Shipping Block ---------- #
-        Shipping = QGroupBox("Shipping Information")
-        shipping_info = QVBoxLayout()
-        name = QHBoxLayout()
-
-        self.firstname = QLineEdit(self)
-        self.lastname = QLineEdit(self)
-
-        if ShopInfo.Login["FirstName"]:
-            self.firstname.setText(ShopInfo.Login["FirstName"][-1])
-        else:
-            self.firstname.setPlaceholderText("First name")
-        if ShopInfo.Login["LastName"]:
-            self.lastname.setText(ShopInfo.Login["LastName"][-1])
-        else:
-            self.lastname.setPlaceholderText("Last name")
-
-        name.addWidget(self.firstname)
-        name.addWidget(self.lastname)
-
-        self.address = QLineEdit(self)
-        self.city = QLineEdit(self)
-        if ShopInfo.Login["Address"]:
-            self.address.setText(ShopInfo.Login["Address"][-1])
-        else:
-            self.address.setPlaceholderText("Address")
-        if ShopInfo.Login["City"]:
-            self.city.setText(ShopInfo.Login["City"][-1])
-        else:
-            self.city.setPlaceholderText("City")
-
-        location = QHBoxLayout()
-        self.state = QLineEdit(self)
-        self.zipcode = QLineEdit(self)
-        if ShopInfo.Login["State"]:
-            self.state.setText(ShopInfo.Login["State"][-1])
-        else:
-            self.state.setPlaceholderText("State")
-        if ShopInfo.Login["Zipcode"]:
-            self.zipcode.setText(ShopInfo.Login["Zipcode"][-1])
-        else:
-            self.zipcode.setPlaceholderText("Zipcode")
-
-        location.addWidget(self.state)
-        location.addWidget(self.zipcode)
-
-        self.phone = QLineEdit(self)
-        if ShopInfo.Login["Phone"]:
-            self.phone.setText(ShopInfo.Login["Phone"][-1])
-        else:
-            self.phone.setPlaceholderText("Phone")
-
-        shipping_info.addLayout(name)
-        shipping_info.addWidget(self.address)
-        shipping_info.addWidget(self.city)
-        shipping_info.addLayout(location)
-        shipping_info.addWidget(self.phone)
-
-        Shipping.setLayout(shipping_info)
-        # ------------------------------------- #
-
-        # ---------- Billing Block ---------- #
-        Billing = QGroupBox("Payment")
-        billing_info = QVBoxLayout()
-
-        self.card_number = QLineEdit(self)
-        self.card_name = QLineEdit(self)
-        if ShopInfo.Login["CardNumber"]:
-            self.card_number.setText(ShopInfo.Login["CardNumber"][-1])
-        else:
-            self.card_number.setPlaceholderText("Card number")
-        if ShopInfo.Login["CardName"]:
-            self.card_name.setText(ShopInfo.Login["CardName"][-1])
-        else:
-            self.card_name.setPlaceholderText("Card name")
-
-        card_details = QHBoxLayout()
-        self.card_expiration = QLineEdit(self)
-        self.card_security = QLineEdit(self)
-        if ShopInfo.Login["CardExpiration"]:
-            self.card_expiration.setText(ShopInfo.Login["CardExpiration"][-1])
-        else:
-            self.card_expiration.setPlaceholderText("Card expiration")
-        if ShopInfo.Login["CardSecurity"]:
-            self.card_security.setText(ShopInfo.Login["CardSecurity"][-1])
-        else:
-            self.card_security.setPlaceholderText("Card security")
-        card_details.addWidget(self.card_expiration)
-        card_details.addWidget(self.card_security)
-
-        billing_info.addWidget(self.card_number)
-        billing_info.addWidget(self.card_name)
-        billing_info.addLayout(card_details)
-        Billing.setLayout(billing_info)
-        # ----------------------------------- #
+    def InitWindow(self):
+        self.CreateContactBlock()
+        self.CreateShippingBlock()
 
         vbox = QVBoxLayout()
         vbox.addStretch()
-        vbox.addWidget(Contact)
-        vbox.addWidget(Shipping)
-        vbox.addWidget(Billing)
+        vbox.addWidget(self.Contact)
+        vbox.addWidget(self.Shipping)
         vbox.addStretch()
 
         hbox = QHBoxLayout()
@@ -161,6 +43,77 @@ class Login_Window(QWidget):
         self.button = QPushButton("Next", self)
         self.button.resize(100, 32)
         self.button.move(1000, 850)
+
+    def CreateContactBlock(self):
+        self.Contact = QGroupBox("Contact Information")
+        emailGridLayout = QGridLayout()
+
+        self.email = QLineEdit(self)
+        self.password = QLineEdit(self)
+
+        if ShopInfo.Login["Email"]:
+            self.email.setText(ShopInfo.Login["Email"][-1])
+        else:
+            self.email.setPlaceholderText("Email")
+
+        if ShopInfo.Login["Password"]:
+            self.password.setText(ShopInfo.Login["Password"][-1])
+        else:
+            self.password.setPlaceholderText("Password")
+
+        emailGridLayout.addWidget(self.email)
+        emailGridLayout.addWidget(self.password)
+
+        self.Contact.setLayout(emailGridLayout)
+
+    def CreateShippingBlock(self):
+        self.Shipping = QGroupBox("Shipping Information")
+        shipping_info = QVBoxLayout()
+        name = QHBoxLayout()
+        location = QHBoxLayout()
+
+        self.firstname = QLineEdit(self)
+        self.lastname = QLineEdit(self)
+        self.address = QLineEdit(self)
+        self.city = QLineEdit(self)
+        self.zipcode = QLineEdit(self)
+        self.state = QLineEdit(self)
+
+        if ShopInfo.Login["FirstName"]:
+            self.firstname.setText(ShopInfo.Login["FirstName"][-1])
+        else:
+            self.firstname.setPlaceholderText("First name")
+        if ShopInfo.Login["LastName"]:
+            self.lastname.setText(ShopInfo.Login["LastName"][-1])
+        else:
+            self.lastname.setPlaceholderText("Last name")
+        if ShopInfo.Login["Address"]:
+            self.address.setText(ShopInfo.Login["Address"][-1])
+        else:
+            self.address.setPlaceholderText("Address")
+        if ShopInfo.Login["City"]:
+            self.city.setText(ShopInfo.Login["City"][-1])
+        else:
+            self.city.setPlaceholderText("City")
+        if ShopInfo.Login["Zipcode"]:
+            self.zipcode.setText(ShopInfo.Login["Zipcode"][-1])
+        else:
+            self.zipcode.setPlaceholderText("Zipcode")
+
+        self.state.setText("California")
+        self.state.setReadOnly(True)
+
+        name.addWidget(self.firstname)
+        name.addWidget(self.lastname)
+        location.addWidget(self.state)
+        location.addWidget(self.zipcode)
+
+        shipping_info.addLayout(name)
+        shipping_info.addWidget(self.address)
+        shipping_info.addWidget(self.city)
+        shipping_info.addLayout(location)
+
+        self.Shipping.setLayout(shipping_info)
 
 
 class Search_Window(QWidget):
@@ -201,7 +154,6 @@ class Search_Window(QWidget):
             self.searchbtn4.setDown(True)
         if self.menu == 5:
             self.searchbtn5.setDown(True)
-
 
         hbox.addStretch()
 
@@ -277,11 +229,6 @@ class Search_Window(QWidget):
         self.WomenMenu.setLayout(vbox)
 
 
-class Window2(QWidget):
-    def __init__(self, parent=GUI.App):
-        super().__init__()
-
-
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__()
@@ -298,7 +245,9 @@ class MainWindow(QMainWindow):
         self.LoginWindow.button.clicked.connect(lambda: self.startSearchWindow(True, False, 0))
         self.show()
 
+    # INPUTS SHOW IF STARTSEARCHWINDOW IS CALLED FROM PAGE BEFORE OR AFTER
     def startSearchWindow(self, is_valid_search, is_back, menu):
+        # IF CALLED FROM STARTLOGINWINDOW; ALLOWS USERS TO CONTINUE WITHOUT INPUTTING INFO
         if is_valid_search and not is_back and menu == 0:
             if not self.LoginWindow.email.text() == "":
                 ShopInfo.Login["Email"].append(self.LoginWindow.email.text())
@@ -316,16 +265,6 @@ class MainWindow(QMainWindow):
                 ShopInfo.Login['State'].append(self.LoginWindow.state.text())
             if not self.LoginWindow.zipcode.text() == "":
                 ShopInfo.Login['Zipcode'].append(self.LoginWindow.zipcode.text())
-            if not self.LoginWindow.phone.text() == "":
-                ShopInfo.Login['Phone'].append(self.LoginWindow.phone.text())
-            if not self.LoginWindow.card_number.text() == "":
-                ShopInfo.Login['CardNumber'].append(self.LoginWindow.card_number.text())
-            if not self.LoginWindow.card_name.text() == "":
-                ShopInfo.Login['CardName'].append(self.LoginWindow.card_name.text())
-            if not self.LoginWindow.card_expiration.text() == "":
-                ShopInfo.Login['CardExpiration'].append(self.LoginWindow.card_expiration.text())
-            if not self.LoginWindow.card_security.text() == "":
-                ShopInfo.Login['CardSecurity'].append(self.LoginWindow.card_security.text())
 
         self.Window = Search_Window(is_valid_search, is_back, menu)
         self.setCentralWidget(self.Window)
@@ -336,15 +275,13 @@ class MainWindow(QMainWindow):
         self.Window.searchbtn4.clicked.connect(lambda: self.startSearchWindow(True, False, 4))
         self.Window.searchbtn5.clicked.connect(lambda: self.startSearchWindow(True, False, 5))
 
-
-        self.Window.BTN.clicked.connect(self.startWindow2)
+        self.Window.BTN.clicked.connect(self.startGUIWindow)
         self.Window.BCKBTN.clicked.connect(self.startLoginWindow)
         self.show()
 
-    def startWindow2(self):
+    def startGUIWindow(self):
 
-        # DETERMINE KETWORDS
-        # Mens = 1; Womens = 2; Kids = 3; Socks = 4; Accessories = 5
+        # DETERMINE KETWORDS FROM PREVIOUS WINDOWS
         if self.Window.menu == 1:
             keyword1 = "mens"
             if self.Window.MenRadioBtn1.isChecked():
@@ -369,7 +306,6 @@ class MainWindow(QMainWindow):
                 keyword2 = "skippers"
             elif self.Window.WomenRadioBtn5.isChecked():
                 keyword2 = "toppers"
-                print("in here")
             else:
                 keyword2 = "runners"
         elif self.Window.menu == 3:
@@ -386,11 +322,10 @@ class MainWindow(QMainWindow):
             keyword1 = ""
             keyword2 = ""
 
-        print(keyword1)
-        print(keyword2)
-
+        # INTIALIZE GUI WINDOW WITH KEYWORDS
         self.win = GUI.App(keyword1, keyword2)
 
+        # IF SEARCH IS VALID, START GUIWINDOW
         if self.win.is_valid_search:
             is_back = True
             is_valid_search = True
@@ -398,7 +333,6 @@ class MainWindow(QMainWindow):
             self.setCentralWidget(self.win)
             self.win.bckbtn.clicked.connect(lambda: self.startSearchWindow(is_valid_search, is_back, 0))
             self.show()
-            print("in if")
         else:
             is_valid_search = False
             is_back = False

@@ -17,9 +17,4 @@ Login = {
     "City": [],
     "State": [],
     "Zipcode": [],
-    "Phone": [],
-    "CardNumber": [],
-    "CardName": [],
-    "CardExpiration": [],
-    "CardSecurity": []
 }

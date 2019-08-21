@@ -17,6 +17,11 @@ def sel():
     city = 'cerritos'
     zipcode = '90703'
 
+    cardNum = '1234567891234567'
+    cardName = 'Ooga Booga'
+    cardExp = '06/20'
+    cardSecurity = '212'
+
     driver = webdriver.Chrome('./chromedriver')
     time.sleep(1)
     driver.get('https://www.allbirds.com/products/mens-wool-runners?size=10')
@@ -37,9 +42,18 @@ def sel():
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_city"]').send_keys(city)
     driver.find_element_by_xpath('//*[@id="checkout_shipping_address_zip"]').send_keys(zipcode)
     driver.find_element_by_xpath('//*[@id="checkout_email"]').send_keys('dartren@gmail.com')
-    time.sleep(1)
+
     driver.find_element_by_xpath('/html/body/div[4]/div/div[1]/div[2]/div/form/div[2]/button').click()
     driver.find_element_by_xpath('/html/body/div[4]/div/div[1]/div[2]/div/form/div[2]/button').click()
+    time.sleep(6)
+
+    # Payment Page
+    frame = driver.find_element_by_xpath('//*iframe[contains(@class="card-fields-iframe")]')
+    driver.switch_to.frame(4)
+    driver.find_element_by_xpath('//*[@id="number"]').send_keys(cardNum)
+    driver.find_element_by_xpath('//*[@id="name"]').send_keys(cardName)
+    driver.find_element_by_xpath('//*[@id="expiry"]').send_keys(cardExp)
+    driver.find_element_by_xpath('//*[@id="verification_value"]').send_keys(cardSecurity)
 
 
 if __name__ == '__main__':
