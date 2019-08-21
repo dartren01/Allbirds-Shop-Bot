@@ -10,7 +10,6 @@ ShoppingKeys = {
 
 Login = {
     "Email": [],
-    "Password": [],
     "FirstName": [],
     "LastName": [],
     "Address": [],

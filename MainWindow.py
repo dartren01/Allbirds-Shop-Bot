@@ -1,13 +1,10 @@
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QDialog, QGroupBox, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QGroupBox, QHBoxLayout, QVBoxLayout
 from PyQt5.QtCore import *
 from PyQt5 import QtGui
-import HelperFile
 import ShopInfo
 import GUI
-import threading
-import multiprocessing
 
 
 class Login_Window(QWidget):
@@ -49,20 +46,13 @@ class Login_Window(QWidget):
         emailGridLayout = QGridLayout()
 
         self.email = QLineEdit(self)
-        self.password = QLineEdit(self)
 
         if ShopInfo.Login["Email"]:
             self.email.setText(ShopInfo.Login["Email"][-1])
         else:
             self.email.setPlaceholderText("Email")
 
-        if ShopInfo.Login["Password"]:
-            self.password.setText(ShopInfo.Login["Password"][-1])
-        else:
-            self.password.setPlaceholderText("Password")
-
         emailGridLayout.addWidget(self.email)
-        emailGridLayout.addWidget(self.password)
 
         self.Contact.setLayout(emailGridLayout)
 
@@ -251,8 +241,6 @@ class MainWindow(QMainWindow):
         if is_valid_search and not is_back and menu == 0:
             if not self.LoginWindow.email.text() == "":
                 ShopInfo.Login["Email"].append(self.LoginWindow.email.text())
-            if not self.LoginWindow.password.text() == "":
-                ShopInfo.Login["Password"].append(self.LoginWindow.password.text())
             if not self.LoginWindow.firstname.text() == "":
                 ShopInfo.Login['FirstName'].append(self.LoginWindow.firstname.text())
             if not self.LoginWindow.lastname.text() == "":
