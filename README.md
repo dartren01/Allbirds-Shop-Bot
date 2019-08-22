@@ -1,5 +1,5 @@
 # Allbirds-Shop-Bot
-A shopping assistant that automates the checkout process for the webstore, Allbirds
+A shopping assistant that automates the checkout process for the webstore, [Allbirds](https://allbirds.com)
 
 ### Prerequisites
 
