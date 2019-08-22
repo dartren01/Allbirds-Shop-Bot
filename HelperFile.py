@@ -1,6 +1,6 @@
 import requests
 import json
-from testDriver import testDriver
+from SeleniumWebDriver import WebAppDriver
 import UrlGenerators
 import ShopInfo
 
@@ -65,7 +65,7 @@ def CompleteShopping():
     for i in range(len(ProductList)):
         URL = UrlGenerators.UrlGen(ProductList[i], SizeList[i])
         UrlList.append(URL)
-    checkouttest = testDriver(UrlList, ProductList, QuantityList)
+    checkouttest = WebAppDriver(UrlList, ProductList, QuantityList)
     checkouttest.checkout()
     return checkouttest
 

@@ -4,7 +4,7 @@ import ShopInfo
 import GUI
 
 
-class testDriver:
+class WebAppDriver:
     def __init__(self, UrlList, FinalProductList, QuantityList):
         self.urls = UrlList
         self.FinalProdList = FinalProductList

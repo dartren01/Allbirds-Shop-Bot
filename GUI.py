@@ -184,7 +184,6 @@ class App(QDialog):
         initRowPos = self.table2.rowCount()
         if length > initRowPos:
             for i in range(length-initRowPos):
-                print("yes")
                 rowPos = self.table2.rowCount()
                 self.table2.insertRow(rowPos)
                 self.table2.setItem(rowPos, 0, QTableWidgetItem(ShopInfo.ShoppingKeys["Cart"][rowPos]['title']))
