@@ -1,5 +1,5 @@
-# ShopBot_2.0
-A shopping assistant that automates the checkout process for the webstore, Allbirds
+# Allbirds-Shop-Bot
+A shopping assistant that automates the checkout process for the webstore, [Allbirds](https://allbirds.com)
 
 ### Prerequisites
 
@@ -28,6 +28,10 @@ $ pipenv run python MainWindow.py
 ## Demonstration
 
 ![](https://media.giphy.com/media/h2ZATDOCToTirkpLvB/giphy.gif) 
+
+## Disclaimer
+Only works in US, California  
+User must input their own credit card information (for security purposes, we did not include that in the bot)
 
 ## Built With
 
